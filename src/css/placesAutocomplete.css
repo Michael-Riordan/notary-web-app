@@ -1,0 +1,52 @@
+#address-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 12.4rem;
+}
+
+#address-list ul{
+    position: absolute;
+    background-color: #f5efbfd8;
+    width: 14.46rem;
+    list-style-type: none;
+    padding: 0;
+    margin-top: 0;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.address-list-item {
+    border: 1px solid rgb(49, 43, 38);
+    transition: height 400ms cubic-bezier(0.23, 1, 0.320, 1);
+    cursor: pointer;
+}
+
+.address-list-item:hover {
+    background-color: #f3e896a3;
+}
+
+#google-logo {
+    align-self: flex-end;
+    height: 21px;
+    margin-left: 10px;
+    margin-bottom: 2px;
+}
+
+@media screen and (max-width: 480px) {
+    #address-list ul {
+        width: 14.8rem;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    #address-list ul {
+        width: 14.5rem;
+        font-size: .8rem;
+    }
+}
+
+@media screen and (max-width:390px) {
+    #address-list ul {
+        width: 14.5rem;
+    }
+}
+

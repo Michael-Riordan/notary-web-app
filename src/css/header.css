@@ -1,0 +1,46 @@
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100vw;
+    background-color: #f5efbf;
+    padding: 0;
+    border-bottom: 1px solid black;
+    box-shadow: 0px 1px 4px black;
+    z-index: 2;
+}
+
+header h2 {
+    margin: 0;
+    margin-left: 10px;
+    color: rgb(49, 43, 38);
+    font-size: 1.6rem;
+    text-decoration: underline;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    justify-items: center;
+    padding: 2px;
+    padding: 5px;
+    margin: 5px;
+}
+
+@media screen and (max-width: 480px) {
+    header h2 {
+        font-size: .8rem;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    header h2 {
+        font-size: .6rem;
+    }
+}

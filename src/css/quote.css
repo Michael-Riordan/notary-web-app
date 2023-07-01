@@ -1,0 +1,426 @@
+#quote-body {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 100px;
+    margin-top: 0;
+    width: 100vw;
+    min-height: 100vh;
+    background-image: url('../assets/stacked-peaks-haikei.svg');
+    background-position: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#quote-header-wrapper {
+    margin-top: 0;
+    opacity: 0;
+    transform: translateY(100px);
+    animation: drag-in-animation 1.5s ease-out forwards;
+}
+
+@keyframes drag-in-animation {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#quote-header-wrapper p {
+    font-size: 1.5rem;
+    margin-left: 6rem;
+}
+
+#your-free-quote {
+    margin-left: 20%;
+    font-size: 4rem;
+    margin-top: 30%;
+    margin-bottom: 0;
+}
+
+#quote-calculator {
+    margin-top:5%;
+    width: 20em;
+    margin-left: 10%;
+    height: 500px;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+    width: max-content;
+}
+
+.input-label {
+    display: flex;
+    font-size: 1.3rem;
+}
+
+.input {
+    width: 12rem;
+    height: 20px;
+}
+
+.button-input {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 12.5rem;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    text-align: start;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid rgb(49, 43, 38);
+}
+
+.button-input:hover {
+    background-color: #f3e896a3;
+}
+
+.button-input::after {
+    content: '';
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom: 10px solid rgb(49, 43, 38);
+    margin-left: 35%;
+    transform: rotate(-360deg);
+    transition: transform 0.3s ease
+}
+
+.button-input.clicked::after {
+    content: '';
+    transform: rotate(180deg);
+}
+
+#services-menu {
+    position: absolute;
+    margin-top: 56px;
+    width: 12.5rem;
+}
+
+#services-list {
+    margin-top: 0;
+    padding: 0;
+}
+
+.service-li {
+    list-style-type: none;
+    height: 0px;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+.service-label {
+    cursor: pointer;
+}
+
+.service-input {
+    cursor: pointer;
+}
+
+#number-input {
+    width: 30px;
+    margin-left: 37%;
+    margin-bottom: 10px;
+}
+
+.button-input.clicked ~ #services-menu #services-list > .service-li {
+    border: 1px solid rgb(49, 43, 38);
+    background-color: #f5efbfd8;
+    height: 44px;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: visible;
+}
+
+.service-li-number {
+    list-style-type: none;
+    height: 0px;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+.button-input.clicked ~ #services-menu #services-list > .service-li-number {
+    height: 50px;
+    list-style-type: none;
+    border: 1px solid rgb(49, 43, 38);
+    background-color: #f5efbfa3;
+}
+
+.input.address {
+    width: 14rem;
+}
+
+.final-quote {
+    margin: 0;
+}
+
+.final-quote:first-of-type {
+    margin-top: 10px;
+}
+
+.textarea.email-content {
+    height: 170px;
+    width: 350px;
+}
+
+#send-button {
+    width: 40%;
+    margin-left: 100px;
+    margin-top: 5px;
+    background-color: #f5efbfd8;
+    border-radius: 20px;
+    border: 1px solid rgb(49, 43, 38);
+}
+
+#send-button:hover {
+    background-color: #f3e896a3;
+}
+
+.email {
+    margin-top: 2px;
+    display: grid;
+}
+
+.email.sent #confirmation-symbol{
+    background-color: green;
+    border: 2px solid black;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    justify-self: center;
+    margin-left: -15px;
+}
+
+.email.failed #confirmation-symbol{
+    background-color: red;
+    border: 2px solid black;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    justify-self: center;
+    margin-left: -15px;
+}
+
+.email.sent #confirmation-symbol::after {
+    content: '';
+    display: block;
+    height: 5px;
+    width: 15px;
+    margin-top: 6%;
+    margin-left: 10%;
+    border-radius: 4px;
+    transform: rotate(40deg);
+    justify-self: center;
+    background-color: white;
+}
+
+.email.sent #confirmation-symbol::before {
+    content: '';
+    display: block;
+    height: 5px;
+    width: 31.4px;
+    margin-left: 22.9%;
+    border-radius: 4px;
+    margin-top: 45%;
+    transform: rotate(130deg);
+    justify-self: center;
+    background-color: white;
+}
+
+.email.failed #confirmation-symbol::after {
+    content: '';
+    display: block;
+    height: 5px;
+    width: 35px;
+    margin-left: 3px;
+    border-radius: 4px;
+    margin-top: 17px;
+    transform: rotate(130deg);
+    justify-self: center;
+    background-color: white;
+}
+
+.email.failed #confirmation-symbol::before {
+    content: '';
+    z-index: 1;
+    position: absolute;
+    display: block;
+    height: 5px;
+    width: 35px;
+    margin-top: 17px;
+    margin-left: 4px;
+    border-radius: 4px;
+    transform: rotate(-130deg);
+    justify-self: center;
+    background-color: white;
+}
+
+
+@media screen and (max-width: 480px) {
+    #quote-body #quote-header-wrapper p:last-of-type{
+        margin-bottom: 20px;
+    }
+
+    #your-free-quote {
+        margin-top: 0;
+        text-align: center;
+        margin-left: 0;
+        margin-right: 40px;
+    }
+
+    #services-menu {
+        width: 12.5rem;
+        margin-left: 0;
+        margin-top: 58.5px;
+    }
+
+    .textarea.email-content {
+        width: 300px;
+    }
+
+    #quote-header-wrapper p {
+        font-size: 1.5rem;
+        margin-left: 15%;
+    }
+
+    #quote-header-wrapper {
+        margin-top: 15px;
+    }
+
+    #send-button {
+        margin-left: 30%;
+        height: 40px;
+    }
+
+    .email.sent #confirmation-symbol {
+        margin-left: 55%;
+        margin-top: -14%;
+    }
+
+    .email.failed #confirmation-symbol {
+        margin-left: 55%;
+        margin-top: -14%;
+    }
+
+    #quote-calculator {
+        display: grid;
+        flex-direction: column;
+        justify-content: center;
+        margin-top:5%;
+        width: 20em;
+        margin-left: 8%;
+        height: 500px;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    #quote-body {
+        display: grid;
+        justify-items: center;
+    }
+    #your-free-quote {
+        font-size: 2rem;
+        justify-self: center;
+    }
+
+    #quote-header-wrapper p {
+        font-size: 1rem;
+        margin-left: 20px;
+    }
+
+    .input-label {
+        font-size: 1rem;
+    }
+
+    .button-input {
+        background-color: #f5efbfa3;
+        width: 200px;
+        height: 25px;
+    }
+
+    #services-menu {
+        margin-top: 46px;
+        font-size: .8rem;
+    }
+
+    .button-input.clicked ~ #services-menu #services-list > .service-li{
+        height: 25px;
+    }
+
+    .button-input.clicked ~ #services-menu #services-list > .service-li input {
+        height: 10px;
+        margin-top: 10px;
+    }
+
+    .input {
+        width: 200px;
+        height: 15px;
+    }
+
+    .textarea.email-content {
+        width: 200px;
+    }
+
+    #quote-calculator {
+        margin-left: -50px;
+    }
+
+    .email.sent #confirmation-symbol{
+        background-color: green;
+        border: 2px solid black;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        justify-self: center;
+        margin-left: -40px;
+        margin-top: 10px;
+    }
+
+    .email.failed #confirmation-symbol{
+        background-color: red;
+        border: 2px solid black;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        justify-self: center;
+        margin-left: -40px;
+        margin-top: 10px;
+    }
+
+    #send-button {
+        width: 40%;
+        height: 35px;
+        margin-left: 53px;
+        margin-top: 5px;
+        background-color: #f5efbfd8;
+        border-radius: 20px;
+        border: 1px solid rgb(49, 43, 38);
+    }
+
+}
+
+@media screen and (min-width:390px) {
+    #quote-header-wrapper p:last-of-type {
+        margin-bottom: -200px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    #quote-header-wrapper p:last-of-type {
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    #quote-header-wrapper p:last-of-type {
+        margin-bottom: 20px;
+    }
+}
+

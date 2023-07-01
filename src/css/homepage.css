@@ -1,0 +1,108 @@
+
+#header-section {
+    margin-top: 2%;
+    background-position: center;
+    background-size: cover;
+    height: 50%;
+    width: 70%;
+    justify-self: center;
+    opacity: 0;
+    animation: fade-in-animation 2s forwards;
+}
+
+#app-head {
+    display: grid;
+    height: 90vh;
+    width: 100vw;
+    background-image: url('../assets/desert-scene-background.jpeg');
+    background-position: center;
+    background-size: cover;
+}
+
+
+#company-logo {
+    display: grid;
+    justify-self: center;
+    height: 100%;
+}
+
+#company-name {
+    display: flex;
+    font-size: 300%;
+    align-items: center;
+    width: max-content;
+    height: 50px;
+    justify-self: center;
+    margin-bottom: 0;
+    text-decoration: underline;
+    color: rgb(49, 43, 38);
+}
+
+#head-quote {
+    justify-self: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: rgb(49, 43, 38);
+}
+
+#quote-continuation {
+    margin-top: -30px;
+    margin-bottom: 50px;
+    justify-self: center;
+    color: rgb(49, 43, 38);
+}
+
+
+@media screen and (max-width: 480px) {
+    #company-name {
+        font-size: 180%;
+        margin-top: 100px;
+    }
+
+    #header-section {
+        height: 40%;
+    }
+
+    #head-quote {
+        margin-top: 10%;
+    }
+    #quote-continuation {
+        margin-top: 4%;
+    }
+}
+
+@media screen and (min-width: 568px) {
+    #company-logo {
+        margin-top: -7%;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    #company-logo {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    #company-logo {
+        margin-top: -100px;
+    }
+
+    #head-quote {
+        font-size: 1rem;
+    }
+
+    #quote-continuation {
+        margin-top: 0;
+        font-size: .7rem;
+    }
+}
+
+@keyframes fade-in-animation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
