@@ -24,7 +24,7 @@ export default function PlacesAutocomplete({ inputValue, onData}) {
         fetchData();
     }, [inputValue]);
 
-    /* passing address data back to parent */
+    /* passing address data back to parent (Quote)*/
     const handleAddressSelection = (address) => {
         setSelected(true);
         const data = address

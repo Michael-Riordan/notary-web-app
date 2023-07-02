@@ -14,13 +14,13 @@ export default function Quote() {
     const [costOfGas, setCostOfGas] = useState(0);
     const [nameInput, setNameInput] = useState('');
     const [emailInput, setEmailInput] = useState('');
+    const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
     const [emailSent, setEmailSent] = useState(null);
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
 My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
-    console.log(costOfGas);
-    console.log(totalPrice + notarizationPrice + parseFloat(costOfGas));
+
 
     const services = [
         {id: 0, name: 'Acknowledgement', price: 10},
@@ -73,6 +73,7 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
         setNotarizationPrice(price);
     };
 
+    // Handles Data passed up DOM tree from PlacesAutocomplete Child Component
     const handleAddressData = (address) => {
         setPlaceId(address.place_id);
         setAddressInput(address.description);
@@ -145,7 +146,7 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                     <h1 id='your-free-quote'>Your Free Quote.</h1>
                     <p className='final-quote'>Services: ${totalPrice + notarizationPrice}</p>
                     <p className='final-quote'>Cost of Gas ($.62 Round Trip) : ${costOfGas}</p>
-                    <p className='final-quote'>My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}</p>
+                    <p className='final-quote'>My Free Estimate: ${(totalPrice + notarizationPrice + (Number(costOfGas))).toFixed(2)}</p>
                 </div>
                 <div id='quote-calculator'>
                     <div className='input-wrapper'>
@@ -232,13 +233,18 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
-                            label='Email Content'
+                            label='Message'
                             name='email-content'
                             type='email'
-                            value={emailContent}
+                            value={isDisabled? 'If you would like to send us an email, please first select all desired services and fill out all fields.' : emailSent? 
+                            'Thank you! Your email was sent successfully, please check your email inbox for a confirmation.' : emailContent}
                             handleInputChange={handleInputChange}
                         />
-                        <button id='send-button' onClick={sendEmail}>Send</button>
+                        <button id='send-button' onClick={sendEmail} 
+                                                 disabled={isDisabled}
+                                                 style={isDisabled || emailSent? {display: "none"} : {display: "block"}}>
+                                Send
+                        </button>
                         <div className={emailSent == null? '' : emailSent? 'email sent' : 'email failed'}>
                             <div id='confirmation-symbol' />
                         </div>
@@ -277,6 +283,7 @@ function FormLabelAndInput(props) {
                    type={`${type}`}
                    value={value}
                    onChange={handleInputChange}
+                   required
             /> : 
             <textarea className={`textarea ${name}`}
                       name={`${name}-input`}

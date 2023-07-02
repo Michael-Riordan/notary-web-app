@@ -181,6 +181,7 @@
 
 #send-button:hover {
     background-color: #f3e896a3;
+    cursor: pointer;
 }
 
 .email {
@@ -196,6 +197,7 @@
     border-radius: 50%;
     justify-self: center;
     margin-left: -15px;
+    margin-top: -40%;
 }
 
 .email.failed #confirmation-symbol{
@@ -300,20 +302,20 @@
     }
 
     .email.sent #confirmation-symbol {
-        margin-left: 55%;
-        margin-top: -14%;
+        margin-left: 0;
+        margin-top: -40%;
     }
 
     .email.failed #confirmation-symbol {
-        margin-left: 55%;
-        margin-top: -14%;
+        margin-left: 0;
+        margin-top: -40%;
     }
 
     #quote-calculator {
         display: grid;
         flex-direction: column;
         justify-content: center;
-        margin-top:5%;
+        margin-top: 0;
         width: 20em;
         margin-left: 8%;
         height: 500px;
