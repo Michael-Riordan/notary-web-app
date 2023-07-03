@@ -16,6 +16,7 @@ export default function Quote() {
     const [emailInput, setEmailInput] = useState('');
     const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
     const [emailSent, setEmailSent] = useState(null);
+    const [emailValid, setEmailValid] = useState(false);
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
@@ -84,6 +85,7 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
             setNameInput(event.target.value);
         } else if (event.target.className === 'input email') {
             setEmailInput(event.target.value);
+            event.target.validity.valid? setEmailValid(true) : setEmailValid(false);
         } else if (event.target.className === 'textarea email-content') {
             setEmailContent(event.target.value);
         } else if (event.target.className === 'input address') {
@@ -131,12 +133,13 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
     }, [place_id]);
 
     useEffect(() => {
+        !emailValid? setEmailContent('Please Enter a Valid Email Address.') :
         setEmailContent(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. \n 
 Here is my info: \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($.62 round trip): $${costOfGas} \n
 My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number(costOfGas)}`)
-    }, [nameInput, addressInput, totalPrice, notarizationPrice, costOfGas])
+    }, [nameInput, addressInput, totalPrice, notarizationPrice, costOfGas, emailValid])
 
 
     return (
@@ -207,7 +210,7 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                             </ul>
                         </div>
                     </div>
-                    <form className='input-wrapper'>
+                    <form className='input-wrapper' onSubmit={sendEmail}>
                         <FormLabelAndInput
                             label='Signing Location'
                             name='address'
@@ -228,21 +231,23 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                         <FormLabelAndInput
                             label='Email'
                             name='email'
-                            type='text'
+                            type='email'
                             value={emailInput}
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
                             label='Message'
                             name='email-content'
-                            type='email'
+                            type='text'
                             value={isDisabled? 'If you would like to send us an email, please first select all desired services and fill out all fields.' : emailSent? 
                             'Thank you! Your email was sent successfully, please check your email inbox for a confirmation.' : emailContent}
                             handleInputChange={handleInputChange}
                         />
-                        <button id='send-button' onClick={sendEmail} 
-                                                 disabled={isDisabled}
-                                                 style={isDisabled || emailSent? {display: "none"} : {display: "block"}}>
+                        <button id='send-button'  
+                                disabled={isDisabled}
+                                style={!emailValid || isDisabled || emailSent? {display: "none"} : {display: "block"}}
+                                type='submit'
+                        >
                                 Send
                         </button>
                         <div className={emailSent == null? '' : emailSent? 'email sent' : 'email failed'}>
@@ -269,7 +274,7 @@ function ServiceLabelAndInput(props) {
 }
 
 function FormLabelAndInput(props) {
-    const { name, type, handleInputChange, value, label, img} = props;
+    const { name, type, handleInputChange, value, label, img, pattern} = props;
 
     return (
         <>
@@ -277,18 +282,19 @@ function FormLabelAndInput(props) {
                 {label}
                 {img}
             </label>
-            { type === 'text' ?
+            { name !== 'email-content' ?
             <input className={`input ${name}`}
                    name={`${name}-input`}
-                   type={`${type}`}
+                   type={type}
                    value={value}
+                   placeholder={name === 'address'? `Signing Address` : `Your ${name}`}
                    onChange={handleInputChange}
-                   required
+                   required={true}
             /> : 
             <textarea className={`textarea ${name}`}
                       name={`${name}-input`}
-                      type={`${type}`}
-                      value={`${value}`}
+                      type={type}
+                      value={value}
                       onChange={handleInputChange}
             />
             }

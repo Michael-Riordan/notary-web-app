@@ -1,3 +1,5 @@
+
+
 header {
     display: flex;
     flex-wrap: wrap;
@@ -12,10 +14,23 @@ header {
 
 header h2 {
     margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
     margin-left: 10px;
     color: rgb(49, 43, 38);
     font-size: 1.6rem;
     text-decoration: underline;
+    animation: typing 3s steps(42) forwards;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
 }
 
 header {

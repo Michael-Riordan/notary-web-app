@@ -17,13 +17,16 @@ export default function CustomNav() {
                     <Link className='dropdown-item' to='/'>Home</Link>
                 </li>
                 <li>
+                    <a id='call-now' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`}>Call Now</a>
+                </li>
+                <li>
                     <Link className='dropdown-item' to='/about'>About/Pricing</Link>
                 </li>
                 <li>
                     <Link className='dropdown-item' to='/quote'>Get a Quote</Link>
                 </li>
                 <li>
-                    <a id='call-now' href='tel:+13473061553'>Call Now</a>
+                    <Link className='dropdown-item' to='/appointment'>Create an Appointment</Link>
                 </li>
             </ul>
         </>

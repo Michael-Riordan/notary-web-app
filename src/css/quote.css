@@ -64,6 +64,7 @@
 .input {
     width: 12rem;
     height: 20px;
+    font-family: 'DMSerifDisplay';
 }
 
 .button-input {
@@ -78,6 +79,7 @@
     cursor: pointer;
     background-color: white;
     border: 1px solid rgb(49, 43, 38);
+    font-family: 'DMSerifDisplay';
 }
 
 .button-input:hover {
@@ -168,6 +170,7 @@
 .textarea.email-content {
     height: 170px;
     width: 350px;
+    font-family: 'DMSerifDisplay';
 }
 
 #send-button {

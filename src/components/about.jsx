@@ -1,3 +1,4 @@
+import handshake from '../assets/undraw_business_deal_re_up4u.svg';
 
 export default function About() {
     return (
@@ -6,6 +7,7 @@ export default function About() {
                 <div id='about-header-wrapper'>
                     <div id='licensed-bonded-insured'>
                         <h1>Licensed. <br/> Bonded. <br/> Insured.</h1>
+                        <img src={handshake} alt='handshake' id='handshake'/>
                     </div>
                     <h1 id='about-header'>LRmobilenotary is a professional mobile notary service based in the Phoenix area 
                         committed to providing reliable and efficient notarial services.

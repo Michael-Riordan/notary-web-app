@@ -1,0 +1,40 @@
+#calendar-body {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../assets/layered-peaks-haikei(5).svg');
+    background-size: cover;
+}
+
+#appointment-header {
+    justify-self: center;
+    font-size: 3rem;
+    text-align: center;
+}
+
+#calendar-wrapper {
+    margin-top: 10px;
+    justify-self: center;
+    margin-bottom: 100px;
+}
+
+#appointment-selector {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    border: 1px solid black;
+    align-self: center;
+    margin-bottom: 20%;
+    background: linear-gradient(to right, #f5efbf, #e89b4475);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    border-radius: 20px;
+    
+    
+}
+
+#appointment-time-list {
+    justify-self: start;
+    list-style-type: none;
+}
