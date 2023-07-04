@@ -84,6 +84,14 @@
     z-index: 1;
 }
 
+#menu-toggle:checked ~#menu li:first-child {
+    margin-top: -8.2px;
+}
+
+#menu-toggle ~ #menu li:first-child {
+    margin-top: -8.2px;
+}
+
 #menu-toggle:checked ~ #menu li:not(:last-child) {
     border-bottom: none;
 }
@@ -114,7 +122,7 @@
 @media screen and (max-width: 480px) {
 
     #menu {
-        margin-top: 39px;
+        margin-top: 47.5px;
         margin-right: 1em;
     }
 }

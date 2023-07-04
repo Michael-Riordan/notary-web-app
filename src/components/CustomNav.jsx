@@ -1,10 +1,17 @@
+import { useState } from "react";
 import {Link} from "react-router-dom";
 
 export default function CustomNav() {
+    const [isChecked, setIsChecked] = useState(true);
+
+    const handleCheck = () => {
+        isChecked? setIsChecked(false) : setIsChecked(true);
+    }
+
 
     return (
         <>
-            <input type='checkbox' id='menu-toggle' name='menu-toggle' />
+            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onClick={handleCheck}/>
             <label htmlFor='menu-toggle' id='menu-label'>
                 <div id='menu-button-container'>
                     <div id='menu-button'>

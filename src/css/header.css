@@ -18,7 +18,7 @@ header h2 {
     white-space: nowrap;
     margin-left: 10px;
     color: rgb(49, 43, 38);
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     text-decoration: underline;
     animation: typing 3s steps(42) forwards;
 }

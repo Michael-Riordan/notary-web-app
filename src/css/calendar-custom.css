@@ -1,6 +1,7 @@
 
 .react-calendar__tile--now {
     background-color: #f0610b  !important;
+    border-radius: 50%;
 }
 
 .react-calendar__tile--active {
@@ -21,34 +22,60 @@ abbr {
 
 .react-calendar__navigation__label {
     font-family: 'DMSerifDisplay';
+    font-weight: bold;
     font-size: 1.5rem;
+    pointer-events: none;
+}
+
+.react-calendar__navigation__label:disabled {
+    background-color: #f5efbf58 !important;
+}
+
+
+
+.react-calendar__navigation__arrow {
+    font-weight: bold;
+    font-size: 1rem;
 }
 
 .react-calendar__navigation__arrow.react-calendar__navigation__prev2-button {
-    border-top-left-radius: 19px;
-}
-.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
-    border-top-right-radius: 19px;
-}
-
-.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button:disabled{
-    background-color: rgba(232, 155, 68, 0.458) !important;
+    display: none;
 }
 
 .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
-    background-color: #f5efbf !important;
+    border-top-left-radius: 19px;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+    display: none;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button:disabled {
+    background-color: rgba(118, 96, 72, 0.458) !important;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button:disabled:hover {
+    background-color: rgba(118, 96, 72, 0.458) !important;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button:disabled:hover {
+    background-color: rgba(118, 96, 72, 0.458) !important;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+    border-top-right-radius: 19px;
 }
 
 .react-calendar__navigation__arrow.react-calendar__navigation__prev-button:disabled {
-    background-color: rgba(232, 155, 68, 0.458) !important;
+    background-color: rgba(118, 96, 72, 0.458) !important;
 }
 
 .react-calendar__navigation__arrow:hover {
-    background-color: #4FACF7  !important;
+    background-color: #8ebfe8  !important;
 }
 
 .react-calendar__navigation__label:hover {
-    background-color: #4FACF7  !important;
+    background-color: #8ebfe8  !important;
 }
 
 .react-calendar__month-view {
@@ -62,7 +89,7 @@ abbr {
 }
 
 .react-calendar__month-view__days button:hover {
-    background-color: #4FACF7  !important;
+    background-color: #8ebfe8   !important;
     border-radius: 20%;
 }
 
