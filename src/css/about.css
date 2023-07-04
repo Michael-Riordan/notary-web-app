@@ -1,0 +1,88 @@
+
+#about-header-wrapper {
+    display: grid;
+    transform: translateY(500px);
+    animation: drag-in-animation 1s ease-out forwards;
+    opacity: 0;
+}
+
+#licensed-bonded-insured {
+    justify-self: center;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: -1rem;
+}
+
+#about-header {
+    margin-top: 0;
+    justify-self: center;
+    width: 80%;
+    font-size: 1.2rem;
+}
+
+#services-wrapper {
+    display: flex;
+    transform: translateY(500px);
+    animation: drag-in-animation 1s ease-out forwards;
+    opacity: 0;
+}
+
+.about-service {
+    margin-left: 15px;
+    margin-right: 2px;
+    border-right: 1px solid rgb(49, 43, 38);
+    padding: 5px;
+}
+
+.about-service:nth-of-type(3) {
+    border-right: none;
+}
+
+@media screen and (max-width: 480px) {
+    #services-wrapper {
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    #licensed-bonded-insured {
+        font-size: 1rem;
+    }
+
+    #about-header {
+        font-size: .7rem;
+    }
+
+    #services-wrapper h1 {
+        font-size: 1rem;
+    }
+
+    #services-wrapper p {
+        font-size: .7rem;
+    }
+}
+
+#about-body {
+    z-index: 0;
+    width: 100vw;
+    background-image: url(../assets/stacked-peaks-haikei1.svg);
+    background-size: cover;
+}
+
+#handshake {
+    height: 150px;
+    margin-top: -50px;
+    margin-bottom: 10px;
+}
+
+@keyframes drag-in-animation {
+    from {
+        opacity: 0;
+        transform: translateY(500px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
