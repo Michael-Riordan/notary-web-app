@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'
 import '../css/calendar-custom.css'
@@ -53,6 +54,9 @@ export default function Appointment() {
 
     const handleInputClick = (event) => {
         selectedTime == null ? setSelectedTime(event.target.value) : setSelectedTime(null);
+        axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
+            appointment: event.target.value,
+        })
     }
 
     useEffect(() => {
