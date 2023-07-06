@@ -3,9 +3,9 @@
     align-content: center;
     height: max-content;
     width: 100vw;
+    margin-bottom: 0;
     background-color: #f5efbf;
     border-top: 1px solid rgb(49, 43, 38);
-    border-bottom: 1px solid rgb(49, 43, 38);
 }
 #footer-tabs {
     display: flex;

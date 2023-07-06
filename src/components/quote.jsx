@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { useHistory, useLocation } from 'react-router-dom';
 import googleLogo from '/src/assets/google_on_white_hdpi.png'
 import emailjs from '@emailjs/browser'
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 export default function Quote() {
     const [isClicked, setIsClicked] = useState(false);
+    const [appointmentSelectorOpen, setAppointmentSelectorOpen] = useState(false);
+    const [appointmentRequested, setAppointmentRequested] = useState(null);
     const [selectedServices, setSelectedServices] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [numOfNotarizations, setNumOfNotarizations] = useState(0);
@@ -17,11 +20,15 @@ export default function Quote() {
     const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
     const [emailSent, setEmailSent] = useState(null);
     const [emailValid, setEmailValid] = useState(false);
+    const [appointment, setAppointment] = useState('');
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
 My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
-
+    console.log(appointment);
+    
+    const history = useHistory();
+    const location = useLocation();
 
     const services = [
         {id: 0, name: 'Acknowledgement', price: 10},
@@ -38,6 +45,30 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
     
     const handleClick = () => {
         setIsClicked(!isClicked);
+    }
+
+    const handleAppointmentClick = () => {
+        setAppointmentSelectorOpen(!appointmentSelectorOpen);
+    }
+
+    const changeAppointmentRequest = (event) => {
+        if (appointmentRequested == null) {
+            setAppointmentRequested(event.target.value);
+            if (event.target.value === 'yes') {
+                sessionStorage.setItem('addressData', JSON.stringify(addressInput));
+                sessionStorage.setItem('totalPrice', JSON.stringify(totalPrice));
+                sessionStorage.setItem('servicesData', JSON.stringify(selectedServices));
+                sessionStorage.setItem('notarizationPrice', JSON.stringify(notarizationPrice));
+                sessionStorage.setItem('numOfNotarizations', JSON.stringify(numOfNotarizations));
+                sessionStorage.setItem('costOfGasData', JSON.stringify(costOfGas));
+                sessionStorage.setItem('nameData', JSON.stringify(nameInput));
+                sessionStorage.setItem('emailData', JSON.stringify(emailInput));
+                sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
+                history.push('./appointment')
+            }
+        } else {
+            setAppointmentRequested(null);
+        }
     }
 
     const handleCheckboxChange = (serviceId, servicePrice) => {
@@ -138,9 +169,63 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
 Here is my info: \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($.62 round trip): $${costOfGas} \n
-My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number(costOfGas)}`)
+My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number(costOfGas)} \n
+${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointment: ${appointment}` : ''}`)
     }, [nameInput, addressInput, totalPrice, notarizationPrice, costOfGas, emailValid])
 
+    useEffect(() => {
+        if (sessionStorage.getItem('servicesData') != null) {
+            const serviceData = JSON.parse(sessionStorage.getItem('servicesData'));
+            setSelectedServices(serviceData);
+        }
+
+        if (sessionStorage.getItem('totalPrice') != null) {
+            const priceData = JSON.parse(sessionStorage.getItem('totalPrice'));
+            setTotalPrice(priceData);
+        }
+
+        if (sessionStorage.getItem('addressData') != null) {
+            const addressData = JSON.parse(sessionStorage.getItem('addressData'));
+            setAddressInput(addressData);
+        }
+
+        if (sessionStorage.getItem('costOfGasData') != null) {
+            const costOfGasData = JSON.parse(sessionStorage.getItem('costOfGasData'));
+            setCostOfGas(costOfGasData);
+        }
+
+        if (sessionStorage.getItem('numOfNotarizations') != null) {
+            const numOfNotarizationsData = JSON.parse(sessionStorage.getItem('numOfNotarizations'));
+            setNumOfNotarizations(numOfNotarizationsData);
+        }
+
+        if (sessionStorage.getItem('notarizationPrice') != null) {
+            const notarizationPriceData = JSON.parse(sessionStorage.getItem('notarizationPrice'));
+            setNotarizationPrice(notarizationPriceData);
+        }
+
+        if (sessionStorage.getItem('nameData') != null) {
+            const nameData = JSON.parse(sessionStorage.getItem('nameData'));
+            setNameInput(nameData);
+        }
+
+        if (sessionStorage.getItem('emailData') != null) {
+            const emailData = JSON.parse(sessionStorage.getItem('emailData'));
+            setEmailInput(emailData);
+        }
+
+        if (sessionStorage.getItem('emailValidationData') != null) {
+            const emailValidationData = JSON.parse(sessionStorage.getItem('emailValidationData'));
+            setEmailValid(emailValidationData);
+        }
+    }, []);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const data = Object.fromEntries(searchParams.entries());
+        setAppointment(`${data.appointmentDate} @ ${data.appointmentTime}`)
+        console.log(data);
+    }, [])
 
     return (
         <>
@@ -172,6 +257,7 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                                                     name={service.name}
                                                     price={service.price}
                                                     handleCheckboxChange={handleCheckboxChange}
+                                                    checked={selectedServices.includes(service.id)}
                                                 />
                                             </>
                                         );
@@ -187,6 +273,7 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                                                     name={service.name}
                                                     price={service.price}
                                                     handleCheckboxChange={handleCheckboxChange}
+                                                    checked={selectedServices.includes(service.id)}
                                                 />
                                             </>
                                         );
@@ -219,8 +306,35 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
                             handleInputChange={handleInputChange}
                             img={<img src={googleLogo} alt='google logo' id='google-logo'/>}
 
-                        />        
+                        />
                         <PlacesAutocomplete inputValue={addressInput} onData={handleAddressData}/>
+                        <label htmlFor='appointment-prompt' className='input-label appointment-prompt'>
+                                {appointment !== '' && typeof appointment !== 'object' ? 'Reschedule Appointment?' : 'Schedule an Appointment?'}
+                        </label>
+                        <button className={`button-input ${appointmentSelectorOpen ? 'clicked' : ''}`} 
+                                name='services-input' type='button' 
+                                onClick={handleAppointmentClick}
+                        >
+                                {appointment !== '' && typeof appointment !== 'object' ? appointment : appointmentSelectorOpen ? 'Click to Close' : 'Click to Open'}
+                        </button>
+                        <div id='yes-no'>
+                            <ul id='yes-no-selector'>
+                                <label htmlFor='yes' className='yes-no-label yes'>
+                                    Yes
+                                </label>
+                                <input type='checkbox' 
+                                       value='yes' 
+                                       onClick={changeAppointmentRequest}
+                                       disabled={appointmentRequested != null && appointmentRequested === 'no'}/>
+                                <label htmlFor='no' className='yes-no-label no'>
+                                    No
+                                </label>
+                                <input type='checkbox' 
+                                       value='no' 
+                                       onClick={changeAppointmentRequest}
+                                       disabled={appointmentRequested != null && appointmentRequested === 'yes'}/>
+                            </ul>
+                        </div>
                         <FormLabelAndInput
                             label='Name'
                             name='name'
@@ -261,20 +375,24 @@ My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number
 }
 
 function ServiceLabelAndInput(props) {
-    const { id, name, price, handleCheckboxChange } = props;
+    const { id, name, price, handleCheckboxChange, checked} = props;
 
     return (
         <li key={id} className='service-li'>
             <label className='service-label'>
                 {name}: ${price}
-                <input type='checkbox' className='service-input' onChange={() => handleCheckboxChange(id, price)} />
+                <input type='checkbox' 
+                       className='service-input'
+                       onChange={(event) => handleCheckboxChange(id, price)} 
+                       checked={checked}
+                />
             </label>
         </li>
     );
 }
 
 function FormLabelAndInput(props) {
-    const { name, type, handleInputChange, value, label, img, pattern} = props;
+    const { name, type, handleInputChange, value, label, img} = props;
 
     return (
         <>

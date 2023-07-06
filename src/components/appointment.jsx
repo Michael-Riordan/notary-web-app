@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'
@@ -9,6 +10,9 @@ export default function Appointment() {
     const [selectedTime, setSelectedTime] = useState(null);
     const [chosenWeekendDay, setChosenWeekendDay] = useState(null)
     const [chosenWeekday, setChosenWeekday] = useState(null);
+    const [appointments, setAppointments] = useState([]);
+
+    const history = useHistory();
 
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu','Fri']
     const daysAndTimes = {
@@ -51,12 +55,51 @@ export default function Appointment() {
         }
         setClickedDate(trimmedDate)
     }
-
+    // Adding appointment time immediately upon click to block appointment before prompt.
     const handleInputClick = (event) => {
-        selectedTime == null ? setSelectedTime(event.target.value) : setSelectedTime(null);
-        axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
-            appointment: event.target.value,
+        if (selectedTime == null) {
+            setSelectedTime(event.target.value);
+            axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
+                appointmentTime: event.target.value,
+                appointmentDate: clickedDate, 
+            });
+            console.log('appointment added');
+        }
+    }
+
+    const handleApptConfirmation = () => {
+        const appointmentData = {appointmentTime: selectedTime,
+                                 appointmentDate: clickedDate};
+        const queryParams = new URLSearchParams(appointmentData).toString();
+        history.push(`/quote?${queryParams}`);
+    }
+
+    const handleApptRejection = () => {
+        let appointmentId;
+        appointments.forEach(appointment => {
+            if (appointment.appointmentTime === selectedTime && clickedDate === appointment.appointmentDate) {
+                console.log(appointment);
+                console.log(selectedTime);
+                appointmentId = appointment.appointmentid;
+            }
+        });
+        console.log('deleting');
+        console.log(selectedTime);
+        console.log(appointmentId);
+        axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointmentId}`)
+        setSelectedTime(null)
+        setClickedDate(null);
+    }
+
+    const checkDisabled = (time) => {
+        let disabled = false;
+        appointments.forEach(appointment => {
+            if (appointment.appointment === time && selectedTime !== time) {
+                disabled = true;
+            }
         })
+
+        return disabled;
     }
 
     useEffect(() => {
@@ -65,11 +108,17 @@ export default function Appointment() {
             monthButton.disabled = true;
             console.log('rendered');
         }
-    }, [clickedDate])
+    }, [clickedDate]);
+
+    useEffect(() => {
+        axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+            .then((response) => response.data)
+            .then(response => setAppointments(response));
+    }, [selectedTime])
 
     return (
         <section id='calendar-body'>
-            <h1 id='appointment-header'>Select an Appointment</h1>
+            <h1 id='appointment-header'>Schedule an Appointment</h1>
                 <div id='hours'>
                     <div id='weekdays'>
                         <h2 className='days'>Mon-Fri</h2>
@@ -80,7 +129,13 @@ export default function Appointment() {
                         <p className='time'>9:00am - 4:00pm</p>
                     </div>
                 </div>
-            {clickedDate == null? <div id='calendar-wrapper'>
+            {selectedTime != null?
+             <div id='appointment confirmation'>
+                <h2>Chosen Appointment: {clickedDate} @ {selectedTime}</h2>
+                <button onClick={handleApptConfirmation}>Confirm</button>
+                <button onClick={handleApptRejection}>Cancel</button>
+             </div> :
+              clickedDate == null? <div id='calendar-wrapper'>
                 <Calendar id='calendar'
                           minDate={new Date()}
                           maxDate={calculateMaxDate()}
@@ -90,14 +145,15 @@ export default function Appointment() {
             <div id='appointment-selector'>
                 <h2>{clickedDate.toString()}</h2>
                 <ul id='appointment-time-list'>
-                    {chosenWeekendDay !== null ? 
+                    {                    
+                     chosenWeekendDay !== null ? 
                      daysAndTimes[chosenWeekendDay].map((time, index) => {
                             return (
                                 <>
                                     <li key={index} className='appointment-time'>
                                         <label htmlFor='time-input'>
                                             {time}
-                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={selectedTime !== null && selectedTime !== time}/>
+                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)}/>
                                         </label>
                                     </li>
                                 </>
@@ -109,7 +165,7 @@ export default function Appointment() {
                                     <li key={index} className='appointment-time'>
                                         <label htmlFor='time-input'>
                                             {time}
-                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={selectedTime !== null && selectedTime !== time}/>
+                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)}/>
                                         </label>
                                     </li>
                                 </>

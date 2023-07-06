@@ -32,9 +32,6 @@ export default function CustomNav() {
                 <li>
                     <Link className='dropdown-item' to='/quote'>Get a Quote</Link>
                 </li>
-                <li>
-                    <Link className='dropdown-item' to='/appointment'>Create an Appointment</Link>
-                </li>
             </ul>
         </>
     );

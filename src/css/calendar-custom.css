@@ -17,7 +17,7 @@ abbr {
 .react-calendar {
     background-color: #f5efbf58 !important;
     border-radius: 20px;
-    box-shadow: 0px 1px 4px 0px black;
+    box-shadow: 0px 2px 8px 1px black;
 }
 
 .react-calendar__navigation__label {
@@ -30,8 +30,6 @@ abbr {
 .react-calendar__navigation__label:disabled {
     background-color: #f5efbf58 !important;
 }
-
-
 
 .react-calendar__navigation__arrow {
     font-weight: bold;
@@ -90,14 +88,30 @@ abbr {
 
 .react-calendar__month-view__days button:hover {
     background-color: #8ebfe8   !important;
-    border-radius: 20%;
+    border-radius: 20px;
 }
 
 .react-calendar__tile:disabled {
-    background-color: rgba(232, 155, 68, 0.458) !important;
+    background-color: rgba(204, 137, 61, 0.458) !important;
 }
 
 .react-calendar__tile:disabled:hover {
-    background-color: rgba(232, 155, 68, 0.458) !important;
+    background-color: rgba(204, 137, 61, 0.458) !important;
     border-radius: 0;
+}
+
+.react-calendar__month-view__days__day:last-of-type {
+    border-bottom-right-radius: 20px;
+}
+
+.react-calendar__month-view__days__day:last-of-type:hover {
+    border-bottom-right-radius: 20px;
+}
+
+.react-calendar__month-view__days__day:disabled {
+    border-radius: 20px;
+}
+
+.react-calendar__month-view__days__day:disabled:hover {
+    border-radius: 20px;
 }

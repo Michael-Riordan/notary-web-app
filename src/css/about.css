@@ -6,6 +6,10 @@
     opacity: 0;
 }
 
+.service-price {
+    font-weight: bold;
+}
+
 #licensed-bonded-insured {
     justify-self: center;
     font-size: 2rem;
@@ -65,7 +69,7 @@
 #about-body {
     z-index: 0;
     width: 100vw;
-    background-image: url(../assets/stacked-peaks-haikei1.svg);
+    background-image: url(../assets/layered-peaks-haikei-8.svg);
     background-size: cover;
 }
 

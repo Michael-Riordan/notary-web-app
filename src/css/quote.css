@@ -5,8 +5,8 @@
     margin-top: 0;
     width: 100vw;
     min-height: 100vh;
-    background-image: url('../assets/stacked-peaks-haikei.svg');
-    background-position: cover;
+    background-image: url('../assets/layered-peaks-haikei-6.svg');
+    background-position: left;
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -59,16 +59,28 @@
 .input-label {
     display: flex;
     font-size: 1.3rem;
+    font-weight: bold;
 }
 
 .input {
     width: 12rem;
+    border: 1px solid black;
     height: 20px;
-    font-family: 'DMSerifDisplay';
+    box-shadow: 1px 4px 8px -2px black;
+    font-family: 'PTSansNarrow';
+}
+
+.input:hover {
+    transform: translateY(-2px);
+}
+
+.button-input:hover {
+    transform: translateY(-2px);
 }
 
 .button-input {
     display: flex;
+    box-shadow: 1px 4px 8px -2px black;
     align-items: center;
     flex-direction: row;
     width: 12.5rem;
@@ -76,10 +88,13 @@
     padding: 0;
     margin: 0;
     text-align: start;
+    text-indent: 3px;
     cursor: pointer;
     background-color: white;
     border: 1px solid rgb(49, 43, 38);
-    font-family: 'DMSerifDisplay';
+    font-family: 'PTSansNarrow';
+    font-size: .8rem;
+    font-weight: bold;
 }
 
 .button-input:hover {
@@ -88,17 +103,23 @@
 
 .button-input::after {
     content: '';
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    border-bottom: 10px solid rgb(49, 43, 38);
-    margin-left: 35%;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    border-bottom: 8px solid rgb(49, 43, 38);
+    margin-left: 55%;
     transform: rotate(-360deg);
-    transition: transform 0.3s ease
+    transition: transform 0.3s ease;
+    z-index: 0;
 }
 
 .button-input.clicked::after {
     content: '';
     transform: rotate(180deg);
+    z-index: 0;
+}
+
+.input-label.appointment-prompt ~ .button-input::after {
+    display: none;
 }
 
 #services-menu {
@@ -114,7 +135,9 @@
 
 .service-li {
     list-style-type: none;
+    text-indent: 3px;
     height: 0px;
+    background-color: #f5efbfa3;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
     overflow: hidden;
 }
@@ -155,12 +178,54 @@
     background-color: #f5efbfa3;
 }
 
+.button-input ~ #yes-no #yes-no-selector {
+    height: 0;
+    margin-bottom: 0;
+    margin-top: -1px;
+    width: 9.9rem;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    background-color: #f5efbfa3;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.button-input.clicked ~ #yes-no #yes-no-selector {
+    height: 20px;
+    margin-bottom: 0;
+    width: 9.9rem;
+    list-style-type: none;
+    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid rgb(49, 43, 38);
+    background-color: #f5efbfa3;
+}
+
+.button-input.clicked ~ #yes-no #yes-no-selector:hover {
+    transform: translateY(-1px);
+}
+
+#yes-no-selector {
+    text-align: center;
+}
+
+.yes-no-label.no {
+    margin-left: 60px;
+}
+
+.yes-no-label.yes {
+    margin-left: -40px;
+}
+
+.button-input ~ #yes-no #yes-no-selector {
+    text-align: center;
+}
+
 .input.address {
     width: 14rem;
 }
 
 .final-quote {
     margin: 0;
+    margin-right: 100px;
 }
 
 .final-quote:first-of-type {
@@ -170,7 +235,8 @@
 .textarea.email-content {
     height: 170px;
     width: 350px;
-    font-family: 'DMSerifDisplay';
+    font-family: 'PTSansNarrow';
+    font-size: 1rem;
 }
 
 #send-button {
@@ -267,6 +333,14 @@
     background-color: white;
 }
 
+.textarea.email-content {
+    box-shadow: 1px 4px 8px -2px black;
+}
+
+.textarea.email-content:hover {
+    transform: translateY(-2px);
+}
+
 
 @media screen and (max-width: 480px) {
     #quote-body #quote-header-wrapper p:last-of-type{
@@ -283,7 +357,7 @@
     #services-menu {
         width: 12.5rem;
         margin-left: 0;
-        margin-top: 58.5px;
+        margin-top: 57px;
     }
 
     .textarea.email-content {
@@ -322,6 +396,14 @@
         width: 20em;
         margin-left: 8%;
         height: 500px;
+    }
+
+    .input:hover {
+        transform: none;
+    }
+
+    .button-input:hover {
+        transform: none;
     }
 }
 
