@@ -40,6 +40,8 @@
     font-size: 4rem;
     margin-top: 30%;
     margin-bottom: 0;
+    font-style: italic;
+    text-shadow: 8px 7px 4px rgb(0, 0, 0, .3);
 }
 
 #quote-calculator {
@@ -225,7 +227,9 @@
 
 .final-quote {
     margin: 0;
-    margin-right: 100px;
+    margin-right: 70px;
+    font-style: italic;
+    text-shadow: 10px 7px 4px rgb(0, 0, 0, .3);
 }
 
 .final-quote:first-of-type {
@@ -266,7 +270,7 @@
     border-radius: 50%;
     justify-self: center;
     margin-left: -15px;
-    margin-top: -40%;
+    margin-top: -30%;
 }
 
 .email.failed #confirmation-symbol{
@@ -277,6 +281,7 @@
     border-radius: 50%;
     justify-self: center;
     margin-left: -15px;
+    margin-top: -30%;
 }
 
 .email.sent #confirmation-symbol::after {

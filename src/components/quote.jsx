@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from 'react-router-dom';
+import axios from "axios";
 import googleLogo from '/src/assets/google_on_white_hdpi.png'
 import emailjs from '@emailjs/browser'
 import PlacesAutocomplete from "./PlacesAutocomplete";
@@ -21,14 +22,15 @@ export default function Quote() {
     const [emailSent, setEmailSent] = useState(null);
     const [emailValid, setEmailValid] = useState(false);
     const [appointment, setAppointment] = useState('');
+    const [appointmentId, setAppointmentId] = useState(null);
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
-My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
-    console.log(appointment);
+My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
     
     const history = useHistory();
     const location = useLocation();
+    console.log(appointment);
 
     const services = [
         {id: 0, name: 'Acknowledgement', price: 10},
@@ -54,7 +56,7 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
     const changeAppointmentRequest = (event) => {
         if (appointmentRequested == null) {
             setAppointmentRequested(event.target.value);
-            if (event.target.value === 'yes') {
+            if (event.target.value === 'yes' && appointment === '') {
                 sessionStorage.setItem('addressData', JSON.stringify(addressInput));
                 sessionStorage.setItem('totalPrice', JSON.stringify(totalPrice));
                 sessionStorage.setItem('servicesData', JSON.stringify(selectedServices));
@@ -64,6 +66,18 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`)
                 sessionStorage.setItem('nameData', JSON.stringify(nameInput));
                 sessionStorage.setItem('emailData', JSON.stringify(emailInput));
                 sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
+                history.push('./appointment')
+            } else {
+                sessionStorage.setItem('addressData', JSON.stringify(addressInput));
+                sessionStorage.setItem('totalPrice', JSON.stringify(totalPrice));
+                sessionStorage.setItem('servicesData', JSON.stringify(selectedServices));
+                sessionStorage.setItem('notarizationPrice', JSON.stringify(notarizationPrice));
+                sessionStorage.setItem('numOfNotarizations', JSON.stringify(numOfNotarizations));
+                sessionStorage.setItem('costOfGasData', JSON.stringify(costOfGas));
+                sessionStorage.setItem('nameData', JSON.stringify(nameInput));
+                sessionStorage.setItem('emailData', JSON.stringify(emailInput));
+                sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
+                axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointmentId}`)
                 history.push('./appointment')
             }
         } else {
@@ -222,9 +236,15 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
-        const data = Object.fromEntries(searchParams.entries());
-        setAppointment(`${data.appointmentDate} @ ${data.appointmentTime}`)
-        console.log(data);
+        if (searchParams.size === 0) {
+            console.log('null appt id')
+            return;
+        } else {
+            const data = Object.fromEntries(searchParams.entries());
+            setAppointment(`${data.appointmentDate} @ ${data.appointmentTime}`)
+            console.log(data.appointmentId, 'hello');
+            setAppointmentId(data.appointmentId);
+        }
     }, [])
 
     return (
