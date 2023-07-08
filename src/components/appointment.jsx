@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Calendar from 'react-calendar';
+import moment from 'moment';
 import 'react-calendar/dist/Calendar.css'
 import '../css/calendar-custom.css'
 
@@ -12,9 +13,11 @@ export default function Appointment() {
     const [chosenWeekday, setChosenWeekday] = useState(null);
     const [appointments, setAppointments] = useState([]);
     const [appointmentId, setAppointmentId] = useState(null);
-    const [matchedDates, setMatchedDates] = useState([]);
 
     const history = useHistory();
+    const now = new Date();
+    console.log(moment(now).format('ddd MMM D YYYY h:mma'))
+    
 
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu','Fri']
     const daysAndTimes = {
@@ -47,8 +50,16 @@ export default function Appointment() {
 
     const handleClick = (value) => {
         const date = value.toString();
-        const trimmedDate = date.split(" ").slice(0, 4).join(" ");
-        const dayOfWeek = trimmedDate.split(" ")[0];
+        const trimmedDate = date.split(" ").slice(0, 4);
+        const dayOfWeek = date.split(" ")[0];
+        const numberDate = date.split(" ")[2]
+        let suffix;
+        numberDate[numberDate.length - 1] === '1' && numberDate !== '11'? suffix = 'st' : 
+        numberDate[numberDate.length - 1] === '2' && numberDate !== '12'? suffix = 'nd' : 
+        numberDate[numberDate.length - 1] === '3' && numberDate !== '13'? suffix = 'rd' :
+        suffix = 'th';
+        trimmedDate[2] = numberDate + suffix;
+        
         if (dayOfWeek === 'Sat' || dayOfWeek === 'Sun') {
             setChosenWeekendDay(dayOfWeek);
         } else {
@@ -59,7 +70,7 @@ export default function Appointment() {
             });
             setChosenWeekday(weekday);
         }
-        setClickedDate(trimmedDate)
+        setClickedDate(trimmedDate.join(" "));
     }
     // Adding appointment time immediately upon click to block appointment before prompt.
     const handleInputClick = (event) => {
@@ -69,7 +80,6 @@ export default function Appointment() {
                 appointmentTime: event.target.value,
                 appointmentDate: clickedDate, 
             });
-            console.log('appointment added');
         }
     }
 
@@ -77,7 +87,6 @@ export default function Appointment() {
         const appointmentData = {appointmentTime: selectedTime,
                                  appointmentDate: clickedDate,
                                  appointmentId: appointmentId};
-        console.log(appointmentData.appointmentId);
         const queryParams = new URLSearchParams(appointmentData).toString();
         history.push(`/quote?${queryParams}`);
     }
@@ -93,30 +102,61 @@ export default function Appointment() {
         setSelectedTime(null)
         setClickedDate(null);
     }
-    //really really really really really poorly written code need to re-do
+
     const checkDisabled = (time) => {
         let disabled = false;
-    // weekend needs blocked times 2hr:30min after scheduled appointment.
+    // weekend needs blocked times 2hr:30min before and after scheduled appointment.
         appointments.forEach(appointment => {
             if (time === appointment.appointmentTime && clickedDate === appointment.appointmentDate && chosenWeekday == null) {
                 disabled = true;
             } else if (appointment.appointmentDate === clickedDate && chosenWeekday == null) {
-                console.log(clickedDate);
-                if (clickedDate === appointment.appointmentDate && chosenWeekday == null) {
-                    return;
+                const dateAndTime = appointment.appointmentDate + ' ' + appointment.appointmentTime;
+                const formattedDate = moment(dateAndTime, 'ddd MMM Do YYYY h:mma');
+                const blockStart = formattedDate.clone().subtract(2.5, 'hours');
+                const blockEnd = formattedDate.clone().add(2.5, 'hours');
+                const blockedTimes = [];
+                let startTime = blockStart.clone();
+
+                while (startTime <= blockEnd) {
+                    blockedTimes.push(startTime.format('ddd MMM D YYYY h:mma'));
+                    startTime.add(30, 'minutes');
+                }
+                if (blockedTimes.includes(appointment.appointmentDate.replace(/0?(\d+)(?:st|nd|rd|th)?/g, '$1') + ' ' + time)) {
+                    disabled = true;
                 }
             }
-        })
+        });
+        return disabled;
     }
 
     const checkAppointmentsForDay = (date) => {
         let disabled = false;
+        const blockedTimes = [];
         appointments.forEach(appointment => {
             const day = appointment.appointmentDate.split(' ')[0]
+            const dateNoSuffix = appointment.appointmentDate.replace(/th|st|rd|nd/, '');
             if (weekdays.includes(day)) {
-                if (appointment.appointmentDate === date.toDateString()) {
+                if (dateNoSuffix === date.toDateString()) {
                     disabled = true;
-                    return;
+                }
+            } else {
+                if (dateNoSuffix === date.toDateString() && appointment.appointmentTime !== '') {
+                    const dateAndTime = appointment.appointmentDate + ' ' + appointment.appointmentTime;
+                    const formattedDate = moment(dateAndTime, 'ddd MMM DD YYYY h:mma');
+                    const blockStart = formattedDate.clone().subtract(2.5, 'hours');
+                    const blockEnd = formattedDate.clone().add(2.5, 'hours');
+                    let startTime = blockStart.clone();
+                    while (startTime <= blockEnd) {
+                        if (daysAndTimes[day].includes(startTime.format('ddd MMM D YYYY h:mma').split(' ')[4])) {
+                            if (!blockedTimes.includes(dateNoSuffix + ' ' + startTime.format('ddd MMM DD YYYY h:mma').split(' ')[4])) {
+                                blockedTimes.push(startTime.format('ddd MMM DD YYYY h:mma'))
+                            };
+                        }
+                        startTime.add(30, 'minutes');
+                    }
+                    if (blockedTimes.length >= daysAndTimes[day].length) {
+                        disabled = true;
+                    }
                 }
             }
         })
@@ -156,10 +196,12 @@ export default function Appointment() {
                     </div>
                 </div>
             {selectedTime != null?
-             <div id='appointment confirmation'>
-                <h2>Chosen Appointment: {clickedDate} @ {selectedTime}</h2>
-                <button onClick={handleApptConfirmation}>Confirm</button>
-                <button onClick={handleApptRejection}>Cancel</button>
+             <div id='appointment-confirmation'>
+                <h2 id='selected-time'>Chosen Appointment: <br/> {clickedDate} @ {selectedTime}</h2>
+                <div id='confirmation-button-wrapper'>
+                  <button id='confirm-button' onClick={handleApptConfirmation}>Confirm</button>
+                  <button id='cancel-button' onClick={handleApptRejection}>Cancel</button>
+                </div>
              </div> :
               clickedDate == null? <div id='calendar-wrapper'>
                 <Calendar id='calendar'
@@ -172,16 +214,24 @@ export default function Appointment() {
             </div> :
             <div id='appointment-selector'>
                 <h2>{clickedDate.toString()}</h2>
+                <h3 id='available-appointments'>Available Appointments: </h3>
                 <ul id='appointment-time-list'>
                     {                    
                      chosenWeekendDay !== null ? 
                      daysAndTimes[chosenWeekendDay].map((time, index) => {
                             return (
                                 <>
-                                    <li key={index} className='appointment-time'>
+                                    <li key={index} 
+                                        className='appointment-time'
+                                        style={checkDisabled(time)? {display: 'none'} : {display: 'inherit'}}>
                                         <label htmlFor='time-input'>
                                             {time}
-                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)}/>
+                                            <input type='checkbox' 
+                                                   onClick={handleInputClick} 
+                                                   value={time} 
+                                                   disabled={checkDisabled(time)}
+                                                   className='time-input'
+                                            />
                                         </label>
                                     </li>
                                 </>
