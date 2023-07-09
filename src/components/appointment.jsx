@@ -15,9 +15,6 @@ export default function Appointment() {
     const [appointmentId, setAppointmentId] = useState(null);
 
     const history = useHistory();
-    const now = new Date();
-    console.log(moment(now).format('ddd MMM D YYYY h:mma'))
-    
 
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu','Fri']
     const daysAndTimes = {
@@ -103,9 +100,28 @@ export default function Appointment() {
         setClickedDate(null);
     }
 
+    // weekend needs blocked times 2hr:30min before and after scheduled appointment.
     const checkDisabled = (time) => {
         let disabled = false;
-    // weekend needs blocked times 2hr:30min before and after scheduled appointment.
+
+        const now = new Date();
+        const dateNoSuffix = clickedDate.replace((/th|st|nd|rd/), '');
+        const openDate = new Date(dateNoSuffix);
+        const dateAndTime = dateNoSuffix + ' ' + time;
+        const todayFormatted = moment(now).format('ddd MMM D YYYY h:mma');
+        const todayNoTime = todayFormatted.split(' ').slice(0, 4).join(' ');
+        const openDateFormatted = moment(openDate).format('ddd MMM D YYYY');
+        const todayObject = moment(now, 'ddd MMM D YYYY h:mma');
+        const openDateAndTimeObject = moment(dateAndTime, 'ddd MMM D YYYY h:mma')
+        const todayBuffer = todayObject.clone().add(1.5, 'hours')
+        //handling same day appointments using above variables -- buffer = 1.5 hours
+
+        if (todayNoTime === openDateFormatted) {
+            if (openDateAndTimeObject <= todayBuffer) {
+                disabled = true;
+            };
+        }
+        
         appointments.forEach(appointment => {
             if (time === appointment.appointmentTime && clickedDate === appointment.appointmentDate && chosenWeekday == null) {
                 disabled = true;
@@ -116,7 +132,7 @@ export default function Appointment() {
                 const blockEnd = formattedDate.clone().add(2.5, 'hours');
                 const blockedTimes = [];
                 let startTime = blockStart.clone();
-
+                
                 while (startTime <= blockEnd) {
                     blockedTimes.push(startTime.format('ddd MMM D YYYY h:mma'));
                     startTime.add(30, 'minutes');
@@ -132,6 +148,25 @@ export default function Appointment() {
     const checkAppointmentsForDay = (date) => {
         let disabled = false;
         const blockedTimes = [];
+        const now = new Date();
+        const todayFormatted = moment(now).format('ddd MMM D YYYY');
+        const todayObject = moment(now, 'ddd MMM D YYYY h:mma');
+        const todayBuffer = todayObject.clone().add(1.5, 'hours')
+        const day = moment(date).format('ddd MMM D YYYY');
+        if (todayFormatted === day) {
+            const weekday = day.split(' ')[0];
+            daysAndTimes[weekday].forEach(time => {
+                const dayAndTime = day + ' ' + time;
+                const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
+                if (dayAndTimeObj <= todayBuffer) {
+                    blockedTimes.push(dayAndTimeObj._i);
+                    if (blockedTimes.length >= daysAndTimes[weekday].length) {
+                        disabled = true;
+                    }
+                }
+            });
+        }
+
         appointments.forEach(appointment => {
             const day = appointment.appointmentDate.split(' ')[0]
             const dateNoSuffix = appointment.appointmentDate.replace(/th|st|rd|nd/, '');
@@ -184,7 +219,7 @@ export default function Appointment() {
 
     return (
         <section id='calendar-body'>
-            <h1 id='appointment-header'>Schedule an Appointment</h1>
+            <h1 id='appointment-header'>Select an Appointment Date/Time</h1>
                 <div id='hours'>
                     <div id='weekdays'>
                         <h2 className='days'>Mon-Fri</h2>
@@ -213,8 +248,8 @@ export default function Appointment() {
                 />
             </div> :
             <div id='appointment-selector'>
-                <h2>{clickedDate.toString()}</h2>
-                <h3 id='available-appointments'>Available Appointments: </h3>
+                <h2 className='appointment-selector-header'>{clickedDate.toString()}</h2>
+                <h3 className='appointment-selector-header'>Available Appointments: </h3>
                 <ul id='appointment-time-list'>
                     {                    
                      chosenWeekendDay !== null ? 
@@ -224,10 +259,10 @@ export default function Appointment() {
                                     <li key={index} 
                                         className='appointment-time'
                                         style={checkDisabled(time)? {display: 'none'} : {display: 'inherit'}}>
-                                        <label htmlFor='time-input'>
+                                        <label htmlFor='time-input' className='time-label'>
                                             {time}
                                             <input type='checkbox' 
-                                                   onClick={handleInputClick} 
+                                                   onChange={handleInputClick} 
                                                    value={time} 
                                                    disabled={checkDisabled(time)}
                                                    className='time-input'
@@ -241,9 +276,9 @@ export default function Appointment() {
                             return (
                                 <>
                                     <li key={index} className='appointment-time'>
-                                        <label htmlFor='time-input'>
+                                        <label htmlFor='time-input' className='time-label'>
                                             {time}
-                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)}/>
+                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)} className='time-input'/>
                                         </label>
                                     </li>
                                 </>

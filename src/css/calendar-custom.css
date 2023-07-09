@@ -115,9 +115,3 @@ abbr {
 .react-calendar__month-view__days__day:disabled:hover {
     border-radius: 20px;
 }
-
-#available-appointments {
-    margin-top: -10px;
-    margin-bottom: -10px;
-    text-decoration: underline;
-}

@@ -14,8 +14,10 @@ import './css/quote.css'
 import './css/placesAutocomplete.css'
 import './css/appointment.css'
 import './css/calendar-custom.css'
+import './css/admin.css'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import Appointment from './components/appointment';
+import Admin from './components/admin';
 
 function App() {
 
@@ -33,6 +35,7 @@ function App() {
           <Route path='/about' component={About} />
           <Route path='/quote' component={Quote} />
           <Route path='/appointment' component={Appointment} />
+          <Route path='/admin' component={Admin} />
         </Switch>
       <footer id='app-footer'>
         <div id='footer-info-wrapper'>
@@ -47,6 +50,8 @@ function App() {
           </div>
           <div id='footer-tabs-2'>
             <Link id='footer-quote-tab' to='/quote'>Get a Quote</Link>
+            <p>|</p>
+            <Link id='footer-admin-tab' to='/admin'>Admin</Link>
           </div>
         </div>
       </footer>

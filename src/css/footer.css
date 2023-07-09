@@ -13,6 +13,7 @@
 }
 
 #footer-tabs-2 {
+    display: flex;
     margin-top: -15px;
     justify-self: center;
     margin-bottom: 5px;
@@ -44,6 +45,16 @@
 
 #footer-about-tab {
     color: rgb(49, 43, 38);
+}
+
+#footer-quote-tab ~ p {
+    margin-top: 0;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#footer-admin-tab {
+    margin-left: 0;
 }
 
 #NNA-emblem {

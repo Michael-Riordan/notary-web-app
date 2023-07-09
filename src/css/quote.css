@@ -110,13 +110,11 @@
     margin-left: 55%;
     transform: rotate(-360deg);
     transition: transform 0.3s ease;
-    z-index: 0;
 }
 
 .button-input.clicked::after {
     content: '';
     transform: rotate(180deg);
-    z-index: 0;
 }
 
 .input-label.appointment-prompt ~ .button-input::after {
@@ -396,18 +394,15 @@
         display: grid;
         flex-direction: column;
         justify-content: center;
-        margin-top: 0;
+        margin-top: -170px;
         width: 20em;
         margin-left: 8%;
         height: 500px;
     }
 
-    .input:hover {
-        transform: none;
-    }
-
-    .button-input:hover {
-        transform: none;
+    #quote-body {
+        display: flex;
+        min-height: 1000px;
     }
 }
 

@@ -21,6 +21,7 @@ export default function Quote() {
     const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
     const [emailSent, setEmailSent] = useState(null);
     const [emailValid, setEmailValid] = useState(false);
+    const [numberInput, setNumberInput] = useState(null);
     const [appointment, setAppointment] = useState('');
     const [appointmentId, setAppointmentId] = useState(null);
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
@@ -135,6 +136,8 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
             setEmailContent(event.target.value);
         } else if (event.target.className === 'input address') {
             setAddressInput(event.target.value);
+        } else if (event.target.className === 'input number') {
+            setNumberInput(event.target.value);
         }
     };
 
@@ -236,7 +239,7 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
-        if (searchParams.size === 0) {
+        if (searchParams.size === 0 || searchParams.size == undefined) {
             console.log('null appt id')
             return;
         } else {
@@ -329,7 +332,7 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                         />
                         <PlacesAutocomplete inputValue={addressInput} onData={handleAddressData}/>
                         <label htmlFor='appointment-prompt' className='input-label appointment-prompt'>
-                                {appointment !== '' && typeof appointment !== 'object' ? 'Reschedule Appointment?' : 'Schedule an Appointment?'}
+                                {appointment !== '' && typeof appointment !== 'object' ? 'Choose a Different Appointment?' : 'Choose an Appointment? (optional)'}
                         </label>
                         <button className={`button-input ${appointmentSelectorOpen ? 'clicked' : ''}`} 
                                 name='services-input' type='button' 
@@ -360,6 +363,15 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             name='name'
                             type='text'
                             value={nameInput}
+                            required={true}
+                            handleInputChange={handleInputChange}
+                        />
+                        <FormLabelAndInput
+                            label='Phone Number (optional)'
+                            name='number'
+                            type='tel'
+                            value={numberInput}
+                            required={false}
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
@@ -367,13 +379,14 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             name='email'
                             type='email'
                             value={emailInput}
+                            required={true}
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
-                            label='Message'
+                            label={isDisabled || !emailValid? 'Message' : 'Feel free to add any additional information below.'}
                             name='email-content'
                             type='text'
-                            value={isDisabled? 'If you would like to send us an email, please first select all desired services and fill out all fields.' : emailSent? 
+                            value={isDisabled? 'If you would like to send us an email or request your chosen appointment, please first select all desired services and fill out all required fields.' : emailSent? 
                             'Thank you! Your email was sent successfully, please check your email inbox for a confirmation.' : emailContent}
                             handleInputChange={handleInputChange}
                         />
@@ -411,12 +424,12 @@ function ServiceLabelAndInput(props) {
     );
 }
 
-function FormLabelAndInput(props) {
-    const { name, type, handleInputChange, value, label, img} = props;
+export function FormLabelAndInput(props) {
+    const { name, type, handleInputChange, value, label, img, required} = props;
 
     return (
         <>
-            <label htmlFor={`input-${name}`} className={'input-label'}>
+            <label htmlFor={`input-${name}`} className={`input-label ${name}`}>
                 {label}
                 {img}
             </label>
@@ -427,7 +440,7 @@ function FormLabelAndInput(props) {
                    value={value}
                    placeholder={name === 'address'? `Signing Address` : `Your ${name}`}
                    onChange={handleInputChange}
-                   required={true}
+                   required={required}
             /> : 
             <textarea className={`textarea ${name}`}
                       name={`${name}-input`}
