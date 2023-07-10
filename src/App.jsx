@@ -26,7 +26,7 @@ function App() {
       <Router>
       <header>
         <div className='logo'>
-        <h2>Laurie A. Riordan, Certified Notary Public</h2>
+        <h2>LRmobilenotary</h2>
         </div>
         <CustomNav />
       </header>

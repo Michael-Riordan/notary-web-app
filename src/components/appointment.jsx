@@ -259,13 +259,15 @@ export default function Appointment() {
                                     <li key={index} 
                                         className='appointment-time'
                                         style={checkDisabled(time)? {display: 'none'} : {display: 'inherit'}}>
-                                        <label htmlFor='time-input' className='time-label'>
+                                        <label htmlFor='time-input' 
+                                               className='time-label'
+                                               >
                                             {time}
                                             <input type='checkbox' 
-                                                   onChange={handleInputClick} 
+                                                   onClick={handleInputClick} 
                                                    value={time} 
                                                    disabled={checkDisabled(time)}
-                                                   className='time-input'
+                                                   className={'time-input'}
                                             />
                                         </label>
                                     </li>

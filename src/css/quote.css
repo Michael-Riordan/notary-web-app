@@ -4,7 +4,7 @@
     flex-grow: 100px;
     margin-top: 0;
     width: 100vw;
-    min-height: 100vh;
+    height: 800px;
     background-image: url('../assets/layered-peaks-haikei-6.svg');
     background-position: left;
     background-size: cover;
@@ -66,9 +66,10 @@
 .input {
     width: 12rem;
     border: 1px solid black;
-    height: 20px;
+    height: 30px;
     box-shadow: 1px 4px 8px -2px black;
     font-family: 'PTSansNarrow';
+    font-weight: bold;
 }
 
 .input:hover {
@@ -107,7 +108,7 @@
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 8px solid rgb(49, 43, 38);
-    margin-left: 55%;
+    margin-left: 60%;
     transform: rotate(-360deg);
     transition: transform 0.3s ease;
 }
@@ -139,6 +140,7 @@
     background-color: #f5efbfa3;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
     overflow: hidden;
+    font-weight: bold;
 }
 
 .service-label {
@@ -177,6 +179,11 @@
     background-color: #f5efbfa3;
 }
 
+#address-list {
+    z-index: 2;
+    font-weight: bold;
+}
+
 .button-input ~ #yes-no #yes-no-selector {
     height: 0;
     margin-bottom: 0;
@@ -186,6 +193,7 @@
     background-color: #f5efbfa3;
     z-index: 0;
     overflow: hidden;
+    font-weight: bold;
 }
 
 .button-input.clicked ~ #yes-no #yes-no-selector {
@@ -337,6 +345,7 @@
 
 .textarea.email-content {
     box-shadow: 1px 4px 8px -2px black;
+    font-weight: bold;
 }
 
 .textarea.email-content:hover {
@@ -350,16 +359,16 @@
     }
 
     #your-free-quote {
-        margin-top: 0;
-        text-align: center;
-        margin-left: 0;
-        margin-right: 40px;
+        margin-top: 20px;
+        margin-left: 10px;
+        text-shadow: none;
     }
 
     #services-menu {
         width: 12.5rem;
         margin-left: 0;
         margin-top: 57px;
+        z-index: 2;
     }
 
     .textarea.email-content {
@@ -403,6 +412,38 @@
     #quote-body {
         display: flex;
         min-height: 1000px;
+    }
+
+    .button-input {
+        z-index: 1;
+    }
+
+    .button-input::after {
+        display: none;
+    }
+
+    .input.address {
+        z-index: 1;
+    }
+
+    .final-quote {
+        text-shadow: none;
+    }
+
+    #quote-calculator {
+        margin-top: -250px;
+    }
+
+    .input.name {
+        z-index: 1;
+    }
+
+    .button-input ~ #yes-no #yes-no-selector {
+        z-index: 3;
+    }
+
+    .button-input ~ #yes-no {
+        z-index: 3;
     }
 }
 
@@ -489,7 +530,6 @@
         border-radius: 20px;
         border: 1px solid rgb(49, 43, 38);
     }
-
 }
 
 @media screen and (min-width:390px) {

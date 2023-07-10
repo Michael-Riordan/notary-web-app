@@ -70,7 +70,7 @@
 
 #menu {
     position: absolute;
-    top: 0;
+    top: 12.5px;
     right: .1em;
     flex-direction: column;
     width: 8em;
@@ -139,7 +139,7 @@
 @media screen and (max-width: 480px) {
 
     #menu {
-        margin-top: 48.5px;
+        margin-top: 50px;
         margin-right: 1em;
     }
 }

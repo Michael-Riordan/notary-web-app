@@ -21,7 +21,7 @@ export default function Quote() {
     const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
     const [emailSent, setEmailSent] = useState(null);
     const [emailValid, setEmailValid] = useState(false);
-    const [numberInput, setNumberInput] = useState(null);
+    const [numberInput, setNumberInput] = useState('');
     const [appointment, setAppointment] = useState('');
     const [appointmentId, setAppointmentId] = useState(null);
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
@@ -31,7 +31,6 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
     
     const history = useHistory();
     const location = useLocation();
-    console.log(appointment);
 
     const services = [
         {id: 0, name: 'Acknowledgement', price: 10},
@@ -67,6 +66,7 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
                 sessionStorage.setItem('nameData', JSON.stringify(nameInput));
                 sessionStorage.setItem('emailData', JSON.stringify(emailInput));
                 sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
+                sessionStorage.setItem('phoneData', JSON.stringify(numberInput));
                 history.push('./appointment')
             } else {
                 sessionStorage.setItem('addressData', JSON.stringify(addressInput));
@@ -78,6 +78,7 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
                 sessionStorage.setItem('nameData', JSON.stringify(nameInput));
                 sessionStorage.setItem('emailData', JSON.stringify(emailInput));
                 sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
+                sessionStorage.setItem('phoneData', JSON.stringify(numberInput));
                 axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointmentId}`)
                 history.push('./appointment')
             }
@@ -136,7 +137,8 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
             setEmailContent(event.target.value);
         } else if (event.target.className === 'input address') {
             setAddressInput(event.target.value);
-        } else if (event.target.className === 'input number') {
+        } else if (event.target.className) {
+            console.log(typeof event.target.value);
             setNumberInput(event.target.value);
         }
     };
@@ -235,15 +237,21 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
             const emailValidationData = JSON.parse(sessionStorage.getItem('emailValidationData'));
             setEmailValid(emailValidationData);
         }
+
+        if (sessionStorage.getItem('phoneData') != null) {
+            const phoneData = JSON.parse(sessionStorage.getItem('phoneData'))
+            setNumberInput(phoneData);
+        }
     }, []);
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
-        if (searchParams.size === 0 || searchParams.size == undefined) {
+        const data = Object.fromEntries(searchParams.entries());
+        console.log(data.appointmentDate);
+        if (searchParams.size === 0 || data.appointmentDate == null) {
             console.log('null appt id')
             return;
         } else {
-            const data = Object.fromEntries(searchParams.entries());
             setAppointment(`${data.appointmentDate} @ ${data.appointmentTime}`)
             console.log(data.appointmentId, 'hello');
             setAppointmentId(data.appointmentId);
