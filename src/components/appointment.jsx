@@ -115,7 +115,6 @@ export default function Appointment() {
         const openDateAndTimeObject = moment(dateAndTime, 'ddd MMM D YYYY h:mma')
         const todayBuffer = todayObject.clone().add(1.5, 'hours')
         //handling same day appointments using above variables -- buffer = 1.5 hours
-
         if (todayNoTime === openDateFormatted) {
             if (openDateAndTimeObject <= todayBuffer) {
                 disabled = true;
@@ -155,16 +154,33 @@ export default function Appointment() {
         const day = moment(date).format('ddd MMM D YYYY');
         if (todayFormatted === day) {
             const weekday = day.split(' ')[0];
-            daysAndTimes[weekday].forEach(time => {
-                const dayAndTime = day + ' ' + time;
-                const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
-                if (dayAndTimeObj <= todayBuffer) {
-                    blockedTimes.push(dayAndTimeObj._i);
-                    if (blockedTimes.length >= daysAndTimes[weekday].length) {
-                        disabled = true;
+            if (weekday === 'Sat' || weekday === 'Sun') {
+                daysAndTimes[weekday].forEach(time => {
+                    const dayAndTime = day + ' ' + time;
+                    const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
+                    if (dayAndTimeObj <= todayBuffer) {
+                        blockedTimes.push(dayAndTimeObj._i);
+                        if (blockedTimes.length >= daysAndTimes[weekday].length) {
+                            disabled = true;
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                daysAndTimes.weekday.forEach(weekday => {
+                    weekday.times.forEach(time => {
+                        const dayAndTime = day + ' ' + time;
+                        const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
+                        if (dayAndTimeObj <= todayBuffer) {
+                            if (!blockedTimes.includes(dayAndTimeObj._i)) {
+                                blockedTimes.push(dayAndTimeObj._i);
+                                if (blockedTimes.length >= weekday.times.length) {
+                                    disabled = true;
+                                }
+                            }
+                        }
+                    })
+                });
+            }
         }
 
         appointments.forEach(appointment => {
@@ -278,7 +294,9 @@ export default function Appointment() {
                             return (
                                 <>
                                     <li key={index} className='appointment-time'>
-                                        <label htmlFor='time-input' className='time-label'>
+                                        <label htmlFor='time-input' 
+                                               className='time-label'
+                                               style={checkDisabled(time)? {display: 'none'} : {display: 'inherit'}}>
                                             {time}
                                             <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)} className='time-input'/>
                                         </label>
