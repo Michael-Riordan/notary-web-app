@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormLabelAndInput } from "./quote";
 import axios from "axios";
 
@@ -6,7 +6,10 @@ export default function Admin() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
-    const [weekdayHours, setWeekdayHours] = useState('');
+    const [daysAndHours, setDaysAndHours] = useState([]);
+    const [days, setDays] = useState([]);
+    const [buttonOpen, setButtonOpen] = useState(false);
+    console.log(days);
 
     const possibleWeekdayHours = [
         '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm', '9:00pm'
@@ -38,23 +41,43 @@ export default function Admin() {
         }
     }
 
+    const handleButtonClick = () => {
+        setButtonOpen(!buttonOpen);
+    }
+
+    useEffect(() => {
+        const weekdays = []
+        const fetchTimes = async () => {
+            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/business-hours`);
+            const daysAndTimes = await results.json();
+            daysAndTimes.forEach(dayObj => {
+                const day = Object.keys(dayObj)[0];
+                weekdays.push(day);
+
+            })
+            setDays(weekdays)
+            setDaysAndHours(daysAndTimes);
+        }
+
+        fetchTimes();
+    }, []);
+
     return (
         <div id='admin-body'>
-            {loggedIn? 
+            {!loggedIn? 
                 
                     <section id='navigation-section'>
                         <div id='hours-setter-wrapper'>
                             <h2 id='hours-header'>Hours</h2>
-                            <div id='weekday-hours-wrapper'>
-                                <h3 id='weekday-hours'>Mon-Fri</h3>
-                                <div id='weekday-setter-wrapper'>
-                                    <p id='hours-list'>Current Set Hours: {weekdayHours}</p>
-                                    <p id='current-hours'>
-                                        Current Options: <br/>
-                                        {possibleWeekdayHours.join(', ')}
-                                    </p>
-                                    
-                                </div>
+                            <div id='weekday-setter-wrapper'>
+                                <label htmlFor='day' className='day-selector-label'>
+                                    Day
+                                </label>
+                                <button onClick={handleButtonClick}
+                                        className={`days-toggle ${buttonOpen}`}
+                                >
+                                    {!buttonOpen? 'Click to Open' : 'Click to Close'}
+                                </button>
                             </div>
                         </div>
                         <div id='blocked-dates-setter-wrapper'>
@@ -93,5 +116,21 @@ export default function Admin() {
                 </form>
             }
         </div>
+    );
+}
+
+function DaysAndTimesList(props) {
+    const {day, times} = {...props};
+    return (
+        <>
+            <h2>{day}</h2>
+            {
+                times.map(time => {
+                    return (
+                        <li>{time}</li>
+                    );
+                })
+            }
+        </>
     );
 }
