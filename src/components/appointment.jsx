@@ -13,6 +13,10 @@ export default function Appointment() {
     const [chosenWeekday, setChosenWeekday] = useState(null);
     const [appointments, setAppointments] = useState([]);
     const [appointmentId, setAppointmentId] = useState(null);
+    const [daysAndHours, setDaysAndHours] = useState([]);
+    const [days, setDays] = useState([]);
+    const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
+    console.log(hoursForCurrentDay);
 
     const history = useHistory();
 
@@ -233,6 +237,36 @@ export default function Appointment() {
                 }});
     }, [selectedTime])
 
+    useEffect(() => {
+        const weekdays = []
+        const fetchTimes = async () => {
+            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/business-hours`);
+            const daysAndTimes = await results.json();
+            daysAndTimes.forEach(dayObj => {
+                const day = Object.keys(dayObj)[0];
+                weekdays.push(day);
+
+            })
+            setDays(weekdays)
+            setDaysAndHours(daysAndTimes);
+        }
+
+        fetchTimes();
+    }, []);
+
+    useEffect(() => {
+        if (clickedDate != null) {
+            const correctDay = daysAndHours.filter((day, index) => {
+                return daysAndHours[index].hasOwnProperty(clickedDate.split(' ')[0]);
+            });
+        
+            const dayAndHours = [...correctDay]
+            const day = clickedDate.split(' ')[0]
+            setHoursForCurrentDay(dayAndHours[0][day]);
+        }
+
+    }, [clickedDate]);
+
     return (
         <section id='calendar-body'>
             <h1 id='appointment-header'>Select an Appointment Date/Time</h1>
@@ -268,8 +302,7 @@ export default function Appointment() {
                 <h3 className='appointment-selector-header'>Available Appointments: </h3>
                 <ul id='appointment-time-list'>
                     {                    
-                     chosenWeekendDay !== null ? 
-                     daysAndTimes[chosenWeekendDay].map((time, index) => {
+                     hoursForCurrentDay.map((time, index) => {
                             return (
                                 <>
                                     <li key={index} 
@@ -289,21 +322,7 @@ export default function Appointment() {
                                     </li>
                                 </>
                             );
-                        }) :
-                     chosenWeekday[0].times.map((time, index) => {
-                            return (
-                                <>
-                                    <li key={index} className='appointment-time'>
-                                        <label htmlFor='time-input' 
-                                               className='time-label'
-                                               style={checkDisabled(time)? {display: 'none'} : {display: 'inherit'}}>
-                                            {time}
-                                            <input type='checkbox' onClick={handleInputClick} value={time} disabled={checkDisabled(time)} className='time-input'/>
-                                        </label>
-                                    </li>
-                                </>
-                            );
-                     })
+                        })
                     }
                 </ul>
             </div>}

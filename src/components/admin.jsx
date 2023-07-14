@@ -304,7 +304,8 @@ function AddAndDeleteComponents(props) {
             >
                 Add
             </button>
-            <p>{hourAdded? 'Hour Added Successfully' : hourAdded == null? '' : 'Could Not Add Hour'}</p>
+            <p className={`hours-edit-status ${hourAdded}`}>{hourAdded? 'Hour Added Successfully' : hourAdded == null? '' : 
+                (<>Error: Could Not Add Hour. <br/> Check Time Format, and That the Time Slot Is Not Already In Current Hours</>)}</p>
             <br/>
             <label htmlFor='delete-time' id= {`delete-${useCase}-label`}>
                 Delete Time from {formattedDay} Hours
@@ -326,7 +327,10 @@ function AddAndDeleteComponents(props) {
             >
                 Delete
             </button>
-            <p>{hourDeleted? 'Hour Deleted Successfully' : hourDeleted == null? '' : 'Could Not Delete Hour'}</p>
+            <p className={`hours-edit-status ${hourDeleted}`}>
+                {hourDeleted? 'Hour Deleted Successfully' : hourDeleted == null? '' : (<>Error: Could Not Delete Hour. <br/>
+                 Check Time Format, and That the Time Slot Exists In Current Hours</>)}
+            </p>
         </>
     )
 }
