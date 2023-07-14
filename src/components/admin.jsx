@@ -8,12 +8,15 @@ export default function Admin() {
     const [password, setPassword] = useState(null);
     const [daysAndHours, setDaysAndHours] = useState([]);
     const [days, setDays] = useState([]);
+    const [selectedDay, setSelectedDay] = useState(null);
+    const [formattedDay, setFormattedDay] = useState(null);
     const [buttonOpen, setButtonOpen] = useState(false);
-    console.log(days);
+    const [addedHour, setAddedHour] = useState('');
+    const [hourAdded, setHourAdded] = useState(null);
+    const [deletedHour, setDeletedHour] = useState('');
+    const [hourDeleted, setHourDeleted] = useState(null);
+    const [suffix, setSuffix] = useState('am');
 
-    const possibleWeekdayHours = [
-        '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm', '9:00pm'
-    ]
 
     const handleInputChange = (event) => {
         if (event.target.className === 'input username') {
@@ -45,6 +48,99 @@ export default function Admin() {
         setButtonOpen(!buttonOpen);
     }
 
+    const handleDaySelection = (event) => {
+        setSelectedDay(event.target.textContent);
+        setButtonOpen(!buttonOpen);
+        setFormattedDay(event.target.textContent === 'Tue'? 
+        event.target.textContent + 'sday' :
+        event.target.textContent === 'Wed'? 
+        event.target.textContent + 'nsday':
+        event.target.textContent === 'Thu'? 
+        event.target.textContent + 'rsday':
+        event.target.textContent === 'Sat'? 
+        event.target.textContent + 'urday':
+        event.target.textContent + 'day')
+    }
+
+    const handleEditorChange = (event) => {
+        event.target.id === 'add-hours'? setAddedHour(event.target.value) : setDeletedHour(event.target.value);
+    }
+    
+    const validateTimeFormat = (time) => {
+        const pattern = /^(1[0-2]|0?[1-9]):(00|30)$/;
+        return pattern.test(time);
+    }
+
+    const addTime = () => {
+        if (validateTimeFormat(addedHour)) {
+            const hourToAdd = addedHour + suffix
+            let dayToUpdate;
+            for (let i = 0; i<7; i++) {
+                if (daysAndHours[i][selectedDay] != null) {
+                    dayToUpdate = daysAndHours[i][selectedDay];
+                }
+            }
+            if (!dayToUpdate.includes(hourToAdd)) {
+                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/update-hours`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({day: selectedDay, time: hourToAdd}),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        setDaysAndHours(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    })
+                setHourAdded(true);
+            } else {
+                setHourAdded(false);
+            }
+        } else {
+            setHourAdded(false);
+        }
+    };
+
+    const deleteTime = () => {
+        let dayToUpdate;
+        if (validateTimeFormat(deletedHour)) {
+            const hourToDelete = deletedHour + suffix
+            for (let i = 0; i<7; i++) {
+                if (daysAndHours[i][selectedDay] != null) {
+                    dayToUpdate = daysAndHours[i][selectedDay];
+                }
+            }
+            if (dayToUpdate.includes(hourToDelete)) {
+                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/delete-hours`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({day: selectedDay, time: hourToDelete}),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        setDaysAndHours(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    })
+                setHourDeleted(true);
+            } else {
+                setHourDeleted(false);
+            }
+        } else {
+            setHourDeleted(false);
+        }
+    }
+
+    const changeSuffix = () => {
+        suffix === 'am'? setSuffix('pm') : setSuffix('am');
+    }
+
     useEffect(() => {
         const weekdays = []
         const fetchTimes = async () => {
@@ -74,10 +170,59 @@ export default function Admin() {
                                     Day
                                 </label>
                                 <button onClick={handleButtonClick}
-                                        className={`days-toggle ${buttonOpen}`}
+                                        className={`days-toggle ${buttonOpen? 'open' : 'closed'}`}
                                 >
-                                    {!buttonOpen? 'Click to Open' : 'Click to Close'}
+                                    {!buttonOpen && selectedDay === null? 'Select Day' : selectedDay != null? `${selectedDay}` : 'Select Day'}
                                 </button>
+                                <ul id='days-list'>
+                                    {
+                                        days.map((day, index) => {
+                                            return (
+                                                <li className='list-item-day'
+                                                    key={index}
+                                                    onClick={handleDaySelection}
+                                                >
+                                                    {day}
+                                                </li>
+                                            );
+                                        })
+                                    }
+                                </ul>
+                                <div id='current-hours-wrapper'>
+                                    <h3 id='current-hours-header'>{selectedDay == null ? 'Select a Day to View Hours' :
+                                        `Current ${formattedDay} Hours`}
+                                    </h3>
+                                    <p id='hours-list'> 
+                                        {
+                                            daysAndHours.map((day, index) => {
+                                                 if (Object.keys(daysAndHours[index]).includes(selectedDay)) {
+                                                    return daysAndHours[index][selectedDay].join(', ')
+                                                 }
+                                            })
+                                        }
+                                    </p>
+                                </div>
+                                <div id='hours-editor-wrapper'>
+                                    <h3 id='hours-editor-header'>
+                                        {selectedDay == null? 'Select a Day to Edit Hours' : `Edit ${formattedDay} Hours`}
+                                    </h3> 
+                                    {selectedDay != null? 
+                                    <AddAndDeleteComponents 
+                                        formattedDay={formattedDay} 
+                                        useCase='hours'
+                                        handleEditorChange={handleEditorChange}
+                                        addedHour={addedHour}
+                                        deletedHour={deletedHour}
+                                        addTime={addTime}
+                                        deleteTime={deleteTime}
+                                        changeSuffix={changeSuffix}
+                                        suffix={suffix}
+                                        hourAdded={hourAdded}
+                                        hourDeleted={hourDeleted}
+                                    /> :
+                                    ''
+                                    }                              
+                                </div>
                             </div>
                         </div>
                         <div id='blocked-dates-setter-wrapper'>
@@ -133,4 +278,55 @@ function DaysAndTimesList(props) {
             }
         </>
     );
+}
+
+function AddAndDeleteComponents(props) {
+    const {formattedDay, useCase, handleEditorChange, addedHour, deletedHour, addTime, 
+           deleteTime, changeSuffix, suffix, hourAdded, hourDeleted} = {...props};
+
+    return (
+        <>
+            <label htmlFor='add-time' id={`add-${useCase}-label`}>Add Time to {formattedDay} Hours</label>
+            <div className='input-and-suffix-wrapper'>
+                <input type='text' 
+                       id={`add-${useCase}`}
+                       onChange={handleEditorChange}
+                       value={addedHour}
+                />
+                <button className='am-pm'
+                        onClick={changeSuffix}
+                >
+                    {suffix}
+                </button>
+            </div>
+            <button id='add-button'
+                    onClick={addTime}
+            >
+                Add
+            </button>
+            <p>{hourAdded? 'Hour Added Successfully' : hourAdded == null? '' : 'Could Not Add Hour'}</p>
+            <br/>
+            <label htmlFor='delete-time' id= {`delete-${useCase}-label`}>
+                Delete Time from {formattedDay} Hours
+            </label>
+            <div className='input-and-suffix-wrapper'>
+                <input id={`delete-${useCase}`} 
+                       type='text'
+                       onChange={handleEditorChange}
+                       value={deletedHour}
+                />
+                <button className='am-pm'
+                        onClick={changeSuffix}
+                >
+                    {suffix}
+                </button>
+            </div>
+            <button id='delete-button'
+                    onClick={deleteTime}
+            >
+                Delete
+            </button>
+            <p>{hourDeleted? 'Hour Deleted Successfully' : hourDeleted == null? '' : 'Could Not Delete Hour'}</p>
+        </>
+    )
 }
