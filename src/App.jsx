@@ -14,7 +14,8 @@ import './css/quote.css'
 import './css/placesAutocomplete.css'
 import './css/appointment.css'
 import './css/calendar-custom.css'
-import './css/admin.css'
+import './css/adminAndHours.css'
+import './css/adminBlockedDates.css'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import Appointment from './components/appointment';
 import Admin from './components/admin';

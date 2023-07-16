@@ -16,6 +16,7 @@ export default function Admin() {
     const [deletedHour, setDeletedHour] = useState('');
     const [hourDeleted, setHourDeleted] = useState(null);
     const [suffix, setSuffix] = useState('am');
+    const [blockedDates, setBlockedDates] = useState([]);
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -180,16 +181,25 @@ export default function Admin() {
         fetchTimes();
     }, []);
 
+    useEffect(() => {
+        const fetchBlockedDates = async () => {
+            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-dates`);
+            const blockedDates = await results.json();
+            setBlockedDates(blockedDates);
+        }
+        fetchBlockedDates();
+    }, []);
+
     return (
         <div id='admin-body'>
-            {!loggedIn? 
+            {loggedIn? 
                 
                     <section id='navigation-section'>
                         <div id='hours-setter-wrapper'>
                             <h2 id='hours-header'>Hours</h2>
                             <div id='weekday-setter-wrapper'>
                                 <label htmlFor='day' className='day-selector-label'>
-                                    Day
+                                    Day of Week
                                 </label>
                                 <button onClick={handleButtonClick}
                                         className={`days-toggle ${buttonOpen? 'open' : 'closed'}`}
@@ -249,7 +259,16 @@ export default function Admin() {
                             </div>
                         </div>
                         <div id='blocked-dates-setter-wrapper'>
-                            <h2>Blocked Dates</h2>
+                            <h2 id='blocked-dates-setter-header'>Blocked Dates</h2>
+                            <h3 id='dates-list-header'>Vacation Time/Days Off</h3>
+                            <div id='blocked-dates-setter'>
+                                    <p id='dates-list'>
+                                        {blockedDates.map((blocked, i) => {
+                                            return blocked['Blocked'].join(", ");
+                                        })}
+                                    </p>
+                                    <BlockedDatesSetter />
+                            </div>
                         </div>
                         <div id='blocked-times-setter-wrapper'>
                             <h2>Blocked Times</h2>
@@ -287,26 +306,9 @@ export default function Admin() {
     );
 }
 
-function DaysAndTimesList(props) {
-    const {day, times} = {...props};
-    return (
-        <>
-            <h2>{day}</h2>
-            {
-                times.map(time => {
-                    return (
-                        <li>{time}</li>
-                    );
-                })
-            }
-        </>
-    );
-}
-
 function AddAndDeleteComponents(props) {
     const {formattedDay, useCase, handleEditorChange, addedHour, deletedHour, addTime, 
            deleteTime, changeSuffix, suffix, hourAdded, hourDeleted} = {...props};
-
     return (
         <>
             <label htmlFor='add-time' id={`add-${useCase}-label`}>Add Time to {formattedDay} Hours</label>
@@ -356,4 +358,19 @@ function AddAndDeleteComponents(props) {
             </p>
         </>
     )
+}
+
+function BlockedDatesSetter(props) {
+    return (
+        <>
+            <label htmlFor='start-date' className='blocked-date-label'>
+                Start Date
+            </label>
+            <input type='text' className='date-input' placeholder="ex. Aug 13th 2023"/>
+            <label htmlFor='end-date' className='blocked-date-label'>
+                End Date
+            </label>
+            <input type='text' className='date-input' placeholder="ex. Aug 20th 2023"/>
+        </>
+    );
 }

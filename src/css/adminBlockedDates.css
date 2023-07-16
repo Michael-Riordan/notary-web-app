@@ -1,0 +1,43 @@
+#blocked-dates-setter-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 25%;
+    text-align: center;
+}
+
+#blocked-dates-setter-header {
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
+
+#dates-list-header {
+    margin-bottom: 0;
+}
+
+#blocked-dates-setter {
+    display: grid;
+}
+
+#dates-list {
+    margin-top: 0;
+    font-weight: bold;
+    width: 80%;
+    background-color: antiquewhite;
+    border: 1px solid black;
+    justify-self: center;
+}
+
+.blocked-date-label {
+    font-size: 1rem;
+    font-family: 'PTSansNarrow';
+    font-weight: bold;
+}
+
+.date-input {
+    width: 80%;
+    justify-self: center;
+    text-align: center;
+}
