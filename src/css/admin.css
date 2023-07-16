@@ -198,6 +198,7 @@
 .am-pm {
     background-color: rgb(231, 196, 150);
     border-radius: 5px;
+    font-weight: bold;
 }
 
 .am-pm:hover {

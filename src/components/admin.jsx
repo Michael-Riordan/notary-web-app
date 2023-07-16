@@ -17,6 +17,28 @@ export default function Admin() {
     const [hourDeleted, setHourDeleted] = useState(null);
     const [suffix, setSuffix] = useState('am');
 
+    const sort_by_hour = (time1, time2) => {
+        let hour1 = parseInt(time1.slice(0, -5));
+        let hour2 = parseInt(time2.slice(0, -5));
+        let minute1 = parseInt(time1.slice(-7, -5));
+        let minute2 = parseInt(time2.slice(-7, -5));
+        const period1 = time1.slice(-2);
+        const period2 = time2.slice(-2);
+
+        if (period1 == 'pm' && hour1 !== 12) {
+            hour1 += 12;
+        }
+
+        if (period2 == 'pm' && hour2 !== 12) {
+            hour2 += 12;
+        }
+
+        if (hour1 === hour2) {
+            return minute1 - minute2;
+        }
+
+        return hour1 - hour2;
+    };
 
     const handleInputChange = (event) => {
         if (event.target.className === 'input username') {
@@ -196,7 +218,8 @@ export default function Admin() {
                                         {
                                             daysAndHours.map((day, index) => {
                                                  if (Object.keys(daysAndHours[index]).includes(selectedDay)) {
-                                                    return daysAndHours[index][selectedDay].join(', ')
+                                                    const sortedHours = daysAndHours[index][selectedDay].sort(sort_by_hour);
+                                                    return sortedHours.join(', ');
                                                  }
                                             })
                                         }

@@ -6,34 +6,19 @@ import moment from 'moment';
 import 'react-calendar/dist/Calendar.css'
 import '../css/calendar-custom.css'
 
+const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu','Fri'];
+
 export default function Appointment() {
     const [clickedDate, setClickedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
-    const [chosenWeekendDay, setChosenWeekendDay] = useState(null)
-    const [chosenWeekday, setChosenWeekday] = useState(null);
     const [appointments, setAppointments] = useState([]);
     const [appointmentId, setAppointmentId] = useState(null);
     const [daysAndHours, setDaysAndHours] = useState([]);
     const [days, setDays] = useState([]);
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
-    console.log(hoursForCurrentDay);
 
     const history = useHistory();
 
-    const weekdays = ['Mon', 'Tue', 'Wed', 'Thu','Fri']
-    const daysAndTimes = {
-        weekday: weekdays.map(weekday => ({
-            weekday: weekday,
-            times: ['6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm',  '8:30pm', '9:00pm'],
-        })),
-        'Sat': ['7:00am', '7:30am', '8:00am', '8:30am', '9:00am', 
-                '9:30am', '10:00am', '10:30am', '11:00am', '11:30am', 
-                '12:00pm', '12:30pm', '1:00pm', '1:30pm','2:00pm', 
-                '2:30pm', '3:00pm', '3:30pm', '4:00pm'],
-        'Sun': ['9:00am', '9:30am', '10:00am', '10:30am', '11:00am', 
-                '11:30am', '12:00pm', '12:30pm', '1:00pm', '1:30pm',
-                '2:00pm', '2:30pm', '3:00pm', '3:30pm', '4:00pm']
-    }
 
     const calculateMaxDate = () => {
         const date = (new Date());
@@ -52,7 +37,6 @@ export default function Appointment() {
     const handleClick = (value) => {
         const date = value.toString();
         const trimmedDate = date.split(" ").slice(0, 4);
-        const dayOfWeek = date.split(" ")[0];
         const numberDate = date.split(" ")[2]
         let suffix;
         numberDate[numberDate.length - 1] === '1' && numberDate !== '11'? suffix = 'st' : 
@@ -60,17 +44,6 @@ export default function Appointment() {
         numberDate[numberDate.length - 1] === '3' && numberDate !== '13'? suffix = 'rd' :
         suffix = 'th';
         trimmedDate[2] = numberDate + suffix;
-        
-        if (dayOfWeek === 'Sat' || dayOfWeek === 'Sun') {
-            setChosenWeekendDay(dayOfWeek);
-        } else {
-            const weekday = daysAndTimes.weekday.filter(day => {
-                if (day.weekday === dayOfWeek) {
-                    return day.weekday;
-                }
-            });
-            setChosenWeekday(weekday);
-        }
         setClickedDate(trimmedDate.join(" "));
     }
     // Adding appointment time immediately upon click to block appointment before prompt.
@@ -126,9 +99,9 @@ export default function Appointment() {
         }
         
         appointments.forEach(appointment => {
-            if (time === appointment.appointmentTime && clickedDate === appointment.appointmentDate && chosenWeekday == null) {
+            if (time === appointment.appointmentTime && clickedDate === appointment.appointmentDate) {
                 disabled = true;
-            } else if (appointment.appointmentDate === clickedDate && chosenWeekday == null) {
+            } else if (appointment.appointmentDate === clickedDate) {
                 const dateAndTime = appointment.appointmentDate + ' ' + appointment.appointmentTime;
                 const formattedDate = moment(dateAndTime, 'ddd MMM Do YYYY h:mma');
                 const blockStart = formattedDate.clone().subtract(2.5, 'hours');
@@ -156,41 +129,33 @@ export default function Appointment() {
         const todayObject = moment(now, 'ddd MMM D YYYY h:mma');
         const todayBuffer = todayObject.clone().add(1.5, 'hours')
         const day = moment(date).format('ddd MMM D YYYY');
+        //checking if all possible appointment times are past for current day
         if (todayFormatted === day) {
             const weekday = day.split(' ')[0];
-            if (weekday === 'Sat' || weekday === 'Sun') {
-                daysAndTimes[weekday].forEach(time => {
-                    const dayAndTime = day + ' ' + time;
-                    const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
-                    if (dayAndTimeObj <= todayBuffer) {
-                        blockedTimes.push(dayAndTimeObj._i);
-                        if (blockedTimes.length >= daysAndTimes[weekday].length) {
-                            disabled = true;
-                        }
-                    }
-                });
-            } else {
-                daysAndTimes.weekday.forEach(weekday => {
-                    weekday.times.forEach(time => {
-                        const dayAndTime = day + ' ' + time;
-                        const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
-                        if (dayAndTimeObj <= todayBuffer) {
-                            if (!blockedTimes.includes(dayAndTimeObj._i)) {
-                                blockedTimes.push(dayAndTimeObj._i);
-                                if (blockedTimes.length >= weekday.times.length) {
-                                    disabled = true;
+            for (let i=0; i<7; i++) {
+                if (daysAndHours.length > 0) {
+                    if (Object.keys(daysAndHours[i])[0] === weekday) {
+                        daysAndHours[i][weekday].forEach(time => {
+                            const dayAndTime = day + ' ' + time;
+                            const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
+                            if (dayAndTimeObj <= todayBuffer) {
+                                if (!blockedTimes.includes(dayAndTimeObj._i)) {
+                                    blockedTimes.push(dayAndTimeObj._i);
+                                    if (blockedTimes.length >= daysAndHours[i][weekday].length) {
+                                        disabled = true;
+                                    }
                                 }
                             }
-                        }
-                    })
-                });
+                        })
+                    }
+                }
             }
         }
 
         appointments.forEach(appointment => {
             const day = appointment.appointmentDate.split(' ')[0]
             const dateNoSuffix = appointment.appointmentDate.replace(/th|st|rd|nd/, '');
-            if (weekdays.includes(day)) {
+            if (WEEKDAYS.includes(day)) {
                 if (dateNoSuffix === date.toDateString()) {
                     disabled = true;
                 }
@@ -201,16 +166,26 @@ export default function Appointment() {
                     const blockStart = formattedDate.clone().subtract(2.5, 'hours');
                     const blockEnd = formattedDate.clone().add(2.5, 'hours');
                     let startTime = blockStart.clone();
+                    let hoursForDay;
+                    for (let i=0; i<7; i++) {
+                        if (daysAndHours.length > 0) {
+                            if (Object.keys(daysAndHours[i])[0] === day) {
+                                hoursForDay = daysAndHours[i][day]
+                            }
+                        }
+                    }
                     while (startTime <= blockEnd) {
-                        if (daysAndTimes[day].includes(startTime.format('ddd MMM D YYYY h:mma').split(' ')[4])) {
-                            if (!blockedTimes.includes(dateNoSuffix + ' ' + startTime.format('ddd MMM DD YYYY h:mma').split(' ')[4])) {
-                                blockedTimes.push(startTime.format('ddd MMM DD YYYY h:mma'))
-                            };
+                        if (hoursForDay != null) {
+                            if (hoursForDay.includes(startTime.format('ddd MMM D YYYY h:mma').split(' ')[4])) {
+                                if (!blockedTimes.includes(dateNoSuffix + ' ' + startTime.format('ddd MMM DD YYYY h:mma').split(' ')[4])) {
+                                    blockedTimes.push(startTime.format('ddd MMM DD YYYY h:mma'))
+                                };
+                            }
+                            if (blockedTimes.length >= hoursForDay.length) {
+                                disabled = true;
+                            }
                         }
                         startTime.add(30, 'minutes');
-                    }
-                    if (blockedTimes.length >= daysAndTimes[day].length) {
-                        disabled = true;
                     }
                 }
             }
