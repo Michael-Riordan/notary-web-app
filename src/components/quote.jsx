@@ -335,6 +335,7 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             type='text'
                             value={addressInput}
                             handleInputChange={handleInputChange}
+                            placeholder='123 Main St, Anytown, AZ'
                             img={<img src={googleLogo} alt='google logo' id='google-logo'/>}
 
                         />
@@ -372,6 +373,7 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             type='text'
                             value={nameInput}
                             required={true}
+                            placeholder='First Name, Last Name'
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
@@ -380,6 +382,7 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             type='tel'
                             value={numberInput}
                             required={false}
+                            placeholder='XXX-XXX-XXXX'
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
@@ -388,6 +391,7 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             type='email'
                             value={emailInput}
                             required={true}
+                            placeholder='JaneDoe@email.com'
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
@@ -433,7 +437,7 @@ function ServiceLabelAndInput(props) {
 }
 
 export function FormLabelAndInput(props) {
-    const { name, type, handleInputChange, value, label, img, required} = props;
+    const { name, type, handleInputChange, value, label, img, required, placeholder} = props;
 
     return (
         <>
@@ -446,7 +450,7 @@ export function FormLabelAndInput(props) {
                    name={`${name}-input`}
                    type={type}
                    value={value}
-                   placeholder={name === 'address'? `Signing Address` : `Your ${name}`}
+                   placeholder={placeholder}
                    onChange={handleInputChange}
                    required={required}
             /> : 

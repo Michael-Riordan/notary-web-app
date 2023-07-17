@@ -19,7 +19,6 @@ export default function Appointment() {
 
     const history = useHistory();
 
-
     const calculateMaxDate = () => {
         const date = (new Date());
         const numberDay = date.getDate();

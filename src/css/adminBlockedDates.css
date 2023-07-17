@@ -31,13 +31,47 @@
 }
 
 .blocked-date-label {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-family: 'PTSansNarrow';
     font-weight: bold;
 }
 
 .date-input {
     width: 80%;
+    height: 80%;
     justify-self: center;
     text-align: center;
+    font-weight: bold;
+    font-family: 'PTSansNarrow';
+}
+
+#confirm-dates-button {
+    margin-top: 5px;
+    width: 45%;
+    justify-self: center;
+    background-color: rgb(151, 231, 150);
+    border-radius: 5px;
+    font-family: 'PTSansNarrow';
+    font-weight: bold;
+    font-size: .9rem;
+}
+
+#confirm-dates-button:hover {
+    background-color: rgb(63, 168, 61);
+    cursor: pointer;
+}
+
+#remove-dates-button {
+    width: 45%;
+    justify-self: center;
+    background-color: rgb(224, 120, 97);;
+    border-radius: 5px;
+    font-family: 'PTSansNarrow';
+    font-weight: bold;
+    font-size: .9rem;
+}
+
+#remove-dates-button:hover {
+    background-color: rgb(185, 66, 39);
+    cursor: pointer;
 }

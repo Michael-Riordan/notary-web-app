@@ -17,6 +17,9 @@ export default function Admin() {
     const [hourDeleted, setHourDeleted] = useState(null);
     const [suffix, setSuffix] = useState('am');
     const [blockedDates, setBlockedDates] = useState([]);
+    const [chosenBlockedStartDate, setChosenBlockedStartDate] = useState('');
+    const [chosenBlockedEndDate, setChosenBlockedEndDate] = useState('')
+    console.log(chosenBlockedStartDate);
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -164,6 +167,18 @@ export default function Admin() {
         suffix === 'am'? setSuffix('pm') : setSuffix('am');
     }
 
+    const handleAddDatesClick = () => {
+        return;
+    }
+
+    const handleRemoveDatesClick = () => {
+        return;
+    }
+
+    const handleDatesInputChange = (event) => {
+        event.target.className === 'date-input start'? setChosenBlockedStartDate(event.target.value) : setChosenBlockedEndDate(event.target.value);
+    }
+
     useEffect(() => {
         const weekdays = []
         const fetchTimes = async () => {
@@ -267,7 +282,11 @@ export default function Admin() {
                                             return blocked['Blocked'].join(", ");
                                         })}
                                     </p>
-                                    <BlockedDatesSetter />
+                                    <BlockedDatesSetter 
+                                        handleAddDatesClick={handleAddDatesClick}
+                                        handleRemoveDatesClick={handleRemoveDatesClick}
+                                        handleDatesInputChange={handleDatesInputChange}
+                                    />
                             </div>
                         </div>
                         <div id='blocked-times-setter-wrapper'>
@@ -284,6 +303,7 @@ export default function Admin() {
                         type='text'
                         value={username}
                         required={true}
+                        placeholder='username'
                         handleInputChange={handleInputChange}
                     />
                     <FormLabelAndInput
@@ -292,6 +312,7 @@ export default function Admin() {
                         type='password'
                         value={password}
                         required={true}
+                        placeholder='password'
                         handleInputChange={handleInputChange}
                     />
                     <button
@@ -361,16 +382,21 @@ function AddAndDeleteComponents(props) {
 }
 
 function BlockedDatesSetter(props) {
+    const {handleAddDatesClick, handleRemoveDatesClick, handleDatesInputChange} = {...props};
     return (
         <>
             <label htmlFor='start-date' className='blocked-date-label'>
                 Start Date
             </label>
-            <input type='text' className='date-input' placeholder="ex. Aug 13th 2023"/>
+            <input type='text' className='date-input start' placeholder="Aug 13th 2023" onChange={handleDatesInputChange}/>
             <label htmlFor='end-date' className='blocked-date-label'>
                 End Date
             </label>
-            <input type='text' className='date-input' placeholder="ex. Aug 20th 2023"/>
+            <input type='text' className='date-input end' placeholder="Aug 20th 2023" onChange={handleDatesInputChange}/>
+            <div id='blocked-dates-buttons-wrapper'>
+                <button id='confirm-dates-button'>Add Blocked Dates</button>
+                <button id='remove-dates-button'>Remove Blocked Dates</button>
+            </div>
         </>
     );
 }
