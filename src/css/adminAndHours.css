@@ -59,7 +59,7 @@
 }
 
 #login-button {
-    margin-top: 20px;
+    margin-top: 0px;
     background-color: antiquewhite;
     border-radius: 10px;
     font-family: 'PTSansNarrow';
@@ -71,6 +71,14 @@
     transform: translateY(-2px);
     background-color: rgb(227, 158, 68);
     cursor: pointer;
+}
+
+#login-failed {
+    font-family: 'PTSansNarrow';
+    font-weight: bold;
+    color: red;
+    font-size: 1.2rem;
+    text-align: center;
 }
 
 #navigation-section {

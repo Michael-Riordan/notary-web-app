@@ -64,7 +64,7 @@
 #remove-dates-button {
     width: 45%;
     justify-self: center;
-    background-color: rgb(224, 120, 97);;
+    background-color: rgb(224, 120, 97);
     border-radius: 5px;
     font-family: 'PTSansNarrow';
     font-weight: bold;
@@ -74,4 +74,19 @@
 #remove-dates-button:hover {
     background-color: rgb(185, 66, 39);
     cursor: pointer;
+}
+
+.date-error {
+    color: rgb(207, 46, 46);
+    font-weight: bold;
+}
+
+.date-error {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+}
+
+.date-error:last-of-type {
+    margin-top: 0;
 }

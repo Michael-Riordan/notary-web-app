@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FormLabelAndInput } from "./quote";
 import axios from "axios";
+import moment from "moment";
 
 export default function Admin() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -19,7 +20,9 @@ export default function Admin() {
     const [blockedDates, setBlockedDates] = useState([]);
     const [chosenBlockedStartDate, setChosenBlockedStartDate] = useState('');
     const [chosenBlockedEndDate, setChosenBlockedEndDate] = useState('')
-    console.log(chosenBlockedStartDate);
+    const [loginAttempted, setLoginAttempted] = useState(false);
+    const [endDateGreater, setEndDateGreater] = useState(null);
+    const [validDate, setValidDate] = useState(null);
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -67,6 +70,7 @@ export default function Admin() {
             }
         } catch (error) {
             console.log('Error: ', error.response.data);
+            setLoginAttempted(true);
         }
     }
 
@@ -95,6 +99,27 @@ export default function Admin() {
     const validateTimeFormat = (time) => {
         const pattern = /^(1[0-2]|0?[1-9]):(00|30)$/;
         return pattern.test(time);
+    }
+
+    const validateDateFormat = (date) => {
+        const pattern = /^[A-Za-z]{3} \d{1,2} \d{4}$/;
+        return pattern.test(date);
+    }
+
+    const updateBlockedDates = (event) => {
+        let datesToAddOrRemove = [];
+        if (validateDateFormat(chosenBlockedStartDate) && validateDateFormat(chosenBlockedEndDate)) {
+            const chosenStartMoment = moment(chosenBlockedStartDate, 'MMM D YYYY');
+            const chosenEndMoment = moment(chosenBlockedEndDate, 'MMM D YYYY');
+            chosenEndMoment >= chosenStartMoment? setEndDateGreater(true) : setEndDateGreater(false);
+            chosenStartMoment.isValid() && chosenEndMoment.isValid()? setValidDate(true) : setValidDate(false);
+            if (chosenEndMoment > chosenStartMoment) {
+                datesToAddOrRemove.push(chosenStartMoment.format('MMM D YYYY') + '-' + chosenEndMoment.format('MMM D YYYY'))
+                if (event.target.id = 'confirm-dates-button') {
+                    sendDatesAddRequest(datesToAddOrRemove);
+                }
+            }
+        }
     }
 
     const addTime = () => {
@@ -161,6 +186,24 @@ export default function Admin() {
         } else {
             setHourDeleted(false);
         }
+    }
+
+    const sendDatesAddRequest = (blockedDates) => {
+        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/updateBlockedDates`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ blockedDates: blockedDates }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setBlockedDates(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
     const changeSuffix = () => {
@@ -286,7 +329,10 @@ export default function Admin() {
                                         handleAddDatesClick={handleAddDatesClick}
                                         handleRemoveDatesClick={handleRemoveDatesClick}
                                         handleDatesInputChange={handleDatesInputChange}
+                                        updateBlockedDates={updateBlockedDates}
                                     />
+                                    {validDate != null && validDate? '' : <p className='date-error'>Please enter a valid date.</p>}
+                                    {endDateGreater != null && endDateGreater? '' : <p className='date-error'>The end date must be the same as or after the start date.</p>}
                             </div>
                         </div>
                         <div id='blocked-times-setter-wrapper'>
@@ -321,6 +367,7 @@ export default function Admin() {
                     >
                         Log In
                     </button>
+                    {loginAttempted? <p id='login-failed'>Incorrect Username/Password. <br/> Please Try Again</p> : ''}
                 </form>
             }
         </div>
@@ -382,20 +429,35 @@ function AddAndDeleteComponents(props) {
 }
 
 function BlockedDatesSetter(props) {
-    const {handleAddDatesClick, handleRemoveDatesClick, handleDatesInputChange} = {...props};
+    const {handleDatesInputChange, updateBlockedDates} = {...props};
     return (
         <>
             <label htmlFor='start-date' className='blocked-date-label'>
                 Start Date
             </label>
-            <input type='text' className='date-input start' placeholder="Aug 13th 2023" onChange={handleDatesInputChange}/>
-            <label htmlFor='end-date' className='blocked-date-label'>
+            <input type='text' 
+                   className='date-input start' 
+                   placeholder="Aug 13 2023" 
+                   onChange={handleDatesInputChange}
+            />
+            <label htmlFor='end-date' 
+                   className='blocked-date-label'
+            >
                 End Date
             </label>
-            <input type='text' className='date-input end' placeholder="Aug 20th 2023" onChange={handleDatesInputChange}/>
+            <input type='text' 
+                   className='date-input end' 
+                   placeholder="Aug 20 2023" 
+                   onChange={handleDatesInputChange}
+            />
             <div id='blocked-dates-buttons-wrapper'>
-                <button id='confirm-dates-button'>Add Blocked Dates</button>
-                <button id='remove-dates-button'>Remove Blocked Dates</button>
+                <button id='confirm-dates-button'
+                        onClick={updateBlockedDates}
+                >
+                    Add Blocked Dates
+                </button>
+                <button id='remove-dates-button'
+                        onClick={updateBlockedDates}>Remove Blocked Dates</button>
             </div>
         </>
     );
