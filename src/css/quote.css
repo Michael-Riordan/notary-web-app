@@ -170,6 +170,7 @@
     height: 0px;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
     overflow: hidden;
+    font-weight: bold;
 }
 
 .button-input.clicked ~ #services-menu #services-list > .service-li-number {
