@@ -196,26 +196,18 @@ export default function Admin() {
             },
             body: JSON.stringify({ blockedDates: blockedDates }),
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                setBlockedDates(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+          .then(res =>
+            res.json())
+          .then(data => {
+            setBlockedDates(data);
+        })
+           .catch(error => {
+            console.error('Error:', error);
+        });
     }
 
     const changeSuffix = () => {
         suffix === 'am'? setSuffix('pm') : setSuffix('am');
-    }
-
-    const handleAddDatesClick = () => {
-        return;
-    }
-
-    const handleRemoveDatesClick = () => {
-        return;
     }
 
     const handleDatesInputChange = (event) => {
@@ -326,13 +318,11 @@ export default function Admin() {
                                         })}
                                     </p>
                                     <BlockedDatesSetter 
-                                        handleAddDatesClick={handleAddDatesClick}
-                                        handleRemoveDatesClick={handleRemoveDatesClick}
                                         handleDatesInputChange={handleDatesInputChange}
                                         updateBlockedDates={updateBlockedDates}
                                     />
-                                    {validDate != null && validDate? '' : <p className='date-error'>Please enter a valid date.</p>}
-                                    {endDateGreater != null && endDateGreater? '' : <p className='date-error'>The end date must be the same as or after the start date.</p>}
+                                    {validDate == null? '' : validDate? '' : <p className='date-error'>Please enter a valid date.</p>}
+                                    {endDateGreater == null? '' : endDateGreater? '' : <p className='date-error'>The end date must be the same as or after the start date.</p>}
                             </div>
                         </div>
                         <div id='blocked-times-setter-wrapper'>
