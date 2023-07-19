@@ -27,7 +27,7 @@ export default function Quote() {
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
-My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
+My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
     
     const history = useHistory();
     const location = useLocation();
@@ -36,7 +36,7 @@ My Free Estimate: ${totalPrice + notarizationPrice + Number(costOfGas)}`);
         {id: 0, name: 'Acknowledgement', price: 10},
         {id: 1, name: 'Jurat', price: 10},
         {id: 2, name: 'Loan Package', price: 125},
-        {id: 3, name: 'Notarization', price: 10, notarizations: numOfNotarizations},
+        {id: 3, name: 'Notarization', price: '', notarizations: numOfNotarizations},
     ];
 
     /*created servicesContd to conditionally load in this service as a list item*/
@@ -425,7 +425,7 @@ function ServiceLabelAndInput(props) {
     return (
         <li key={id} className='service-li'>
             <label className='service-label'>
-                {name}: ${price}
+                {name === 'Notarization'? `Basic ${name}: Select Number Below` : `${name}: $${price}`}
                 <input type='checkbox' 
                        className='service-input'
                        onChange={(event) => handleCheckboxChange(id, price)} 

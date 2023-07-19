@@ -113,31 +113,39 @@ export default function Admin() {
             const chosenEndMoment = moment(chosenBlockedEndDate, 'MMM D YYYY');
             chosenEndMoment >= chosenStartMoment? setEndDateGreater(true) : setEndDateGreater(false);
             chosenStartMoment.isValid() && chosenEndMoment.isValid()? setValidDate(true) : setValidDate(false);
-            if (chosenEndMoment > chosenStartMoment) {
-                datesToAddOrRemove.push(chosenStartMoment.format('MMM D YYYY') + '-' + chosenEndMoment.format('MMM D YYYY'))
-                if (event.target.id = 'confirm-dates-button') {
-                    sendDatesAddRequest(datesToAddOrRemove);
+            if (chosenEndMoment >= chosenStartMoment) {
+                if (chosenEndMoment.format('MMM D YYYY') === chosenStartMoment.format('MMM D YYYY')) {
+                    datesToAddOrRemove.push(chosenStartMoment.format('MMM D YYYY'));
+                } else {
+                    datesToAddOrRemove.push(chosenStartMoment.format('MMM D YYYY') + '-' + chosenEndMoment.format('MMM D YYYY'))
+                }
+                if (event.target.id === 'confirm-dates-button') {
+                    sendDatesUpdateRequest(datesToAddOrRemove, `updateBlockedDates`);
+                } else if (event.target.id === 'remove-dates-button') {
+                    sendDatesUpdateRequest(datesToAddOrRemove, 'deleteSelectedDates');
                 }
             }
         }
     }
 
-    const addTime = () => {
-        if (validateTimeFormat(addedHour)) {
-            const hourToAdd = addedHour + suffix
+    const updateTime  = (path) => {
+        let hourToUpdate;
+        path === 'delete-hours'? hourToUpdate = deletedHour : hourToUpdate = addedHour;
+        if (validateTimeFormat(hourToUpdate)) {
+            const hourToChange = hourToUpdate + suffix
             let dayToUpdate;
             for (let i = 0; i<7; i++) {
                 if (daysAndHours[i][selectedDay] != null) {
                     dayToUpdate = daysAndHours[i][selectedDay];
                 }
             }
-            if (!dayToUpdate.includes(hourToAdd)) {
-                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/update-hours`, {
+            if (path === 'delete-hours'? dayToUpdate.includes(hourToChange) : !dayToUpdate.includes(hourToChange)) {
+                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({day: selectedDay, time: hourToAdd}),
+                    body: JSON.stringify({day: selectedDay, time: hourToChange}),
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -146,50 +154,17 @@ export default function Admin() {
                     .catch(error => {
                         console.error('Error:', error);
                     })
-                setHourAdded(true);
+                path === 'delete-hours'? setHourDeleted(true) : setHourAdded(true);
             } else {
-                setHourAdded(false);
+                path === 'delete-hours'? setHourDeleted(false) : setHourAdded(false);
             }
         } else {
-            setHourAdded(false);
+            path === 'delete-hours'? setHourDeleted(false) : setHourAdded(false);
         }
     };
 
-    const deleteTime = () => {
-        let dayToUpdate;
-        if (validateTimeFormat(deletedHour)) {
-            const hourToDelete = deletedHour + suffix
-            for (let i = 0; i<7; i++) {
-                if (daysAndHours[i][selectedDay] != null) {
-                    dayToUpdate = daysAndHours[i][selectedDay];
-                }
-            }
-            if (dayToUpdate.includes(hourToDelete)) {
-                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/delete-hours`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({day: selectedDay, time: hourToDelete}),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        setDaysAndHours(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    })
-                setHourDeleted(true);
-            } else {
-                setHourDeleted(false);
-            }
-        } else {
-            setHourDeleted(false);
-        }
-    }
-
-    const sendDatesAddRequest = (blockedDates) => {
-        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/updateBlockedDates`, {
+    const sendDatesUpdateRequest = (blockedDates, path) => {
+        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -296,8 +271,7 @@ export default function Admin() {
                                         handleEditorChange={handleEditorChange}
                                         addedHour={addedHour}
                                         deletedHour={deletedHour}
-                                        addTime={addTime}
-                                        deleteTime={deleteTime}
+                                        updateTime={updateTime}
                                         changeSuffix={changeSuffix}
                                         suffix={suffix}
                                         hourAdded={hourAdded}
@@ -314,7 +288,7 @@ export default function Admin() {
                             <div id='blocked-dates-setter'>
                                     <p id='dates-list'>
                                         {blockedDates.map((blocked, i) => {
-                                            return blocked['Blocked'].join(", ");
+                                            return blocked['Blocked'].join(' ');
                                         })}
                                     </p>
                                     <BlockedDatesSetter 
@@ -365,8 +339,8 @@ export default function Admin() {
 }
 
 function AddAndDeleteComponents(props) {
-    const {formattedDay, useCase, handleEditorChange, addedHour, deletedHour, addTime, 
-           deleteTime, changeSuffix, suffix, hourAdded, hourDeleted} = {...props};
+    const {formattedDay, useCase, handleEditorChange, addedHour, deletedHour, updateTime, 
+           changeSuffix, suffix, hourAdded, hourDeleted} = {...props};
     return (
         <>
             <label htmlFor='add-time' id={`add-${useCase}-label`}>Add Time to {formattedDay} Hours</label>
@@ -383,7 +357,7 @@ function AddAndDeleteComponents(props) {
                 </button>
             </div>
             <button id='add-button'
-                    onClick={addTime}
+                    onClick={() => updateTime('update-hours')}
             >
                 Add
             </button>
@@ -406,7 +380,7 @@ function AddAndDeleteComponents(props) {
                 </button>
             </div>
             <button id='delete-button'
-                    onClick={deleteTime}
+                    onClick={() => updateTime('delete-hours')}
             >
                 Delete
             </button>
@@ -449,6 +423,14 @@ function BlockedDatesSetter(props) {
                 <button id='remove-dates-button'
                         onClick={updateBlockedDates}>Remove Blocked Dates</button>
             </div>
+        </>
+    );
+}
+
+function BlockedTimesSetter(props) {
+    return (
+        <>
+
         </>
     );
 }

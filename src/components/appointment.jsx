@@ -16,6 +16,7 @@ export default function Appointment() {
     const [daysAndHours, setDaysAndHours] = useState([]);
     const [days, setDays] = useState([]);
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
+    const [blockedDates, setBlockedDates] = useState(null);
 
     const history = useHistory();
 
@@ -119,9 +120,26 @@ export default function Appointment() {
         });
         return disabled;
     }
-
+    
     const checkAppointmentsForDay = (date) => {
         let disabled = false;
+        if (blockedDates != null) {
+            const startDateEndDate = blockedDates[0].Blocked.toString().split('-');
+            const startDateMoment = moment(startDateEndDate[0], 'MMM D YYYY');
+            const endDateMoment = moment(startDateEndDate[1], 'MMM D YYYY');
+            const startDateClone = startDateMoment.clone();
+            console.log(startDateEndDate);
+            while (startDateClone <= endDateMoment) {
+                const blockedDay = startDateClone._d.toString().split(' ').slice(0, 4).join(' ');
+                const dayToCheck = date.toString().split(' ').slice(0, 4).join(' ');
+                if (dayToCheck === blockedDay) {
+                    disabled = true;
+                }
+                startDateClone.add(1, 'day');
+            }
+        }
+
+
         const blockedTimes = [];
         const now = new Date();
         const todayFormatted = moment(now).format('ddd MMM D YYYY');
@@ -240,6 +258,15 @@ export default function Appointment() {
         }
 
     }, [clickedDate]);
+
+    useEffect(() => {
+        const fetchBlockedDates = async () => {
+            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-dates`);
+            const blockedDates = await results.json();
+            setBlockedDates(blockedDates);
+        }
+        fetchBlockedDates();
+    }, []);
 
     return (
         <section id='calendar-body'>
