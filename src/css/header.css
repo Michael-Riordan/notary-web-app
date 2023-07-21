@@ -19,17 +19,6 @@ header h2 {
     color: rgb(49, 43, 38);
     font-size: 1.8rem;
     text-decoration: underline;
-    animation: typing 3s steps(42) forwards;
-}
-
-@keyframes typing {
-    from {
-        width: 0;
-    }
-
-    to {
-        width: 100%;
-    }
 }
 
 header {

@@ -23,6 +23,7 @@ export default function Admin() {
     const [loginAttempted, setLoginAttempted] = useState(false);
     const [endDateGreater, setEndDateGreater] = useState(null);
     const [validDate, setValidDate] = useState(null);
+    const [blockedTimesAndDate, setBlockedTimesAndDate] = useState([]);
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -300,7 +301,16 @@ export default function Admin() {
                             </div>
                         </div>
                         <div id='blocked-times-setter-wrapper'>
-                            <h2>Blocked Times</h2>
+                            <h2 id='blocked-times-setter-header'>Blocked Times</h2>
+                            <h3 id='blocked-times-list-header'>Blocked Times for Date</h3>
+                            <div id='blocked-times-setter'>
+                                <p id='blocked-times-list'>
+                                    {
+                                        blockedTimesAndDate
+                                    }
+                                </p>
+                                <BlockedTimesSetter />
+                            </div>
                         </div>
                     </section>
                 
@@ -421,7 +431,8 @@ function BlockedDatesSetter(props) {
                     Add Blocked Dates
                 </button>
                 <button id='remove-dates-button'
-                        onClick={updateBlockedDates}>Remove Blocked Dates</button>
+                        onClick={updateBlockedDates}>Remove Blocked Dates
+                </button>
             </div>
         </>
     );
@@ -430,7 +441,14 @@ function BlockedDatesSetter(props) {
 function BlockedTimesSetter(props) {
     return (
         <>
-
+            <label htmlFor='date-input' id='date-input-label'>
+                Date
+            </label>
+            <input type='text' id='date-input' placeholder='Aug 13 2023'/>
+            <label htmlFor='time-to-block' id='time-to-block-label'>
+                Time to Block
+            </label>
+            <input type='text' id='time-to-block-input' placeholder='7:30pm' />
         </>
     );
 }

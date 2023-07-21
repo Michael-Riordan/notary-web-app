@@ -21,6 +21,7 @@ export default function Appointment() {
     const history = useHistory();
 
     const calculateMaxDate = () => {
+        //any tile date past the max date will be disabled; 
         const date = (new Date());
         const numberDay = date.getDate();
         const month = (date.getMonth());
@@ -30,7 +31,6 @@ export default function Appointment() {
         } else {
             return new Date(year, month + 1, numberDay);
         }
-        /*return (new Date(0, (month + 1), date.getDay()), date.getFullYear());*/
     }
 
 
@@ -46,14 +46,10 @@ export default function Appointment() {
         trimmedDate[2] = numberDate + suffix;
         setClickedDate(trimmedDate.join(" "));
     }
-    // Adding appointment time immediately upon click to block appointment before prompt.
+
     const handleInputClick = (event) => {
         if (selectedTime == null) {
             setSelectedTime(event.target.value);
-            axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
-                appointmentTime: event.target.value,
-                appointmentDate: clickedDate, 
-            });
         }
     }
 
@@ -62,18 +58,16 @@ export default function Appointment() {
                                  appointmentDate: clickedDate,
                                  appointmentId: appointmentId};
         const queryParams = new URLSearchParams(appointmentData).toString();
+        axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
+            appointmentTime: selectedTime,
+            appointmentDate: clickedDate, 
+        });
+        //pushing appointment data to quote page to be displayed.
         history.push(`/quote?${queryParams}`);
     }
 
     const handleApptRejection = () => {
-        let chosenAppointmentId;
-        appointments.forEach(appointment => {
-            if (appointment.appointmentTime === selectedTime && clickedDate === appointment.appointmentDate) {
-                chosenAppointmentId = appointment.appointmentid;
-            }
-        });
-        axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${chosenAppointmentId}`)
-        setSelectedTime(null)
+        setSelectedTime(null);
         setClickedDate(null);
     }
 
@@ -123,22 +117,32 @@ export default function Appointment() {
     
     const checkAppointmentsForDay = (date) => {
         let disabled = false;
-        if (blockedDates != null) {
-            const startDateEndDate = blockedDates[0].Blocked.toString().split('-');
-            const startDateMoment = moment(startDateEndDate[0], 'MMM D YYYY');
-            const endDateMoment = moment(startDateEndDate[1], 'MMM D YYYY');
-            const startDateClone = startDateMoment.clone();
-            console.log(startDateEndDate);
-            while (startDateClone <= endDateMoment) {
-                const blockedDay = startDateClone._d.toString().split(' ').slice(0, 4).join(' ');
-                const dayToCheck = date.toString().split(' ').slice(0, 4).join(' ');
-                if (dayToCheck === blockedDay) {
-                    disabled = true;
-                }
-                startDateClone.add(1, 'day');
-            }
-        }
 
+        //checking if date is in blockedDates - disabling calendar tile if so.
+        const dayToCheck = date.toString().split(' ').slice(0, 4).join(' ');
+        if (blockedDates != null) {
+            blockedDates[0].Blocked.forEach(span => {
+                const startDateEndDate = span.split('-');
+                if (startDateEndDate.length === 1) {
+                    const weekdayAndDay = moment(span.toString(), 'MMM D YYYY');
+                    const formattedWeekdayAndDay = weekdayAndDay._d.toString().split(' ').slice(0, 4).join(' ');
+                    if (dayToCheck === formattedWeekdayAndDay) {
+                        disabled = true;
+                    }
+                } else {
+                    const startDateMoment = moment(startDateEndDate[0], 'MMM D YYYY');
+                    const endDateMoment = moment(startDateEndDate[1], 'MMM D YYYY');
+                    const startDateClone = startDateMoment.clone();
+                    while (startDateClone <= endDateMoment) {
+                        const blockedDay = startDateClone._d.toString().split(' ').slice(0, 4).join(' ');
+                        if (dayToCheck === blockedDay) {
+                            disabled = true;
+                        }
+                        startDateClone.add(1, 'day');
+                    };
+                };
+            });
+        };
 
         const blockedTimes = [];
         const now = new Date();
@@ -146,7 +150,7 @@ export default function Appointment() {
         const todayObject = moment(now, 'ddd MMM D YYYY h:mma');
         const todayBuffer = todayObject.clone().add(1.5, 'hours')
         const day = moment(date).format('ddd MMM D YYYY');
-        //checking if all possible appointment times are past for current day
+        //checking if all possible appointment times are past for day tile
         if (todayFormatted === day) {
             const weekday = day.split(' ')[0];
             for (let i=0; i<7; i++) {
@@ -169,6 +173,7 @@ export default function Appointment() {
             }
         }
 
+        //checking if all appointment times are blocked off for day tile
         appointments.forEach(appointment => {
             const day = appointment.appointmentDate.split(' ')[0]
             const dateNoSuffix = appointment.appointmentDate.replace(/th|st|rd|nd/, '');
@@ -214,19 +219,21 @@ export default function Appointment() {
         if (clickedDate == null) {
             const monthButton = document.querySelector('.react-calendar__navigation__label');
             monthButton.disabled = true;
-            console.log('rendered');
         }
     }, [clickedDate]);
 
     useEffect(() => {
-        axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
-            .then((response) => response.data)
-            .then(response => {
-                setAppointments(response);
-                if (response.length !== 0) {
-                    console.log('setting appointmentid');
-                    setAppointmentId(response[response.length - 1].appointmentid)
-                }});
+        const getAppointments = async () => {
+            await axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+                .then((response) => response.data)
+                .then(response => {
+                    setAppointments(response);
+                    if (response.length !== 0) {
+                        console.log('setting appointmentid');
+                        setAppointmentId(response[response.length - 1].appointmentid)
+                    }});
+        }
+        getAppointments();
     }, [selectedTime])
 
     useEffect(() => {

@@ -395,10 +395,10 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
-                            label={isDisabled || !emailValid? 'Message' : 'Feel free to add any additional information below.'}
+                            label={isDisabled || !emailValid? 'Message Us' : 'Feel free to add any additional information below.'}
                             name='email-content'
                             type='text'
-                            value={isDisabled? 'If you would like to send us an email or request your chosen appointment, please first select all desired services and fill out all required fields.' : emailSent? 
+                            value={isDisabled? 'If you would like to send us an email and request your chosen appointment, please first select all desired services and fill out all required fields. The send button will appear once all necessary fields are complete.' : emailSent? 
                             'Thank you! Your email was sent successfully, please check your email inbox for a confirmation.' : emailContent}
                             handleInputChange={handleInputChange}
                         />

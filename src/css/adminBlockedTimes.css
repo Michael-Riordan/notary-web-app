@@ -1,0 +1,50 @@
+#blocked-times-setter-wrapper {
+    border: 2px solid black;
+    width: 300px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#blocked-times-setter-header {
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+#blocked-times-list-header {
+    text-align: center;
+}
+
+#blocked-times-setter {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#date-input-label {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#date-input {
+    width: 80%;
+    height: 80%;
+    align-self: center;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'PTSansNarrow';
+}
+
+#time-to-block-input {
+    width: 80%;
+    height: 80%;
+    align-self: center;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'PTSansNarrow';
+}
+
+#time-to-block-label {
+    font-size: 1rem;
+    font-weight: bold;
+}

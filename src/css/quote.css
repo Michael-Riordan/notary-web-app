@@ -14,14 +14,13 @@
 #quote-header-wrapper {
     margin-top: 0;
     opacity: 0;
-    transform: translateY(100px);
-    animation: drag-in-animation 1.5s ease-out forwards;
+    animation: fade-in-animation 3s ease-out forwards;
 }
 
 @keyframes drag-in-animation {
     from {
         opacity: 0;
-        transform: translateY(100px);
+        transform: translateY(500px);
     }
     
     to {
@@ -48,6 +47,7 @@
     width: 20em;
     margin-left: 10%;
     height: 500px;
+    animation: fade-in-animation 3s forwards;
 }
 
 .input-wrapper {
