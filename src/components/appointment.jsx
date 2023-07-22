@@ -17,6 +17,8 @@ export default function Appointment() {
     const [days, setDays] = useState([]);
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
     const [blockedDates, setBlockedDates] = useState(null);
+    const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
+    console.log(appointmentId);
 
     const history = useHistory();
 
@@ -55,8 +57,7 @@ export default function Appointment() {
 
     const handleApptConfirmation = () => {
         const appointmentData = {appointmentTime: selectedTime,
-                                 appointmentDate: clickedDate,
-                                 appointmentId: appointmentId};
+                                 appointmentDate: clickedDate};
         const queryParams = new URLSearchParams(appointmentData).toString();
         axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
             appointmentTime: selectedTime,
@@ -91,6 +92,23 @@ export default function Appointment() {
                 disabled = true;
             };
         }
+
+        const openDateForTimeCheck = openDateFormatted.split(' ').slice(1, 4).join(' ')
+        blockedTimesForDate.forEach(block => {
+            const blockedDayAndTime = block.date + ' ' + block.time
+            const blockedBuffer = block.buffer.split(' ');
+            if (block.date === openDateForTimeCheck) {
+                const timeMoment = moment(blockedDayAndTime, 'MMM D YYYY h:mma');
+                const startMoment = timeMoment.clone().subtract(blockedBuffer[0], blockedBuffer[1]);
+                const endMoment = timeMoment.clone().add(blockedBuffer[0], blockedBuffer[1]);
+                while (startMoment <= endMoment) {
+                    if (startMoment.format('h:mma') === time) {
+                        disabled = true;
+                    }
+                    startMoment.add(30, 'minutes');  
+                }
+            }
+        })
         
         appointments.forEach(appointment => {
             if (time === appointment.appointmentTime && clickedDate === appointment.appointmentDate) {
@@ -150,6 +168,24 @@ export default function Appointment() {
         const todayObject = moment(now, 'ddd MMM D YYYY h:mma');
         const todayBuffer = todayObject.clone().add(1.5, 'hours')
         const day = moment(date).format('ddd MMM D YYYY');
+
+        const dateForTimeCheck = day.split(' ').slice(1, 4).join(' ');
+        blockedTimesForDate.forEach(block => {
+            const blockedDayAndTime = block.date + ' ' + block.time
+            const blockedBuffer = block.buffer.split(' ');
+            if (block.date === dateForTimeCheck) {
+                const timeMoment = moment(blockedDayAndTime, 'MMM D YYYY h:mma');
+                const startMoment = timeMoment.clone().subtract(blockedBuffer[0], blockedBuffer[1]);
+                const endMoment = timeMoment.clone().add(blockedBuffer[0], blockedBuffer[1]);
+                while (startMoment <= endMoment) {
+                    if (!blockedTimes.includes(startMoment.format('h:mma'))) {
+                        blockedTimes.push(startMoment.format('h:mma'));
+                    }
+                    startMoment.add(30, 'minutes');  
+                }
+            }
+        });
+
         //checking if all possible appointment times are past for day tile
         if (todayFormatted === day) {
             const weekday = day.split(' ')[0];
@@ -268,12 +304,22 @@ export default function Appointment() {
 
     useEffect(() => {
         const fetchBlockedDates = async () => {
-            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-dates`);
-            const blockedDates = await results.json();
+            const response = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-dates`);
+            const blockedDates = await response.json();
             setBlockedDates(blockedDates);
         }
         fetchBlockedDates();
     }, []);
+
+    useEffect(() => {
+        const fetchBlockedDateAndTime = async () => {
+            const response = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-time-for-date`);
+            const blockedTimes = await response.json();
+            setBlockedTimesForDate(blockedTimes);
+        }
+
+        fetchBlockedDateAndTime();
+    }, [])
 
     return (
         <section id='calendar-body'>

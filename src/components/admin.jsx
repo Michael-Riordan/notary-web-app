@@ -20,10 +20,17 @@ export default function Admin() {
     const [blockedDates, setBlockedDates] = useState([]);
     const [chosenBlockedStartDate, setChosenBlockedStartDate] = useState('');
     const [chosenBlockedEndDate, setChosenBlockedEndDate] = useState('')
+    const [chosenBlockedDateForTime, setChosenBlockedDateForTime] = useState(' ');
+    const [chosenTimeToBlock, setChosenTimeToBlock] = useState(' ');
+    const [chosenBuffer, setChosenBuffer] = useState(' ');
     const [loginAttempted, setLoginAttempted] = useState(false);
     const [endDateGreater, setEndDateGreater] = useState(null);
     const [validDate, setValidDate] = useState(null);
     const [blockedTimesAndDate, setBlockedTimesAndDate] = useState([]);
+    const [timeBlockValidity, setTimeBlockValidity] = useState(null);
+    const [pendingAppointments, setPendingAppointments] = useState([]);
+    const [selectedAppointment, setSelectedAppointment] = useState('');
+    const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -85,7 +92,7 @@ export default function Admin() {
         setFormattedDay(event.target.textContent === 'Tue'? 
         event.target.textContent + 'sday' :
         event.target.textContent === 'Wed'? 
-        event.target.textContent + 'nsday':
+        event.target.textContent + 'nesday':
         event.target.textContent === 'Thu'? 
         event.target.textContent + 'rsday':
         event.target.textContent === 'Sat'? 
@@ -186,8 +193,67 @@ export default function Admin() {
         suffix === 'am'? setSuffix('pm') : setSuffix('am');
     }
 
-    const handleDatesInputChange = (event) => {
-        event.target.className === 'date-input start'? setChosenBlockedStartDate(event.target.value) : setChosenBlockedEndDate(event.target.value);
+    const handleBlockerInputChange = (event) => {
+        event.target.className === 'date-input start' ? setChosenBlockedStartDate(event.target.value) : 
+        event.target.className === 'date-input end' ? setChosenBlockedEndDate(event.target.value) :
+        event.target.className === 'date-input date-for-time' ? setChosenBlockedDateForTime(event.target.value) :
+        event.target.className === 'date-input time' ? setChosenTimeToBlock(event.target.value) :
+        setChosenBuffer(event.target.value);
+    }
+
+    const updateBlockedTime = (event) => {
+        let path;
+
+        if (validateTimeFormat(chosenTimeToBlock) && validateDateFormat(chosenBlockedDateForTime) && moment(chosenBlockedDateForTime, 'MMM D YYYY').isValid()) {
+            const timeToBlock = chosenTimeToBlock + suffix;
+            event.target.id === 'confirm-dates-button'? path='updateBlockedTime' : path='deleteBlockedTime';
+
+            if (path != null) {
+                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({date: chosenBlockedDateForTime, time: timeToBlock, buffer: chosenBuffer}),
+                })
+                  .then(res => 
+                    res.json())
+                  .then(data => {
+                    setBlockedTimesAndDate(data);
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  })
+            }
+        } else {
+            setTimeBlockValidity(false);
+        }
+    }
+
+    const handleAppointmentSelection = (event, appointmentId) => {
+        setSelectedAppointment(event.target.textContent);
+        setSelectedAppointmentId(appointmentId);
+    }
+
+    const updatePendingAppointments = (event) => {
+        const splitAppointment = selectedAppointment.split(' ');
+        const name = splitAppointment.slice(0, 2).join(' ').replace(':', '');
+        const appointment = splitAppointment.slice(2, 8).join(' ');
+
+        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/removePendingAppointment`, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({name: name, appointment: appointment, appointmentId: selectedAppointmentId})
+        })
+          .then(res => res.json())
+          .then(data => {
+            setPendingAppointments(data);
+          })
+          .catch(error => {
+            console.error(error);
+          })
     }
 
     useEffect(() => {
@@ -215,6 +281,25 @@ export default function Admin() {
         }
         fetchBlockedDates();
     }, []);
+
+    useEffect(() => {
+        const fetchBlockedDateAndTime = async () => {
+            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-time-for-date`)
+            const blockedTimeForDate = await results.json();
+            setBlockedTimesAndDate(blockedTimeForDate);
+        }
+        fetchBlockedDateAndTime();
+    }, []);
+
+    useEffect(() => {
+        const fetchPendingAppointments = async () => {
+            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/pending-appointments`)
+            const appointments = await results.json();
+            setPendingAppointments(appointments)
+        }
+        fetchPendingAppointments();
+    }, []);
+
 
     return (
         <div id='admin-body'>
@@ -292,10 +377,34 @@ export default function Admin() {
                                             return blocked['Blocked'].join(' ');
                                         })}
                                     </p>
-                                    <BlockedDatesSetter 
-                                        handleDatesInputChange={handleDatesInputChange}
-                                        updateBlockedDates={updateBlockedDates}
+                                    <CustomInputAndLabel 
+                                        className='blocked-date-label'
+                                        onChange={handleBlockerInputChange}
+                                        placeholder='Aug 13 2023'
+                                        identifier='start'
+                                        name='start-date'
+                                        label='Start Date'
                                     />
+                                    <CustomInputAndLabel 
+                                        className='blocked-date-label'
+                                        onChange={handleBlockerInputChange}
+                                        placeholder='Aug 20 2023'
+                                        identifier='end'
+                                        name='end-date'
+                                        label='End Date'
+                                    />
+                                    <div id='blocked-dates-buttons-wrapper'>
+                                        <CustomButton 
+                                            onClick={updateBlockedDates}
+                                            id='confirm-dates-button'
+                                            label='Add Blocked Dates'
+                                        />
+                                        <CustomButton
+                                            onClick={updateBlockedDates}
+                                            id='remove-dates-button'
+                                            label='Remove Blocked Dates'
+                                        />
+                                    </div>
                                     {validDate == null? '' : validDate? '' : <p className='date-error'>Please enter a valid date.</p>}
                                     {endDateGreater == null? '' : endDateGreater? '' : <p className='date-error'>The end date must be the same as or after the start date.</p>}
                             </div>
@@ -304,16 +413,104 @@ export default function Admin() {
                             <h2 id='blocked-times-setter-header'>Blocked Times</h2>
                             <h3 id='blocked-times-list-header'>Blocked Times for Date</h3>
                             <div id='blocked-times-setter'>
-                                <p id='blocked-times-list'>
+                                <ul id='blocked-times-list'>
                                     {
-                                        blockedTimesAndDate
+                                        blockedTimesAndDate.map(block => {
+                                            const bufferToUse = block.buffer.split(' ');
+                                            const fullDate = block.date + ' ' + block.time
+                                            const timeMoment = moment(fullDate, 'MMM D YYYY h:mma');
+                                            const endBlock = timeMoment.clone().add(bufferToUse[0], bufferToUse[1]);
+                                            const startBlock = timeMoment.clone().subtract(bufferToUse[0], bufferToUse[1]);
+                                            const formattedStart = startBlock.format('h:mma')
+                                            const formattedEnd = endBlock.format('h:mma')
+                                            return (
+                                                <li className='blocked-time-item'>
+                                                    {block.date}: {formattedStart} - {formattedEnd}
+                                                </li>
+                                            )
+                                        })
                                     }
-                                </p>
-                                <BlockedTimesSetter />
+                                </ul>
+                                <CustomInputAndLabel
+                                    name='date-input'
+                                    className='blocked-date-label'
+                                    placeholder='Aug 13 2023' 
+                                    onChange={handleBlockerInputChange}
+                                    label='Date'
+                                    identifier='date-for-time'
+                                />
+                                <CustomInputAndLabel
+                                    name='time-input'
+                                    className='blocked-date-label'
+                                    placeholder='7:30'
+                                    onChange={handleBlockerInputChange}
+                                    identifier='time'
+                                    label='Time'
+                                    changeSuffix={changeSuffix}
+                                    suffix={suffix}
+                                />
+                                <CustomInputAndLabel
+                                    name='buffer-input'
+                                    className='blocked-date-label'
+                                    placeholder='2 hours'
+                                    onChange={handleBlockerInputChange}
+                                    label={`Amount Blocked Before & After Time Block`}
+                                />
+                                <div id='blocked-time-buttons-wrapper'>
+                                    <CustomButton 
+                                        onClick={updateBlockedTime}
+                                        id='confirm-dates-button'
+                                        label='Add Blocked Times'
+                                    />
+                                    <CustomButton
+                                        onClick={updateBlockedTime}
+                                        id='remove-dates-button'
+                                        label='Remove Blocked Times'
+                                    />
+                                    <p className='date-error'>
+                                        {
+                                            timeBlockValidity == null || timeBlockValidity == true? '' : 'Error: Invalid Date, Time, or Buffer'
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id='appointment-confirmation-setter-wrapper'>
+                            <h2 id='appointment-confirmation-header'>Pending Appointments</h2>
+                            <h3 id='pending-appointments-header'>New Appointments</h3>
+                            <ul id='pending-appointments-list'>
+                                {
+                                    pendingAppointments.map((appointment, index) => {
+                                        return (
+                                            <li className='pending-appointment' onClick={(event) => handleAppointmentSelection(event, appointment.appointmentId)} key={index} appointmentId={appointment.appointmentId}>
+                                                {appointment.name}: {appointment.appointment}
+                                            </li>
+                                        );
+                                    })
+                                }
+                            </ul>
+                            <CustomInputAndLabel
+                                name='selected-appointment'
+                                className='blocked-date-label'
+                                placeholder='Select an Appointment'
+                                label={`Selected Time`}
+                                value={selectedAppointment}
+                                identifier={'appointment'}
+                            />
+                            <div id='appointment-confirmation-buttons-wrapper'>
+                                <CustomButton
+                                    onClick={updatePendingAppointments}
+                                    id='confirm-dates-button'
+                                    label='Accept Appointment'
+                                />
+                                <CustomButton
+                                    onClick={updatePendingAppointments}
+                                    id='remove-dates-button'
+                                    label='Reject Appointment'
+                                />
                             </div>
                         </div>
                     </section>
-                
                 :   
                 <form id='login-form-wrapper' onSubmit={validateCredentials}>
                     <h2 id='login-form-header'>Admin Login</h2>
@@ -402,53 +599,43 @@ function AddAndDeleteComponents(props) {
     )
 }
 
-function BlockedDatesSetter(props) {
-    const {handleDatesInputChange, updateBlockedDates} = {...props};
+function CustomInputAndLabel(props) {
+    const { className, identifier, name, placeholder, onChange, label, changeSuffix, suffix, value} = {...props}
     return (
         <>
-            <label htmlFor='start-date' className='blocked-date-label'>
-                Start Date
+            <label htmlFor={name} className={className}>
+                {label}
             </label>
-            <input type='text' 
-                   className='date-input start' 
-                   placeholder="Aug 13 2023" 
-                   onChange={handleDatesInputChange}
-            />
-            <label htmlFor='end-date' 
-                   className='blocked-date-label'
-            >
-                End Date
-            </label>
-            <input type='text' 
-                   className='date-input end' 
-                   placeholder="Aug 20 2023" 
-                   onChange={handleDatesInputChange}
-            />
-            <div id='blocked-dates-buttons-wrapper'>
-                <button id='confirm-dates-button'
-                        onClick={updateBlockedDates}
-                >
-                    Add Blocked Dates
-                </button>
-                <button id='remove-dates-button'
-                        onClick={updateBlockedDates}>Remove Blocked Dates
-                </button>
+            <div className='input-and-suffix-wrapper'>
+                <input type='text' 
+                       className={`date-input ${identifier}`}
+                       placeholder={placeholder}
+                       onChange={onChange}
+                       name={name}
+                       value={value}
+                />
+                {identifier === 'time' ? 
+                    <button className='am-pm'
+                            onClick={changeSuffix}
+                    >
+                        {suffix}
+                    </button> : 
+                ''}
             </div>
         </>
     );
 }
 
-function BlockedTimesSetter(props) {
+function CustomButton(props) {
+    const {id, onClick, label} = {...props};
     return (
         <>
-            <label htmlFor='date-input' id='date-input-label'>
-                Date
-            </label>
-            <input type='text' id='date-input' placeholder='Aug 13 2023'/>
-            <label htmlFor='time-to-block' id='time-to-block-label'>
-                Time to Block
-            </label>
-            <input type='text' id='time-to-block-input' placeholder='7:30pm' />
+            <button id={id}
+                    onClick={onClick}
+            >
+               {label}
+            </button>
         </>
-    );
+
+    ); 
 }

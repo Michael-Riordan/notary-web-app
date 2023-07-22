@@ -1,0 +1,71 @@
+#appointment-confirmation-setter-wrapper {
+    display: grid;
+    flex-direction: column;
+    border: 2px solid black;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 30%;
+}
+
+#appointment-confirmation-header {
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+#pending-appointments-header {
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+#pending-appointments-list {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    font-weight: bold;
+    border: 1px solid black;
+    padding-left: 0;
+    text-align: center;
+    justify-self: center;
+    width: 80%;
+    margin-top: 0;
+    height: max-content;
+    background-color: antiquewhite;
+}
+
+.pending-appointment {
+    height: 40px;
+    padding-top: 0;
+}
+
+.pending-appointment:not(:last-of-type) {
+    border-bottom: 1px solid black;
+}
+
+.pending-appointment:hover {
+    cursor: pointer;
+    background-color: rgb(180, 170, 156);
+}
+
+.date-input.appointment {
+    width: 90%;
+    align-self: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    height: auto;
+}
+
+#pending-appointments-list ~ .input-and-suffix-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#pending-appointments-list ~ .blocked-date-label{
+    text-align: center;
+}
+
+#appointment-confirmation-buttons-wrapper {
+    justify-self: center;
+    margin-bottom: 10px;
+}

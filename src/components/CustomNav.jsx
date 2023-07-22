@@ -11,7 +11,7 @@ export default function CustomNav() {
 
     return (
         <>
-            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onClick={handleCheck}/>
+            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onChange={handleCheck}/>
             <label htmlFor='menu-toggle' id='menu-label'>
                 <div id='menu-button-container'>
                     <div id='menu-button'>

@@ -28,6 +28,7 @@ export default function Quote() {
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
 My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
+
     
     const history = useHistory();
     const location = useLocation();
@@ -161,6 +162,23 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
                 console.log(error.text);
                 setEmailSent(false);
             });
+
+        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/updatePendingAppointments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({name: nameInput, appointment: appointment, appointmentId: appointmentId}),
+        })
+          .then(res => 
+            res.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error(error);
+          })
+
     };
 
     useEffect(() => {
@@ -247,15 +265,23 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const data = Object.fromEntries(searchParams.entries());
-        console.log(data.appointmentDate);
         if (searchParams.size === 0 || data.appointmentDate == null) {
-            console.log('null appt id')
             return;
         } else {
             setAppointment(`${data.appointmentDate} @ ${data.appointmentTime}`)
-            console.log(data.appointmentId, 'hello');
-            setAppointmentId(data.appointmentId);
         }
+    }, [])
+
+    useEffect(() => {
+        const getAppointments = async () => {
+            await axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+                .then((response) => response.data)
+                .then(response => {
+                    if (response.length !== 0) {
+                        setAppointmentId(response[response.length - 1].appointmentid)
+                    }});
+        }
+        getAppointments();
     }, [])
 
     return (
