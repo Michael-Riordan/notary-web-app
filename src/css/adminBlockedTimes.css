@@ -67,3 +67,7 @@ p ~ .date-input {
     padding-left: 0;
     background-color: antiquewhite;
 }
+
+#blocked-time-buttons-wrapper {
+    margin-bottom: 20px;
+}

@@ -31,6 +31,8 @@ export default function Admin() {
     const [pendingAppointments, setPendingAppointments] = useState([]);
     const [selectedAppointment, setSelectedAppointment] = useState('');
     const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
+    const [appointments, setAppointments] = useState([]);
+    const [pendingAppointmentAccepted, setPendingAppointmentAccepted] = useState(false);
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -235,10 +237,22 @@ export default function Admin() {
         setSelectedAppointmentId(appointmentId);
     }
 
-    const updatePendingAppointments = (event) => {
+    const updateAppointmentStatus = () => {
+        const newStatus = 'Accepted';
+        
+        axios.put(`http://${import.meta.env.VITE_IP_ADDRESS}/updateAppointment/${selectedAppointmentId}`, { status: newStatus})
+             .then((response) => {
+                console.log(response.data.message);
+             })
+             .catch((error) => {
+                console.error('Axios error:', error);
+             });
+    }
+
+    const removeFromPending = () => {
         const splitAppointment = selectedAppointment.split(' ');
-        const name = splitAppointment.slice(0, 2).join(' ').replace(':', '');
-        const appointment = splitAppointment.slice(2, 8).join(' ');
+        const name = splitAppointment.slice(0, 1).join(' ').replace(':', '');
+        const appointment = splitAppointment.slice(1, 8).join(' ');
 
         fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/removePendingAppointment`, {
             method: 'POST', 
@@ -250,10 +264,24 @@ export default function Admin() {
           .then(res => res.json())
           .then(data => {
             setPendingAppointments(data);
+            setSelectedAppointment('');
           })
           .catch(error => {
             console.error(error);
           })
+        
+        updateAppointmentStatus();
+    }
+
+    const updatePendingAppointments = async (event) => {
+
+        if (event.target.textContent === 'Reject Appointment') {
+            removeFromPending();
+            await axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${selectedAppointmentId}`)
+        } else {
+            setPendingAppointmentAccepted(true);
+            removeFromPending();
+        }
     }
 
     useEffect(() => {
@@ -300,6 +328,33 @@ export default function Admin() {
         fetchPendingAppointments();
     }, []);
 
+    useEffect(() => {
+        const getAppointments = async () => {
+            await axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+                .then((response) => response.data)
+                .then(response => {
+                    setAppointments(response)});
+        }
+        getAppointments();
+        let pendingIds = [];
+        if (pendingAppointments.length > 0) {
+            pendingAppointments.forEach(appointment => {
+                pendingIds.push(appointment.appointmentId);
+            })
+        };
+
+        appointments.forEach(appointment => {
+            if (pendingAppointments.length === 0 && pendingAppointmentAccepted === false && appointment.status !== 'Accepted') {
+                console.log('deleting first if check reached')
+                axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointment.appointmentid}`)  
+            } else {
+                if (!pendingIds.includes(appointment.appointmentid) && pendingAppointmentAccepted === false && appointment.status !== 'Accepted') {
+                    console.log(pendingIds, appointment.appointmentid);
+                    axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointment.appointmentid}`)  
+                }
+            }
+        })
+    }, [pendingAppointments])
 
     return (
         <div id='admin-body'>

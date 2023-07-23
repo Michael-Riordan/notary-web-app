@@ -24,6 +24,7 @@ export default function Quote() {
     const [numberInput, setNumberInput] = useState('');
     const [appointment, setAppointment] = useState('');
     const [appointmentId, setAppointmentId] = useState(null);
+    const [tryingToLeave, setTryingToLeave] = useState(null);
     const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
@@ -206,9 +207,10 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
 Here is my info: \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($.62 round trip): $${costOfGas} \n
-My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + Number(costOfGas)} \n
-${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointment: ${appointment}` : ''}`)
-    }, [nameInput, addressInput, totalPrice, notarizationPrice, costOfGas, emailValid])
+My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + (Number(costOfGas))} \n
+${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointment: ${appointment}` : ''} \n
+${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
+    }, [nameInput, addressInput, totalPrice, notarizationPrice, costOfGas, emailValid, numberInput])
 
     useEffect(() => {
         if (sessionStorage.getItem('servicesData') != null) {
@@ -283,6 +285,24 @@ ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointme
         }
         getAppointments();
     }, [])
+
+    useEffect(() => {
+
+        console.log(emailSent, appointment);
+
+        const handleUnload = (event) => {
+            if (emailSent == null && appointment !== '' ) {
+                setTryingToLeave(true);
+                event.preventDefault();
+            }
+        }
+        
+        window.addEventListener('beforeunload', handleUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleUnload);
+        }
+    }, [emailSent, appointment]);
 
     return (
         <>

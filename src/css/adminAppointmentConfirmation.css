@@ -9,8 +9,9 @@
 
 #appointment-confirmation-header {
     border-bottom: 2px solid black;
-    padding-bottom: 10px;
+    padding-bottom: 0;
     text-align: center;
+    font-size: 1.5rem;
 }
 
 #pending-appointments-header {
@@ -66,6 +67,16 @@
 }
 
 #appointment-confirmation-buttons-wrapper {
-    justify-self: center;
+    display: flex;
+    justify-content: center;
     margin-bottom: 10px;
+}
+
+#appointment-confirmation-buttons-wrapper #remove-dates-button {
+    align-self: center;
+}
+
+#appointment-confirmation-buttons-wrapper #confirm-dates-button {
+    align-self: center;
+    margin-top: 0;
 }
