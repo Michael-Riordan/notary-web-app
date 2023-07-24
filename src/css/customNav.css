@@ -144,6 +144,12 @@
     }
 }
 
+@media screen and (max-width: 414px) {
+    #menu {
+        margin-top: 49.1px;
+    }
+}
+
 @media screen and (min-width: 568px) {
     #menu {
         margin-top: 56px;
@@ -177,23 +183,34 @@
     }
 
     #menu-button-container {
-        margin-right: 10px;
+        margin-right: 20px;
     }
 
     #menu-toggle ~ #menu {
-        margin-top: 33px;
+        margin-top: 38.5px;
         margin-right: 7.4px;
-        width: 50px;
+        width: 70px;
     }
 
     #menu li {
-        font-size: .5rem;
+        font-size: .8rem;
         z-index: 1;
     }
 }
 
 @media screen and (max-width: 390px) {
     #menu {
-        margin-top: 37.5px;
+        margin-top: 49px;
+        width: 25%;
+    }
+
+    #menu-button-container {
+        margin-right: 19px;
+    }
+}
+
+@media screen and (max-width: 280px) {
+    #menu-toggle ~ #menu {
+      margin-right: 12px;  
     }
 }

@@ -37,6 +37,7 @@
     text-decoration: underline;
     color: rgb(49, 43, 38);
     text-align: center;
+    margin-top: 100px;
 }
 
 #head-quote {
@@ -45,31 +46,12 @@
     margin-bottom: 0;
     color: rgb(49, 43, 38);
     text-align: center;
+    margin-top: 40px;
 }
 
-#quote-continuation {
-    margin-top: -30px;
-    margin-bottom: 50px;
-    justify-self: center;
-    color: rgb(49, 43, 38);
-}
-
-
-@media screen and (max-width: 480px) {
-    #company-name {
-        font-size: 180%;
-        margin-top: 100px;
-    }
-
-    #header-section {
-        height: 40%;
-    }
-
-    #head-quote {
-        margin-top: 10%;
-    }
-    #quote-continuation {
-        margin-top: 4%;
+@media screen and (min-width: 1025px) {
+    #company-logo {
+        margin-top: 10px;
     }
 }
 
@@ -79,24 +61,91 @@
     }
 }
 
-@media screen and (min-width: 1025px) {
+@media screen and (max-width: 920px) {
+    #company-logo {
+        margin-top: 200px;
+    }
+
+    #company-name {
+        margin-bottom: auto;
+        margin-top: 200px;
+    }
+
+    #head-quote {
+        margin-top: -60px;
+    }
+}
+
+@media screen and (max-width: 820px) {
     #company-logo {
         margin-top: 10px;
+    }
+    
+    #head-quote {
+        margin-top: -90px;
+    }
+
+}
+
+@media screen and (max-width: 770px) {
+    #head-quote {
+        margin-top: -8px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    #company-name {
+        font-size: 250%;
+        margin-top: 100px;
+        margin-bottom: auto;
+    }
+
+    #header-section {
+        height: 40%;
+    }
+
+    #head-quote {
+        margin-top: 10%;
+    }
+}
+
+@media screen and (min-width: 375px) {
+    #company-logo {
+        margin-top: -30px;
+        margin-left: -20px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    #company-logo {
+        justify-content: center;
     }
 }
 
 @media screen and (max-width: 320px) {
     #company-logo {
-        margin-top: -100px;
+        margin-top: -80px;
     }
 
     #head-quote {
         font-size: 1rem;
     }
+}
 
-    #quote-continuation {
-        margin-top: 0;
-        font-size: .7rem;
+@media screen and (max-width: 280px) {
+    #company-logo {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-height: 420px) {
+    #app-head {
+        height: 200vh;
+    }
+
+    #company-name {
+        margin-bottom: 50px;
     }
 }
 

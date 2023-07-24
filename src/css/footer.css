@@ -123,6 +123,7 @@
 
     #footer-tabs-2 {
         font-size: .7rem;
+        margin-left: 10px;
     }
 }
 
@@ -138,14 +139,47 @@
 
     #footer-company-name {
         margin-left: -10px;
+        font-weight: bold;
     }
 
     #footer-tabs {
+        font-size: .8rem;
+        font-weight: bold;
         margin-left: -10px;
     }
 
     #footer-tabs-2 {
-        margin-left: -30px;
+        font-weight: bold;
+        margin-left: -10px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    #company-name {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 280px) {
+    #AZ-state-flag {
+        margin-left: 70%;
     }
 
+    #footer-company-name {
+        margin-left: 20px;
+    }
+
+    #footer-tabs {
+        margin-left: 20px;
+    }
+
+    #footer-tabs-2 {
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-height:320px) {
+    #AZ-state-flag {
+        margin-left: 70%;
+    }
 }

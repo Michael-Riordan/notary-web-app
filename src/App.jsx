@@ -29,7 +29,7 @@ function App() {
       <Router>
       <header>
         <div className='logo'>
-        <h2>LRmobilenotary</h2>
+        <Link to='/' id='header-webname'>LRmobilenotary</Link>
         </div>
         <CustomNav />
       </header>

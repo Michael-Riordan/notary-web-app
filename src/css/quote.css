@@ -354,6 +354,54 @@
 }
 
 
+
+@media screen and (max-width: 940px) {
+    #quote-body {
+        height: 100vh;
+    }
+    
+    #your-free-quote {
+        margin-top: 100%;
+    }
+    
+    #quote-calculator {
+        margin-left: 0px;
+        margin-top: 300px;
+    }
+    
+    .textarea.email-content {
+        width: 280px;
+    }
+}
+
+@media screen and (max-width: 820px) {
+    #quote-calculator {
+        margin-left: -30px;
+    }
+}
+
+@media screen and (max-width: 770px) {
+    #quote-body {
+        display: flex;
+        height: fit-content;
+        min-height: 800px;
+    }
+
+    #your-free-quote {
+        margin-left: 10px;
+        margin-top: 50%;
+    }
+
+    .final-quote {
+        margin-right: 0;
+    }
+
+    #quote-calculator {
+        margin-left: -10px;
+        margin-top: 100px;
+    }
+}
+
 @media screen and (max-width: 480px) {
     #quote-body #quote-header-wrapper p:last-of-type{
         margin-bottom: 20px;
@@ -386,7 +434,7 @@
     }
 
     #send-button {
-        margin-left: 30%;
+        margin-left: 80px;
         height: 40px;
     }
 
@@ -453,6 +501,7 @@
         display: grid;
         justify-items: center;
     }
+
     #your-free-quote {
         font-size: 2rem;
         justify-self: center;
@@ -532,6 +581,15 @@
         border: 1px solid rgb(49, 43, 38);
     }
 }
+@media screen and (max-width: 320px) {
+    .textarea.email-content {
+        font-size: .8rem;
+    }
+
+    #services-menu {
+        margin-top: 43px;
+    }
+}
 
 @media screen and (min-width:390px) {
     #quote-header-wrapper p:last-of-type {
@@ -548,6 +606,72 @@
 @media screen and (max-width: 414px) {
     #quote-header-wrapper p:last-of-type {
         margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-height: 420px) {
+
+    #quote-body {
+        display: flex;
+        height: fit-content;
+        min-height: 800px;
+    }
+
+    #your-free-quote {
+        margin-top: 300px;
+    }
+
+    #quote-calculator {
+        margin-top: 20%;
+    }
+}
+
+@media screen and (max-height: 380px) {
+    #quote-body {
+        display: grid;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 1000px;
+    }
+
+    #your-free-quote {
+        margin-top: 100px;
+        text-align: center;
+    }
+
+    #quote-calculator {
+        margin-top: 0;
+        margin-left: 10%;
+    }
+
+    .final-quote {
+        margin-right: 170px;
+    }
+
+    #send-button {
+        margin-left: 80px;
+    }
+}
+
+@media screen and (max-height: 320px) {
+    #quote-calculator {
+        margin-top: -100px;
+    }
+}
+
+@media screen and (max-height:740px) {
+    .final-quote:nth-of-type(2) {
+        margin-right: -30px;
+    }
+}
+
+@media only screen and (min-width: 428px)  and (orientation: landscape) {
+    #your-free-quote {
+        margin-top: 50px;
+    }
+
+    #quote-calculator {
+        margin-top: 50px;
     }
 }
 

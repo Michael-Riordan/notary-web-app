@@ -2,9 +2,11 @@
     display: grid;
     flex-direction: column;
     border: 2px solid black;
-    margin-top: 20px;
     margin-bottom: 20px;
-    width: 30%;
+    margin-top: -60px;
+    width: 300px;
+    background-color: rgba(250, 235, 215, 0.401);
+    box-shadow: 4px 4px 10px 0px black;
 }
 
 #appointment-confirmation-header {
@@ -80,3 +82,29 @@
     align-self: center;
     margin-top: 0;
 }
+@media screen and (max-width: 920px ) {
+    #appointment-confirmation-setter-wrapper {
+        transform: translateY(-240px);
+        height: 255px
+    }
+
+    #blocked-times-setter-wrapper {
+        transform: translateX(170px);
+        margin-top: -10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #appointment-confirmation-setter-wrapper {
+        margin-top: 0;
+        transform: none;
+    }
+
+    #blocked-times-setter-wrapper {
+        transform: none;
+        margin-top: 0;
+    }
+}
+
+
+

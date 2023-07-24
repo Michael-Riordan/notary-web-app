@@ -39,14 +39,18 @@
 
 @media screen and (max-width: 320px) {
     #address-list ul {
-        width: 14.5rem;
         font-size: .8rem;
+    }
+
+    #yes-no {
+        margin-top: -2px;
     }
 }
 
 @media screen and (max-width:390px) {
     #address-list ul {
-        width: 14.5rem;
+        width: 14.3rem;
+        margin-top: -2px;
     }
 }
 

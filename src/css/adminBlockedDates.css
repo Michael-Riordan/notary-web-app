@@ -3,9 +3,11 @@
     flex-direction: column;
     border: 2px solid black;
     margin-top: 20px;
-    margin-bottom: 20px;
     width: 300px;
     text-align: center;
+    height: 320px;
+    box-shadow: 4px 4px 10px 0px black;
+    background-color: rgba(250, 235, 215, 0.401);
 }
 
 #blocked-dates-setter-header {
@@ -90,4 +92,10 @@
 
 .date-error:last-of-type {
     margin-top: 0;
+}
+
+@media screen and (max-width:480px) {
+    #blocked-dates-setter-wrapper {
+        margin-top: 0;
+    }
 }

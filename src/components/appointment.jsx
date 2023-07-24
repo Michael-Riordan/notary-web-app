@@ -18,7 +18,6 @@ export default function Appointment() {
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
     const [blockedDates, setBlockedDates] = useState(null);
     const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
-    console.log(appointmentId);
 
     const history = useHistory();
 
@@ -277,6 +276,7 @@ export default function Appointment() {
         const fetchTimes = async () => {
             const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/business-hours`);
             const daysAndTimes = await results.json();
+            console.log(daysAndTimes);
             daysAndTimes.forEach(dayObj => {
                 const day = Object.keys(dayObj)[0];
                 weekdays.push(day);
@@ -294,13 +294,12 @@ export default function Appointment() {
             const correctDay = daysAndHours.filter((day, index) => {
                 return daysAndHours[index].hasOwnProperty(clickedDate.split(' ')[0]);
             });
-        
+
             const dayAndHours = [...correctDay]
             const day = clickedDate.split(' ')[0]
             setHoursForCurrentDay(dayAndHours[0][day]);
         }
-
-    }, [clickedDate]);
+    }, [clickedDate, daysAndHours]);
 
     useEffect(() => {
         const fetchBlockedDates = async () => {
@@ -324,16 +323,6 @@ export default function Appointment() {
     return (
         <section id='calendar-body'>
             <h1 id='appointment-header'>Select an Appointment Date/Time</h1>
-                <div id='hours'>
-                    <div id='weekdays'>
-                        <h2 className='days'>Mon-Fri</h2>
-                        <p className='time'>6:00pm - 9:00pm</p>
-                        <h2 className='days'>Sat</h2>
-                        <p className='time'>7:00am - 4:00pm</p>
-                        <h2 className='days'>Sun</h2>
-                        <p className='time'>9:00am - 4:00pm</p>
-                    </div>
-                </div>
             {selectedTime != null?
              <div id='appointment-confirmation'>
                 <h2 id='selected-time'>Chosen Appointment: <br/> {clickedDate} @ {selectedTime}</h2>

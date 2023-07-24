@@ -5,6 +5,7 @@ import googleLogo from '/src/assets/google_on_white_hdpi.png'
 import emailjs from '@emailjs/browser'
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
+
 export default function Quote() {
     const [isClicked, setIsClicked] = useState(false);
     const [appointmentSelectorOpen, setAppointmentSelectorOpen] = useState(false);
@@ -12,7 +13,9 @@ export default function Quote() {
     const [selectedServices, setSelectedServices] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [numOfNotarizations, setNumOfNotarizations] = useState(0);
+    const [numOfLoanPackages, setNumOfLoanPackages] = useState(0);
     const [notarizationPrice, setNotarizationPrice] = useState(0);
+    const [additionalLoanPackagePrice, setAdditionLoanPackagePrice] = useState(0);
     const [addressInput, setAddressInput] = useState('');
     const [place_id, setPlaceId] = useState('');
     const [costOfGas, setCostOfGas] = useState(0);
@@ -24,29 +27,38 @@ export default function Quote() {
     const [numberInput, setNumberInput] = useState('');
     const [appointment, setAppointment] = useState('');
     const [appointmentId, setAppointmentId] = useState(null);
-    const [tryingToLeave, setTryingToLeave] = useState(null);
-    const [emailContent, setEmailContent] = useState(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. Here is my info: \n \n
-My Preferred Signing Location: ${addressInput} \n
-Cost of Gas to Signing Location ($${.62} round trip): ${costOfGas} \n
-My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
+    const [finalPrice, setFinalPrice] = useState(0);
+    const [emailContent, setEmailContent] = useState('');
 
-    
+    const SESSIONDATA = {
+        addressData: addressInput,
+        totalPrice: totalPrice,
+        servicesData: selectedServices,
+        notarizationPrice: notarizationPrice,
+        additionalLoanPackagePrice: additionalLoanPackagePrice,
+        numOfNotarizations: numOfNotarizations,
+        numOfLoanPackages: numOfLoanPackages,
+        costOfGasData: costOfGas,
+        nameData: nameInput,
+        emailData: emailInput,
+        emailValidationData: emailValid,
+        phoneData: numberInput,
+        finalPrice: finalPrice,
+    }
+
     const history = useHistory();
     const location = useLocation();
 
     const services = [
         {id: 0, name: 'Acknowledgement', price: 10},
         {id: 1, name: 'Jurat', price: 10},
-        {id: 2, name: 'Loan Package', price: 125},
+        {id: 2, name: 'Loan Package', price: 175},
         {id: 3, name: 'Notarization', price: '', notarizations: numOfNotarizations},
-    ];
+        {id: 4, name: 'I-9 Verification (hourly)', price: 50},
+        {id: 5, name: 'Job Application Resume Service', price: 30},
 
-    /*created servicesContd to conditionally load in this service as a list item*/
-    const servicesContd = [
-        {id: 4, name: 'Second Loan Package', price: 50}
     ];
-
-    
+   
     const handleClick = () => {
         setIsClicked(!isClicked);
     }
@@ -56,38 +68,30 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
     }
 
     const changeAppointmentRequest = (event) => {
+        const value = event.target.value;
         if (appointmentRequested == null) {
-            setAppointmentRequested(event.target.value);
-            if (event.target.value === 'yes' && appointment === '') {
-                sessionStorage.setItem('addressData', JSON.stringify(addressInput));
-                sessionStorage.setItem('totalPrice', JSON.stringify(totalPrice));
-                sessionStorage.setItem('servicesData', JSON.stringify(selectedServices));
-                sessionStorage.setItem('notarizationPrice', JSON.stringify(notarizationPrice));
-                sessionStorage.setItem('numOfNotarizations', JSON.stringify(numOfNotarizations));
-                sessionStorage.setItem('costOfGasData', JSON.stringify(costOfGas));
-                sessionStorage.setItem('nameData', JSON.stringify(nameInput));
-                sessionStorage.setItem('emailData', JSON.stringify(emailInput));
-                sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
-                sessionStorage.setItem('phoneData', JSON.stringify(numberInput));
+            setAppointmentRequested(value);
+            if (value === 'yes' && appointment === '') {
+                saveToSessionStorage();
                 history.push('./appointment')
-            } else {
-                sessionStorage.setItem('addressData', JSON.stringify(addressInput));
-                sessionStorage.setItem('totalPrice', JSON.stringify(totalPrice));
-                sessionStorage.setItem('servicesData', JSON.stringify(selectedServices));
-                sessionStorage.setItem('notarizationPrice', JSON.stringify(notarizationPrice));
-                sessionStorage.setItem('numOfNotarizations', JSON.stringify(numOfNotarizations));
-                sessionStorage.setItem('costOfGasData', JSON.stringify(costOfGas));
-                sessionStorage.setItem('nameData', JSON.stringify(nameInput));
-                sessionStorage.setItem('emailData', JSON.stringify(emailInput));
-                sessionStorage.setItem('emailValidationData', JSON.stringify(emailValid));
-                sessionStorage.setItem('phoneData', JSON.stringify(numberInput));
+            } else if (value === 'yes' && appointment !== '') {
+                saveToSessionStorage();
                 axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointmentId}`)
                 history.push('./appointment')
-            }
+            } else {
+                return
+            };
         } else {
             setAppointmentRequested(null);
-        }
-    }
+        };
+    };
+
+    const saveToSessionStorage = () => {
+
+        Object.entries(SESSIONDATA).forEach(([key, value]) => {
+            sessionStorage.setItem(key, JSON.stringify(value));
+        });
+    };
 
     const handleCheckboxChange = (serviceId, servicePrice) => {
         setSelectedServices((prevSelectedServices) => {
@@ -100,11 +104,13 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
             } else if (serviceId === 3 && !isSelected) {
                 return [...prevSelectedServices, serviceId]
             } else if (serviceId === 2 && isSelected) {
-                if (prevSelectedServices.includes(4)) {
+                if (numOfLoanPackages !== 0) {
                     setTotalPrice(totalPrice - 175);
-                    return prevSelectedServices.filter((id) => id !== 2 && id !== 4)
+                    setNumOfLoanPackages(0);
+                    setAdditionLoanPackagePrice(0);
+                    return prevSelectedServices.filter((id) => id !== 2)
                 } else {
-                    setTotalPrice(totalPrice - 125);
+                    setTotalPrice(totalPrice - 175);
                     return prevSelectedServices.filter((id) => id !== 2)
                 }
             } else if (isSelected) {
@@ -122,6 +128,12 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
         const price = (numberOfNotarizations * 10);
         setNotarizationPrice(price);
     };
+    
+    const handleNumOfLoanPackageChange = (numOfLoanPackages) => {
+        setNumOfLoanPackages(numOfLoanPackages);
+        const price = (numOfLoanPackages * 75);
+        setAdditionLoanPackagePrice(price);
+    }
 
     // Handles Data passed up DOM tree from PlacesAutocomplete Child Component
     const handleAddressData = (address) => {
@@ -130,23 +142,43 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
     }
 
     const handleInputChange = (event) => {
-        if (event.target.className === 'input name') {
-            setNameInput(event.target.value);
-        } else if (event.target.className === 'input email') {
-            setEmailInput(event.target.value);
-            event.target.validity.valid? setEmailValid(true) : setEmailValid(false);
-        } else if (event.target.className === 'textarea email-content') {
-            setEmailContent(event.target.value);
-        } else if (event.target.className === 'input address') {
-            setAddressInput(event.target.value);
-        } else if (event.target.className) {
-            console.log(typeof event.target.value);
-            setNumberInput(event.target.value);
+        const inputClass = event.target.className;
+        const inputValue = event.target.value;
+
+        switch (inputClass) {
+            case 'input name':
+                setNameInput(inputValue);
+                break;
+            
+            case 'input email':
+                setEmailInput(inputValue);
+                event.target.validity.valid? setEmailValid(true) : setEmailValid(false);
+                break;
+
+            case 'textarea email-content':
+                setEmailContent(inputValue);
+                break;
+
+            case 'input address':
+                setAddressInput(inputValue);
+                break;
+
+            case 'input number':
+                console.log(inputValue, 'inputChangeHandler');
+                setNumberInput(inputValue);
+                break;
+
+            default:
+                console.log('Unexpected Case Input');
         }
     };
 
     const sendEmail = (event) => {
         event.preventDefault();
+
+        if (event.key === 'Enter') {
+            return;
+        }
 
         const templateParams = {
             from_name: nameInput,
@@ -157,11 +189,10 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
 
         emailjs.send(import.meta.env.VITE_EMAIL_JS_SERVICE_ID, import.meta.env.VITE_EMAIL_JS_TEMPLATE_ID, templateParams, import.meta.env.VITE_EMAIL_JS_PUBLIC_KEY)
             .then((result) => {
-                console.log(result.text);
                 setEmailSent(true);
             }, (error) => {
-                console.log(error.text);
                 setEmailSent(false);
+                console.error(error);
             });
 
         fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/updatePendingAppointments`, {
@@ -202,66 +233,113 @@ My Free Estimate: ${totalPrice + notarizationPrice + (Number(costOfGas))}`);
     }, [place_id]);
 
     useEffect(() => {
+        const calculateFinalPrice = () => {
+            return totalPrice + notarizationPrice + additionalLoanPackagePrice + (Number(costOfGas))
+        }
+
+        setFinalPrice(calculateFinalPrice());
+    }, [totalPrice, notarizationPrice, additionalLoanPackagePrice, costOfGas])
+
+    useEffect(() => {
         !emailValid? setEmailContent('Please Enter a Valid Email Address.') :
         setEmailContent(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. \n 
 Here is my info: \n
 My Preferred Signing Location: ${addressInput} \n
 Cost of Gas to Signing Location ($.62 round trip): $${costOfGas} \n
-My Free Estimate (includes gasoline): $${totalPrice + notarizationPrice + (Number(costOfGas))} \n
+My Free Estimate (includes gasoline): $${finalPrice} \n
 ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointment: ${appointment}` : ''} \n
 ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
-    }, [nameInput, addressInput, totalPrice, notarizationPrice, costOfGas, emailValid, numberInput])
+    }, [emailValid, nameInput, costOfGas, finalPrice, appointment, numberInput]);
 
     useEffect(() => {
-        if (sessionStorage.getItem('servicesData') != null) {
-            const serviceData = JSON.parse(sessionStorage.getItem('servicesData'));
-            setSelectedServices(serviceData);
-        }
+        Object.entries(SESSIONDATA).forEach(([key]) => {
+            const storedData = sessionStorage.getItem(key);
+            console.log(key, storedData);
 
-        if (sessionStorage.getItem('totalPrice') != null) {
-            const priceData = JSON.parse(sessionStorage.getItem('totalPrice'));
-            setTotalPrice(priceData);
-        }
+            switch (key) {
+                case 'servicesData':
+                    if (storedData != null) {
+                        setSelectedServices(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('addressData') != null) {
-            const addressData = JSON.parse(sessionStorage.getItem('addressData'));
-            setAddressInput(addressData);
-        }
+                case 'totalPrice':
+                    if (storedData != null) {
+                        setTotalPrice(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('costOfGasData') != null) {
-            const costOfGasData = JSON.parse(sessionStorage.getItem('costOfGasData'));
-            setCostOfGas(costOfGasData);
-        }
+                case 'addressData':
+                    if (storedData != null) {
+                        setAddressInput(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('numOfNotarizations') != null) {
-            const numOfNotarizationsData = JSON.parse(sessionStorage.getItem('numOfNotarizations'));
-            setNumOfNotarizations(numOfNotarizationsData);
-        }
+                case 'costOfGasData':
+                    if (storedData != null) {
+                        setCostOfGas(JSON.parse(storedData));
+                    }
+                    break;
+                
+                case 'numOfNotarizations':
+                    if (storedData != null) {
+                        setNumOfNotarizations(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('notarizationPrice') != null) {
-            const notarizationPriceData = JSON.parse(sessionStorage.getItem('notarizationPrice'));
-            setNotarizationPrice(notarizationPriceData);
-        }
+                case 'notarizationPrice':
+                    if (storedData != null) {
+                        setNotarizationPrice(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('nameData') != null) {
-            const nameData = JSON.parse(sessionStorage.getItem('nameData'));
-            setNameInput(nameData);
-        }
+                case 'additionalLoanPackagePrice':
+                    if (storedData != null) {
+                        setAdditionLoanPackagePrice(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('emailData') != null) {
-            const emailData = JSON.parse(sessionStorage.getItem('emailData'));
-            setEmailInput(emailData);
-        }
+                case 'numOfLoanPackages':
+                    if (storedData != null) {
+                        setNumOfLoanPackages(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('emailValidationData') != null) {
-            const emailValidationData = JSON.parse(sessionStorage.getItem('emailValidationData'));
-            setEmailValid(emailValidationData);
-        }
+                case 'nameData':
+                    if (storedData != null) {
+                        setNameInput(JSON.parse(storedData));
+                    }
+                    break;
 
-        if (sessionStorage.getItem('phoneData') != null) {
-            const phoneData = JSON.parse(sessionStorage.getItem('phoneData'))
-            setNumberInput(phoneData);
-        }
+                case 'emailData':
+                    if (storedData != null) {
+                        setEmailInput(JSON.parse(storedData));
+                    }
+                    break;
+
+                case 'emailValidationData':
+                    if (storedData != null) {
+                        setEmailValid(JSON.parse(storedData));
+                    }
+                    break;
+
+                case 'finalPrice':
+                    if (storedData != null) {
+                        setFinalPrice(JSON.parse(storedData));
+                    }
+                    break;
+
+                case 'phoneData':
+                    if (storedData != null) {
+                        setNumberInput(JSON.parse(storedData));
+                    }
+                    break;   
+                
+                default:
+                    console.log('Unexpected Case Data');
+                    break;
+            }
+        })      
     }, []);
 
     useEffect(() => {
@@ -288,11 +366,8 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
 
     useEffect(() => {
 
-        console.log(emailSent, appointment);
-
         const handleUnload = (event) => {
             if (emailSent == null && appointment !== '' ) {
-                setTryingToLeave(true);
                 event.preventDefault();
             }
         }
@@ -309,9 +384,9 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
             <div id='quote-body'>
                 <div id='quote-header-wrapper'>
                     <h1 id='your-free-quote'>Your Free Quote.</h1>
-                    <p className='final-quote'>Services: ${totalPrice + notarizationPrice}</p>
+                    <p className='final-quote'>Services: ${totalPrice + notarizationPrice + additionalLoanPackagePrice}</p>
                     <p className='final-quote'>Cost of Gas ($.62 Round Trip) : ${costOfGas}</p>
-                    <p className='final-quote'>My Free Estimate: ${(totalPrice + notarizationPrice + (Number(costOfGas))).toFixed(2)}</p>
+                    <p className='final-quote'>My Free Estimate: ${finalPrice}</p>
                 </div>
                 <div id='quote-calculator'>
                     <div className='input-wrapper'>
@@ -340,21 +415,20 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                         );
                                     })
                                 }
-                                {selectedServices.includes(2) ? 
-                                    servicesContd.map((service) => {
-                                        return (
-                                            <>
-                                                <ServiceLabelAndInput 
-                                                    key={service.id}
-                                                    id={service.id}
-                                                    name={service.name}
-                                                    price={service.price}
-                                                    handleCheckboxChange={handleCheckboxChange}
-                                                    checked={selectedServices.includes(service.id)}
-                                                />
-                                            </>
-                                        );
-                                    }) : ''
+                                {selectedServices.includes(2) ?
+                                            <li key={6} className='service-li-number'>
+                                                <label className='service-label'>
+                                                    Additional Loan Packages: $75
+                                                    <input value={numOfLoanPackages}
+                                                           type='number'
+                                                           id='number-input'
+                                                           onChange={(event) => {
+                                                            event.target.value < 0 || event.target.value == null ? setNumOfLoanPackages(0) :
+                                                            handleNumOfLoanPackageChange(Number(event.target.value))}}
+                                                    />
+                                                </label>
+                                            </li>
+                                : ''
                                 }
                                 {selectedServices.includes(3) ? 
                                     <li key={3} className='service-li-number'>
@@ -441,7 +515,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
-                            label={isDisabled || !emailValid? 'Message Us' : 'Feel free to add any additional information below.'}
+                            label={isDisabled || !emailValid? 'Message Us' : `Feel free to add any additional information.`}
                             name='email-content'
                             type='text'
                             value={isDisabled? 'If you would like to send us an email and request your chosen appointment, please first select all desired services and fill out all required fields. The send button will appear once all necessary fields are complete.' : emailSent? 

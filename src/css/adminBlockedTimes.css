@@ -3,6 +3,9 @@
     width: 300px;
     margin-top: 20px;
     margin-bottom: 20px;
+    height: 320px;
+    box-shadow: 4px 4px 10px 0px black;
+    background-color: rgba(250, 235, 215, 0.401);
 }
 
 #blocked-times-setter-header {
@@ -70,4 +73,10 @@ p ~ .date-input {
 
 #blocked-time-buttons-wrapper {
     margin-bottom: 20px;
+}
+
+@media screen and (max-width: 480px) {
+    #blocked-times-setter-wrapper {
+        height: 360px;
+    }
 }
