@@ -37,8 +37,8 @@
 #your-free-quote {
     margin-left: 20%;
     font-size: 4rem;
-    margin-top: 30%;
     margin-bottom: 0;
+    margin-top: 50%;
     text-shadow: 8px 7px 4px rgb(0, 0, 0, .3);
 }
 
@@ -665,13 +665,12 @@
     }
 }
 
-@media only screen and (min-width: 428px)  and (orientation: landscape) {
+@media only screen and (min-width: 480px) and (orientation:landscape) {
     #your-free-quote {
-        margin-top: 50px;
+        text-align: start;
     }
-
     #quote-calculator {
-        margin-top: 50px;
+        margin-top: 100px;
     }
 }
 
