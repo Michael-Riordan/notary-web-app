@@ -11,26 +11,26 @@ export default function CustomNav() {
 
     return (
         <>
-            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onChange={handleCheck}/>
-            <label htmlFor='menu-toggle' id='menu-label'>
+            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onChange={handleCheck} aria-hidden='true'/>
+            <label htmlFor='menu-toggle' id='menu-label' aria-haspopup='menu'>
                 <div id='menu-button-container'>
                     <div id='menu-button'>
                         
                     </div>
                 </div>
             </label>
-            <ul id='menu'>
-                <li>
-                    <Link className='dropdown-item' to='/'>Home</Link>
+            <ul id='menu' role='menu'>
+                <li role='none'>
+                    <Link className='dropdown-item' to='/' role='menuitem'>Home</Link>
                 </li>
-                <li>
-                    <a id='call-now' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`}>Call Now</a>
+                <li role='none'>
+                    <a id='call-now' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`} role='menuitem'>Call Now</a>
                 </li>
-                <li>
-                    <Link className='dropdown-item' to='/about'>About/Pricing</Link>
+                <li role='none'>
+                    <Link className='dropdown-item' to='/about' role='menuitem'>About/Pricing</Link>
                 </li>
-                <li>
-                    <Link className='dropdown-item' to='/quote'>Get a Quote</Link>
+                <li role='none'>
+                    <Link className='dropdown-item' to='/quote' role='menuitem'>Get a Quote</Link>
                 </li>
             </ul>
         </>

@@ -24,6 +24,7 @@
     display: grid;
     justify-self: center;
     height: 100%;
+    background-color: none;
 }
 
 #company-name {

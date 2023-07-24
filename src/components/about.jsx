@@ -1,22 +1,27 @@
+import { Helmet } from 'react-helmet';
 import handshake from '../assets/undraw_business_deal_re_up4u.svg';
 
 export default function About() {
     return (
         <>
+            <Helmet>
+                <title>Mobile Signing Agent in Arizona | Notary Services, Loan Signings, I-9 Verifications</title>
+                <meta name='description' content="Professional Mobile Signing Agent in Arizona offering Notary Services, Loan Signings, I-9 Verifications, and More. Discover our competitive pricing for expert notarial and signing services."  />
+            </Helmet>
             <section id='about-body'>
                 <div id='about-header-wrapper'>
                     <div id='licensed-bonded-insured'>
                         <h1>Licensed. <br/> Bonded. <br/> Insured.</h1>
                         <img src={handshake} alt='handshake' id='handshake'/>
                     </div>
-                    <h1 id='about-header'>LRmobilenotary is a professional mobile notary service based in the Phoenix area 
+                    <h2 id='about-header'>LRmobilenotary is a professional mobile notary service based in the Phoenix area 
                         committed to providing reliable and efficient notarial services.
                          With a focus on convenience and customer satisfaction, LRmobilenotary 
                          offers flexible mobile notary services that cater to the diverse 
                          needs of individuals, businesses, and organizations.
-                    </h1>
+                    </h2>
                 </div>
-                <div id='services-wrapper'>
+                <article id='services-wrapper'>
                     <div className='about-service'>
                         <h1>Mobile Notary Service</h1>
                         <p>
@@ -47,7 +52,7 @@ export default function About() {
                         </p>
                         <p className='service-price'>I-9 Form Verification: $50.00/hr <br/>$.62 round trip gasoline cost</p>
                     </div>
-                </div>
+                </article>
             </section>
         </>
     );

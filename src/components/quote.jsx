@@ -4,6 +4,7 @@ import axios from "axios";
 import googleLogo from '/src/assets/google_on_white_hdpi.png'
 import emailjs from '@emailjs/browser'
 import PlacesAutocomplete from "./PlacesAutocomplete";
+import { Helmet } from "react-helmet";
 
 
 export default function Quote() {
@@ -121,6 +122,14 @@ export default function Quote() {
                 return [...prevSelectedServices, serviceId];
             }
         });
+    };
+
+    const handleKeyDown = (event, id, price) => {
+        if (event.key === 'Enter') {
+            handleCheckboxChange(id, price);
+            event.preventDefault();
+            event.target.click();   
+        }
     };
 
     const handleInputNumberChange = (numberOfNotarizations) => {
@@ -254,7 +263,6 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
     useEffect(() => {
         Object.entries(SESSIONDATA).forEach(([key]) => {
             const storedData = sessionStorage.getItem(key);
-            console.log(key, storedData);
 
             switch (key) {
                 case 'servicesData':
@@ -381,14 +389,20 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
 
     return (
         <>
-            <div id='quote-body'>
+            <Helmet>
+                <title>Free Quote and Appointment Request | LRmobilenotary</title>
+                <meta name='description' content='Get a free quote and request an appointment for mobile notary services in Arizona' />
+            </Helmet>
+
+            <section id='quote-body'>
                 <div id='quote-header-wrapper'>
                     <h1 id='your-free-quote'>Your Free Quote.</h1>
                     <p className='final-quote'>Services: ${totalPrice + notarizationPrice + additionalLoanPackagePrice}</p>
                     <p className='final-quote'>Cost of Gas ($.62 Round Trip) : ${costOfGas}</p>
                     <p className='final-quote'>My Free Estimate: ${finalPrice}</p>
                 </div>
-                <div id='quote-calculator'>
+
+                <section id='quote-calculator'>
                     <div className='input-wrapper'>
                         <label htmlFor='services-input' className='input-label'>Select Services</label>
                         <button className={`button-input ${isClicked ? 'clicked' : ''}`} 
@@ -408,6 +422,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                                     id={service.id}
                                                     name={service.name}
                                                     price={service.price}
+                                                    onKeyDown={handleKeyDown}
                                                     handleCheckboxChange={handleCheckboxChange}
                                                     checked={selectedServices.includes(service.id)}
                                                 />
@@ -415,22 +430,22 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                         );
                                     })
                                 }
-                                {selectedServices.includes(2) ?
+                                {selectedServices.includes(2) &&
                                             <li key={6} className='service-li-number'>
                                                 <label className='service-label'>
                                                     Additional Loan Packages: $75
                                                     <input value={numOfLoanPackages}
                                                            type='number'
                                                            id='number-input'
+                                                           onKeyDown={handleKeyDown}
                                                            onChange={(event) => {
                                                             event.target.value < 0 || event.target.value == null ? setNumOfLoanPackages(0) :
                                                             handleNumOfLoanPackageChange(Number(event.target.value))}}
                                                     />
                                                 </label>
                                             </li>
-                                : ''
                                 }
-                                {selectedServices.includes(3) ? 
+                                {selectedServices.includes(3) && 
                                     <li key={3} className='service-li-number'>
                                         <label className='service-label'>
                                             Number of Notarizations
@@ -443,7 +458,6 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                             />
                                         </label>
                                     </li>
-                                    : ''
                                 }
                             </ul>
                         </div>
@@ -533,14 +547,14 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                             <div id='confirmation-symbol' />
                         </div>
                     </form>
-                </div>
-            </div>
+                </section>
+            </section>
         </>
     );
 }
 
 function ServiceLabelAndInput(props) {
-    const { id, name, price, handleCheckboxChange, checked} = props;
+    const { id, name, price, handleCheckboxChange, checked, onKeyDown} = props;
 
     return (
         <li key={id} className='service-li'>
@@ -550,6 +564,7 @@ function ServiceLabelAndInput(props) {
                        className='service-input'
                        onChange={(event) => handleCheckboxChange(id, price)} 
                        checked={checked}
+                       onKeyDown={(event) => onKeyDown(event, id, price)}
                 />
             </label>
         </li>
