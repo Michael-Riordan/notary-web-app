@@ -70,7 +70,15 @@ export default function Appointment() {
         setSelectedTime(null);
         setClickedDate(null);
     }
+    //returns day of week from date obj
+    const pullDay = (dateObj, sliceStart, sliceEnd) => {
+        return dateObj.toString().split(' ').slice(sliceStart, sliceEnd).join(' ');
+    }
 
+    const createDateAndTime = (date, time) => {
+        return date + ' ' + time;
+    }
+    
     // weekend needs blocked times 2hr:30min before and after scheduled appointment.
     const checkDisabled = (time) => {
         let disabled = false;
@@ -78,23 +86,23 @@ export default function Appointment() {
         const now = new Date();
         const dateNoSuffix = clickedDate.replace((/th|st|nd|rd/), '');
         const openDate = new Date(dateNoSuffix);
-        const dateAndTime = dateNoSuffix + ' ' + time;
+        const dateAndTime = createDateAndTime(dateNoSuffix, time);
         const todayFormatted = moment(now).format('ddd MMM D YYYY h:mma');
-        const todayNoTime = todayFormatted.split(' ').slice(0, 4).join(' ');
+        const todayNoTime = pullDay(todayFormatted, 0, 4);
         const openDateFormatted = moment(openDate).format('ddd MMM D YYYY');
         const todayObject = moment(now, 'ddd MMM D YYYY h:mma');
         const openDateAndTimeObject = moment(dateAndTime, 'ddd MMM D YYYY h:mma')
         const todayBuffer = todayObject.clone().add(1.5, 'hours')
-        //handling same day appointments using above variables -- buffer = 1.5 hours
+        //handling same day appointments using above variables -- buffer = 1.5 hours after current time
         if (todayNoTime === openDateFormatted) {
             if (openDateAndTimeObject <= todayBuffer) {
                 disabled = true;
             };
         }
 
-        const openDateForTimeCheck = openDateFormatted.split(' ').slice(1, 4).join(' ')
+        const openDateForTimeCheck = pullDay(openDateFormatted, 1, 4);
         blockedTimesForDate.forEach(block => {
-            const blockedDayAndTime = block.date + ' ' + block.time
+            const blockedDayAndTime = createDateAndTime(block.date, block.time);
             const blockedBuffer = block.buffer.split(' ');
             if (block.date === openDateForTimeCheck) {
                 const timeMoment = moment(blockedDayAndTime, 'MMM D YYYY h:mma');
@@ -113,7 +121,7 @@ export default function Appointment() {
             if (time === appointment.appointmentTime && clickedDate === appointment.appointmentDate) {
                 disabled = true;
             } else if (appointment.appointmentDate === clickedDate) {
-                const dateAndTime = appointment.appointmentDate + ' ' + appointment.appointmentTime;
+                const dateAndTime = createDateAndTime(appointment.appointmentDate, appointment.appointmentTime)
                 const formattedDate = moment(dateAndTime, 'ddd MMM Do YYYY h:mma');
                 const blockStart = formattedDate.clone().subtract(2.5, 'hours');
                 const blockEnd = formattedDate.clone().add(2.5, 'hours');
@@ -124,25 +132,27 @@ export default function Appointment() {
                     blockedTimes.push(startTime.format('ddd MMM D YYYY h:mma'));
                     startTime.add(30, 'minutes');
                 }
-                if (blockedTimes.includes(appointment.appointmentDate.replace(/0?(\d+)(?:st|nd|rd|th)?/g, '$1') + ' ' + time)) {
+                const dateToCheck = createDateAndTime(appointment.appointmentDate.replace(/0?(\d+)(?:st|nd|rd|th)?/g, '$1'), time);
+                if (blockedTimes.includes(dateToCheck)) {
                     disabled = true;
                 }
             }
         });
         return disabled;
     }
+
     
     const checkAppointmentsForDay = (date) => {
         let disabled = false;
 
         //checking if date is in blockedDates - disabling calendar tile if so.
-        const dayToCheck = date.toString().split(' ').slice(0, 4).join(' ');
+        const dayToCheck = pullDay(date, 0, 4);
         if (blockedDates != null) {
             blockedDates[0].Blocked.forEach(span => {
                 const startDateEndDate = span.split('-');
                 if (startDateEndDate.length === 1) {
                     const weekdayAndDay = moment(span.toString(), 'MMM D YYYY');
-                    const formattedWeekdayAndDay = weekdayAndDay._d.toString().split(' ').slice(0, 4).join(' ');
+                    const formattedWeekdayAndDay = pullDay(weekdayAndDay._d, 0, 4);
                     if (dayToCheck === formattedWeekdayAndDay) {
                         disabled = true;
                     }
@@ -151,7 +161,7 @@ export default function Appointment() {
                     const endDateMoment = moment(startDateEndDate[1], 'MMM D YYYY');
                     const startDateClone = startDateMoment.clone();
                     while (startDateClone <= endDateMoment) {
-                        const blockedDay = startDateClone._d.toString().split(' ').slice(0, 4).join(' ');
+                        const blockedDay = pullDay(startDateClone._d, 0, 4);
                         if (dayToCheck === blockedDay) {
                             disabled = true;
                         }
@@ -168,9 +178,9 @@ export default function Appointment() {
         const todayBuffer = todayObject.clone().add(1.5, 'hours')
         const day = moment(date).format('ddd MMM D YYYY');
 
-        const dateForTimeCheck = day.split(' ').slice(1, 4).join(' ');
+        const dateForTimeCheck = pullDay(day, 1, 4);
         blockedTimesForDate.forEach(block => {
-            const blockedDayAndTime = block.date + ' ' + block.time
+            const blockedDayAndTime = createDateAndTime(block.date, block.time);
             const blockedBuffer = block.buffer.split(' ');
             if (block.date === dateForTimeCheck) {
                 const timeMoment = moment(blockedDayAndTime, 'MMM D YYYY h:mma');
@@ -192,7 +202,7 @@ export default function Appointment() {
                 if (daysAndHours.length > 0) {
                     if (Object.keys(daysAndHours[i])[0] === weekday) {
                         daysAndHours[i][weekday].forEach(time => {
-                            const dayAndTime = day + ' ' + time;
+                            const dayAndTime = createDateAndTime(day, time);
                             const dayAndTimeObj = moment(dayAndTime, 'ddd MMM D YYYY h:mma');
                             if (dayAndTimeObj <= todayBuffer) {
                                 if (!blockedTimes.includes(dayAndTimeObj._i)) {
@@ -218,7 +228,7 @@ export default function Appointment() {
                 }
             } else {
                 if (dateNoSuffix === date.toDateString() && appointment.appointmentTime !== '') {
-                    const dateAndTime = appointment.appointmentDate + ' ' + appointment.appointmentTime;
+                    const dateAndTime = createDateAndTime(appointment.appointmentDate, appointment.appointmentTime);
                     const formattedDate = moment(dateAndTime, 'ddd MMM DD YYYY h:mma');
                     const blockStart = formattedDate.clone().subtract(2.5, 'hours');
                     const blockEnd = formattedDate.clone().add(2.5, 'hours');
@@ -234,7 +244,8 @@ export default function Appointment() {
                     while (startTime <= blockEnd) {
                         if (hoursForDay != null) {
                             if (hoursForDay.includes(startTime.format('ddd MMM D YYYY h:mma').split(' ')[4])) {
-                                if (!blockedTimes.includes(dateNoSuffix + ' ' + startTime.format('ddd MMM DD YYYY h:mma').split(' ')[4])) {
+                                const dateToCheck = createDateAndTime(dateNoSuffix, startTime.format('ddd MMM DD YYYY h:mma').split(' ')[4])
+                                if (!blockedTimes.includes(dateToCheck)) {
                                     blockedTimes.push(startTime.format('ddd MMM DD YYYY h:mma'))
                                 };
                             }
