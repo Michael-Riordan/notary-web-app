@@ -571,22 +571,22 @@ export function FormLabelAndInput(props) {
                     {img}
                 </span>
             <input className={`input ${name}`}
-            name={`${name}-input`}
-            type={type}
-            value={value}
-            placeholder={placeholder}
-            onChange={handleInputChange}
-            required={required}
+                   name={`${name}-input`}
+                   type={type}
+                   value={value}
+                   placeholder={placeholder}
+                   onChange={handleInputChange}
+                   required={required}
             /> 
             </label>
             :
             <label htmlFor={`input-${name}`} className={`input-label ${name}`}>
                 {label}
             <textarea className={`textarea ${name}`}
-            name={`${name}-input`}
-            type={type}
-            value={value}
-            onChange={handleInputChange}
+                      name={`${name}-input`}
+                      type={type}
+                      value={value}
+                      onChange={handleInputChange}
             />
             </label>
             }
