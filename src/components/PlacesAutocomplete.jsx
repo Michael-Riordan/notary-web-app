@@ -37,19 +37,15 @@ export default function PlacesAutocomplete({ inputValue, onData}) {
             <div id='address-list'>
                 <ul>
                     {
-                        data.map((address, index) => {
-                            return (
-                                <>
-                                    <li key={index} 
-                                        className='address-list-item' 
-                                        onClick={() => handleAddressSelection(address)} 
-                                        style={{ display: selected ? 'none' : 'inherit'}}
-                                    >
-                                        {address.description}
-                                    </li>
-                                </>
-                            );
-                        })
+                        data.map((address, index) => (
+                            <li key={index} 
+                                className='address-list-item' 
+                                onClick={() => handleAddressSelection(address)} 
+                                style={{ display: selected ? 'none' : 'inherit'}}
+                            >
+                                {address.description}
+                            </li>
+                        ))
                     }
                 </ul>
             </div>

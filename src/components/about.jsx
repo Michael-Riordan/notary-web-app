@@ -1,13 +1,8 @@
-import { Helmet } from 'react-helmet';
 import handshake from '../assets/undraw_business_deal_re_up4u.svg';
 
 export default function About() {
     return (
         <>
-            <Helmet>
-                <title>Mobile Signing Agent in Arizona | Notary Services, Loan Signings, I-9 Verifications</title>
-                <meta name='description' content="Professional Mobile Signing Agent in Arizona offering Notary Services, Loan Signings, I-9 Verifications, and More. Discover our competitive pricing for expert notarial and signing services."  />
-            </Helmet>
             <section id='about-body'>
                 <div id='about-header-wrapper'>
                     <div id='licensed-bonded-insured'>

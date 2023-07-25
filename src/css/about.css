@@ -126,7 +126,7 @@
     #about-body {
         display: flex;
         flex-direction: column;
-        height: fit-content;
+        height: max-content;
     }
     
     #licensed-bonded-insured {

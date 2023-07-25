@@ -28,7 +28,7 @@
     align-self: flex-end;
     height: 22px;
     margin-left: 10px;
-    margin-bottom: 0px;
+    margin-bottom: -5px;
 }
 
 @media screen and (max-width: 480px) {

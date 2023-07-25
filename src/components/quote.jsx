@@ -4,7 +4,6 @@ import axios from "axios";
 import googleLogo from '/src/assets/google_on_white_hdpi.png'
 import emailjs from '@emailjs/browser'
 import PlacesAutocomplete from "./PlacesAutocomplete";
-import { Helmet } from "react-helmet";
 
 
 export default function Quote() {
@@ -94,7 +93,12 @@ export default function Quote() {
         });
     };
 
-    const handleCheckboxChange = (serviceId, servicePrice) => {
+    const handleCheckboxChange = (event, serviceId, servicePrice) => {
+        //add ability to select using enter key;
+        if (event.key !== 'Enter' && event.key != undefined) {
+            return;
+        }
+
         setSelectedServices((prevSelectedServices) => {
             const isSelected = prevSelectedServices.includes(serviceId);
             
@@ -122,14 +126,6 @@ export default function Quote() {
                 return [...prevSelectedServices, serviceId];
             }
         });
-    };
-
-    const handleKeyDown = (event, id, price) => {
-        if (event.key === 'Enter') {
-            handleCheckboxChange(id, price);
-            event.preventDefault();
-            event.target.click();   
-        }
     };
 
     const handleInputNumberChange = (numberOfNotarizations) => {
@@ -207,7 +203,7 @@ export default function Quote() {
         fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/updatePendingAppointments`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8',
             },
             body: JSON.stringify({name: nameInput, appointment: appointment, appointmentId: appointmentId}),
         })
@@ -389,11 +385,6 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
 
     return (
         <>
-            <Helmet>
-                <title>Free Quote and Appointment Request | LRmobilenotary</title>
-                <meta name='description' content='Get a free quote and request an appointment for mobile notary services in Arizona' />
-            </Helmet>
-
             <section id='quote-body'>
                 <div id='quote-header-wrapper'>
                     <h1 id='your-free-quote'>Your Free Quote.</h1>
@@ -414,21 +405,16 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                         <div id='services-menu'>
                             <ul id='services-list'>
                                 {
-                                    services.map((service) => {
-                                        return (
-                                            <>
-                                                <ServiceLabelAndInput 
-                                                    key={service.id}
-                                                    id={service.id}
-                                                    name={service.name}
-                                                    price={service.price}
-                                                    onKeyDown={handleKeyDown}
-                                                    handleCheckboxChange={handleCheckboxChange}
-                                                    checked={selectedServices.includes(service.id)}
-                                                />
-                                            </>
-                                        );
-                                    })
+                                    services.map((service) => (
+                                        <ServiceLabelAndInput 
+                                            key={service.id}
+                                            id={service.id}
+                                            name={service.name}
+                                            price={service.price}
+                                            handleCheckboxChange={handleCheckboxChange}
+                                            checked={selectedServices.includes(service.id)}
+                                        />
+                                    ))
                                 }
                                 {selectedServices.includes(2) &&
                                             <li key={6} className='service-li-number'>
@@ -437,7 +423,6 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                                     <input value={numOfLoanPackages}
                                                            type='number'
                                                            id='number-input'
-                                                           onKeyDown={handleKeyDown}
                                                            onChange={(event) => {
                                                             event.target.value < 0 || event.target.value == null ? setNumOfLoanPackages(0) :
                                                             handleNumOfLoanPackageChange(Number(event.target.value))}}
@@ -484,22 +469,25 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                 {appointment !== '' && typeof appointment !== 'object' ? appointment : appointmentSelectorOpen ? 'Click to Close' : 'Click to Open'}
                         </button>
                         <div id='yes-no'>
-                            <ul id='yes-no-selector'>
+                            <div id='yes-no-selector'>
                                 <label htmlFor='yes' className='yes-no-label yes'>
                                     Yes
-                                </label>
                                 <input type='checkbox' 
-                                       value='yes' 
+                                       value='yes'
+                                       name='yes' 
                                        onClick={changeAppointmentRequest}
-                                       disabled={appointmentRequested != null && appointmentRequested === 'no'}/>
+                                       disabled={appointmentRequested != null && appointmentRequested === 'no'}
+                                />
+                                </label>
                                 <label htmlFor='no' className='yes-no-label no'>
                                     No
-                                </label>
                                 <input type='checkbox' 
                                        value='no' 
                                        onClick={changeAppointmentRequest}
-                                       disabled={appointmentRequested != null && appointmentRequested === 'yes'}/>
-                            </ul>
+                                       disabled={appointmentRequested != null && appointmentRequested === 'yes'}
+                                />
+                                </label>
+                            </div>
                         </div>
                         <FormLabelAndInput
                             label='Name'
@@ -562,9 +550,9 @@ function ServiceLabelAndInput(props) {
                 {name === 'Notarization'? `Basic ${name}: Select Number Below` : `${name}: $${price}`}
                 <input type='checkbox' 
                        className='service-input'
-                       onChange={(event) => handleCheckboxChange(id, price)} 
+                       onChange={(event) => handleCheckboxChange(event, id, price)} 
                        checked={checked}
-                       onKeyDown={(event) => onKeyDown(event, id, price)}
+                       onKeyDown={(event) => handleCheckboxChange(event, id, price)}
                 />
             </label>
         </li>
@@ -576,25 +564,31 @@ export function FormLabelAndInput(props) {
 
     return (
         <>
+            { name !== 'email-content' ?
+            <label htmlFor={`input-${name}`} className={`input-label ${name}`}>
+                <span className='label-and-img'>
+                    {label}
+                    {img}
+                </span>
+            <input className={`input ${name}`}
+            name={`${name}-input`}
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            onChange={handleInputChange}
+            required={required}
+            /> 
+            </label>
+            :
             <label htmlFor={`input-${name}`} className={`input-label ${name}`}>
                 {label}
-                {img}
-            </label>
-            { name !== 'email-content' ?
-            <input className={`input ${name}`}
-                   name={`${name}-input`}
-                   type={type}
-                   value={value}
-                   placeholder={placeholder}
-                   onChange={handleInputChange}
-                   required={required}
-            /> : 
             <textarea className={`textarea ${name}`}
-                      name={`${name}-input`}
-                      type={type}
-                      value={value}
-                      onChange={handleInputChange}
+            name={`${name}-input`}
+            type={type}
+            value={value}
+            onChange={handleInputChange}
             />
+            </label>
             }
         </>
     )

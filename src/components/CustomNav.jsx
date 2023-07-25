@@ -11,7 +11,7 @@ export default function CustomNav() {
 
     return (
         <>
-            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onChange={handleCheck} aria-hidden='true'/>
+            <input type='checkbox' id='menu-toggle' name='menu-toggle' checked={isChecked} onChange={handleCheck} aria-label='menu-toggle'/>
             <label htmlFor='menu-toggle' id='menu-label' aria-haspopup='menu'>
                 <div id='menu-button-container'>
                     <div id='menu-button'>

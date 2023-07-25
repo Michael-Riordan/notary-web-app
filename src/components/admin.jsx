@@ -153,7 +153,7 @@ export default function Admin() {
                 fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json; charset=utf-8',
                     },
                     body: JSON.stringify({day: selectedDay, time: hourToChange}),
                 })
