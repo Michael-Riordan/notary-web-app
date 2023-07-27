@@ -6,6 +6,7 @@
     margin-bottom: 0;
     background-color: #f5efbf;
     border-top: 1px solid rgb(49, 43, 38);
+    font-weight: bold;
 }
 #footer-tabs {
     display: flex;

@@ -135,17 +135,20 @@
 }
 
 .service-li {
+    display: grid;
     list-style-type: none;
     text-indent: 3px;
     height: 0px;
-    background-color: #f5efbfa3;
+    background-color: #f5efbf;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
     overflow: hidden;
     font-weight: bold;
 }
 
+
 .service-label {
     cursor: pointer;
+    align-self: center;
 }
 
 .service-input {
@@ -160,10 +163,12 @@
 
 .button-input.clicked ~ #services-menu #services-list > .service-li {
     border: 1px solid rgb(49, 43, 38);
-    background-color: #f5efbfd8;
-    height: 44px;
+    background-color: #f5efbf;
+    height: 47px;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
     overflow: visible;
+    text-align: center;
+    justify-items: center;
 }
 
 .service-li-number {
@@ -179,6 +184,11 @@
     list-style-type: none;
     border: 1px solid rgb(49, 43, 38);
     background-color: #f5efbfa3;
+}
+
+.service-li:hover {
+    cursor: pointer;
+    background-color: rgb(209, 180, 94) !important;
 }
 
 #address-list {
@@ -386,7 +396,7 @@
 @media screen and (max-width: 770px) {
     #quote-body {
         display: flex;
-        height: fit-content;
+        height: max-content;
         min-height: 800px;
     }
 
@@ -616,7 +626,7 @@
 
     #quote-body {
         display: flex;
-        height: fit-content;
+        height: max-content;
         min-height: 800px;
     }
 
