@@ -29,7 +29,7 @@ function App() {
       <Router>
       <header>
         <div className='logo'>
-        <Link to='/' id='header-webname'>LRmobilenotary</Link>
+        <Link to='/' id='header-webname'>LR-MobileNotary</Link>
         </div>
         <CustomNav />
       </header>
@@ -44,7 +44,7 @@ function App() {
         <div id='footer-info-wrapper'>
           <img id='NNA-emblem' src={NNAemblem} alt='National Notary Association'/>
           <img id='AZ-state-flag' src={stateFlag} alt='Arizona State Flag' />
-          <Link to='/' id='footer-company-name'>LRmobilenotary</Link>
+          <Link to='/' id='footer-company-name'>LR-MobileNotary</Link>
           <div id='footer-tabs'>
             <a id='call-now-footer' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`}>Call Now</a>
             <p>|</p>
