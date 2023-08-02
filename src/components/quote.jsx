@@ -76,7 +76,7 @@ export default function Quote() {
                 history.push('./appointment')
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
-                axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointmentId}`)
+                axios.delete(`http://${import.meta.env.SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
                 history.push('./appointment')
             } else {
                 return
@@ -200,7 +200,7 @@ export default function Quote() {
                 console.error(error);
             });
 
-        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/updatePendingAppointments`, {
+        fetch(`http://${import.meta.env.SERVER_DOMAIN}/updatePendingAppointments`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
@@ -221,7 +221,7 @@ export default function Quote() {
     useEffect(() => {
         const fetchDistance = async () => {
             if (place_id != '') {
-                const response = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/distance?query=${encodeURIComponent(place_id)}`);
+                const response = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/distance?query=${encodeURIComponent(place_id)}`);
                 const responseData = await response.json();
                 if (responseData.error == undefined) {
                     const routeDistance = responseData.routes[0].legs[0].distance.text;
@@ -358,7 +358,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
 
     useEffect(() => {
         const getAppointments = async () => {
-            await axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+            await axios.get(`http://${import.meta.env.SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
                     if (response.length !== 0) {

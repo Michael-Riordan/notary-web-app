@@ -58,7 +58,7 @@ export default function Appointment() {
         const appointmentData = {appointmentTime: selectedTime,
                                  appointmentDate: clickedDate};
         const queryParams = new URLSearchParams(appointmentData).toString();
-        axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/addAppointment`, {
+        axios.post(`http://${import.meta.env.SERVER_DOMAIN}/addAppointment`, {
             appointmentTime: selectedTime,
             appointmentDate: clickedDate, 
         });
@@ -270,7 +270,7 @@ export default function Appointment() {
 
     useEffect(() => {
         const getAppointments = async () => {
-            await axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+            await axios.get(`http://${import.meta.env.SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
                     setAppointments(response);
@@ -285,7 +285,7 @@ export default function Appointment() {
     useEffect(() => {
         const weekdays = []
         const fetchTimes = async () => {
-            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/business-hours`);
+            const results = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/business-hours`);
             const daysAndTimes = await results.json();
             console.log(daysAndTimes);
             daysAndTimes.forEach(dayObj => {
@@ -314,7 +314,7 @@ export default function Appointment() {
 
     useEffect(() => {
         const fetchBlockedDates = async () => {
-            const response = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-dates`);
+            const response = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/blocked-dates`);
             const blockedDates = await response.json();
             setBlockedDates(blockedDates);
         }
@@ -323,7 +323,7 @@ export default function Appointment() {
 
     useEffect(() => {
         const fetchBlockedDateAndTime = async () => {
-            const response = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-time-for-date`);
+            const response = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/blocked-time-for-date`);
             const blockedTimes = await response.json();
             setBlockedTimesForDate(blockedTimes);
         }

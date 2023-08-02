@@ -68,7 +68,7 @@ export default function Admin() {
     const validateCredentials = async (event) => {
         event.preventDefault();
         try {
-             const response = await axios.post(`http://${import.meta.env.VITE_IP_ADDRESS}/credentials`, {
+             const response = await axios.post(`http://${import.meta.env.SERVER_DOMAIN}/credentials`, {
                 username,
                 password,
             });
@@ -150,7 +150,7 @@ export default function Admin() {
                 }
             }
             if (path === 'delete-hours'? dayToUpdate.includes(hourToChange) : !dayToUpdate.includes(hourToChange)) {
-                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
+                fetch(`http://${import.meta.env.SERVER_DOMAIN}/${path}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8',
@@ -174,7 +174,7 @@ export default function Admin() {
     };
 
     const sendDatesUpdateRequest = (blockedDates, path) => {
-        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
+        fetch(`http://${import.meta.env.SERVER_DOMAIN}/${path}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ export default function Admin() {
             event.target.id === 'confirm-dates-button'? path='updateBlockedTime' : path='deleteBlockedTime';
 
             if (path != null) {
-                fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/${path}`, {
+                fetch(`http://${import.meta.env.SERVER_DOMAIN}/${path}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -240,7 +240,7 @@ export default function Admin() {
     const updateAppointmentStatus = () => {
         const newStatus = 'Accepted';
         
-        axios.put(`http://${import.meta.env.VITE_IP_ADDRESS}/updateAppointment/${selectedAppointmentId}`, { status: newStatus})
+        axios.put(`http://${import.meta.env.SERVER_DOMAIN}/updateAppointment/${selectedAppointmentId}`, { status: newStatus})
              .then((response) => {
                 console.log(response.data.message);
              })
@@ -254,7 +254,7 @@ export default function Admin() {
         const name = splitAppointment.slice(0, 1).join(' ').replace(':', '');
         const appointment = splitAppointment.slice(1, 8).join(' ');
 
-        fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/removePendingAppointment`, {
+        fetch(`http://${import.meta.env.SERVER_DOMAIN}/removePendingAppointment`, {
             method: 'POST', 
             headers: {
                 'Content-Type': 'application/json', 
@@ -277,7 +277,7 @@ export default function Admin() {
 
         if (event.target.textContent === 'Reject Appointment') {
             removeFromPending();
-            await axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${selectedAppointmentId}`)
+            await axios.delete(`http://${import.meta.env.SERVER_DOMAIN}/deleteAppointment/${selectedAppointmentId}`)
         } else {
             setPendingAppointmentAccepted(true);
             removeFromPending();
@@ -287,7 +287,7 @@ export default function Admin() {
     useEffect(() => {
         const weekdays = []
         const fetchTimes = async () => {
-            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/business-hours`);
+            const results = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/business-hours`);
             const daysAndTimes = await results.json();
             daysAndTimes.forEach(dayObj => {
                 const day = Object.keys(dayObj)[0];
@@ -303,7 +303,7 @@ export default function Admin() {
 
     useEffect(() => {
         const fetchBlockedDates = async () => {
-            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-dates`);
+            const results = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/blocked-dates`);
             const blockedDates = await results.json();
             setBlockedDates(blockedDates);
         }
@@ -312,7 +312,7 @@ export default function Admin() {
 
     useEffect(() => {
         const fetchBlockedDateAndTime = async () => {
-            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/blocked-time-for-date`)
+            const results = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/blocked-time-for-date`)
             const blockedTimeForDate = await results.json();
             setBlockedTimesAndDate(blockedTimeForDate);
         }
@@ -321,7 +321,7 @@ export default function Admin() {
 
     useEffect(() => {
         const fetchPendingAppointments = async () => {
-            const results = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/pending-appointments`)
+            const results = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/pending-appointments`)
             const appointments = await results.json();
             setPendingAppointments(appointments)
         }
@@ -330,7 +330,7 @@ export default function Admin() {
 
     useEffect(() => {
         const getAppointments = async () => {
-            await axios.get(`http://${import.meta.env.VITE_IP_ADDRESS}/appointments`)
+            await axios.get(`http://${import.meta.env.SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
                     setAppointments(response)});
@@ -346,11 +346,11 @@ export default function Admin() {
         appointments.forEach(appointment => {
             if (pendingAppointments.length === 0 && pendingAppointmentAccepted === false && appointment.status !== 'Accepted') {
                 console.log('deleting first if check reached')
-                axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointment.appointmentid}`)  
+                axios.delete(`http://${import.meta.env.SERVER_DOMAIN}/deleteAppointment/${appointment.appointmentid}`)  
             } else {
                 if (!pendingIds.includes(appointment.appointmentid) && pendingAppointmentAccepted === false && appointment.status !== 'Accepted') {
                     console.log(pendingIds, appointment.appointmentid);
-                    axios.delete(`http://${import.meta.env.VITE_IP_ADDRESS}/deleteAppointment/${appointment.appointmentid}`)  
+                    axios.delete(`http://${import.meta.env.SERVER_DOMAIN}/deleteAppointment/${appointment.appointmentid}`)  
                 }
             }
         })

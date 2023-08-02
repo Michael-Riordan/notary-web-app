@@ -12,7 +12,7 @@ export default function PlacesAutocomplete({ inputValue, onData}) {
                 if (inputValue !== selectedAddress) {
                     setSelected(false);
                 }
-                const response = await fetch(`http://${import.meta.env.VITE_IP_ADDRESS}/api/places?query=${encodeURIComponent(inputValue)}`);
+                const response = await fetch(`http://${import.meta.env.SERVER_DOMAIN}/api/places?query=${encodeURIComponent(inputValue)}`);
                 const responseData = await response.json();
                 const addressPredictions = responseData.predictions;
                 setData(addressPredictions);
