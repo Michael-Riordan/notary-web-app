@@ -159,11 +159,9 @@ export default function Admin() {
                 })
                     .then(response => {
                         response.json()
-                        console.log(response);
                     })
                     .then(data => {
                         console.log(data, 'data from update request');
-                        setDaysAndHours(data);
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -303,7 +301,7 @@ export default function Admin() {
         }
 
         fetchTimes();
-    }, []);
+    }, [hourAdded, hourDeleted]);
 
     useEffect(() => {
         const fetchBlockedDates = async () => {
