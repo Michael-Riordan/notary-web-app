@@ -33,7 +33,6 @@ export default function Admin() {
     const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
     const [appointments, setAppointments] = useState([]);
     const [pendingAppointmentAccepted, setPendingAppointmentAccepted] = useState(false);
-    console.log(daysAndHours);
 
     const sort_by_hour = (time1, time2) => {
         let hour1 = parseInt(time1.slice(0, -5));
@@ -160,6 +159,7 @@ export default function Admin() {
                 })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         setDaysAndHours(data);
                     })
                     .catch(error => {
