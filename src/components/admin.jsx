@@ -159,7 +159,7 @@ export default function Admin() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
+                        console.log(data, 'data from update request');
                         setDaysAndHours(data);
                     })
                     .catch(error => {
