@@ -157,7 +157,10 @@ export default function Admin() {
                     },
                     body: JSON.stringify({day: selectedDay, time: hourToChange}),
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        response.json()
+                        console.log(response);
+                    })
                     .then(data => {
                         console.log(data, 'data from update request');
                         setDaysAndHours(data);
