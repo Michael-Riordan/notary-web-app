@@ -179,8 +179,10 @@ export default function Quote() {
     };
 
     const sendEmail = (event) => {
+        console.log(appointment);
         console.log(appointmentId);
-        
+        console.log(nameInput);
+
         event.preventDefault();
 
         if (event.key === 'Enter') {
