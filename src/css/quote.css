@@ -151,14 +151,19 @@
     align-self: center;
 }
 
+.service-li-number .service-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .service-input {
     cursor: pointer;
 }
 
 #number-input {
     width: 30px;
-    margin-left: 37%;
-    margin-bottom: 10px;
+    align-self: center;
 }
 
 .button-input.clicked ~ #services-menu #services-list > .service-li {
@@ -172,6 +177,8 @@
 }
 
 .service-li-number {
+    display: grid;
+    flex-direction: column;
     list-style-type: none;
     height: 0px;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -183,7 +190,9 @@
     height: 50px;
     list-style-type: none;
     border: 1px solid rgb(49, 43, 38);
-    background-color: #f5efbfa3;
+    align-content: center;
+    text-align: center;
+    background-color: #f5efbf;
 }
 
 .service-li:hover {
@@ -541,12 +550,11 @@
     }
 
     .button-input.clicked ~ #services-menu #services-list > .service-li{
-        height: 25px;
+        height: 35px;
     }
 
     .button-input.clicked ~ #services-menu #services-list > .service-li input {
         height: 10px;
-        margin-top: 10px;
     }
 
     .input {

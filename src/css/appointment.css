@@ -125,6 +125,7 @@
     font-family: 'PTSansNarrow';
     box-shadow: 2px 2px 3px black;
     cursor: pointer;
+    text-align: center;
 }
 
 #confirm-button:hover {
@@ -149,6 +150,7 @@
     font-family: 'PTSansNarrow';
     box-shadow: 2px 2px 3px black;
     cursor: pointer;
+    text-align: center;
 }
 
 .time-input {
