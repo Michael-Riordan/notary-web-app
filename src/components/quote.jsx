@@ -67,7 +67,7 @@ export default function Quote() {
         setAppointmentSelectorOpen(!appointmentSelectorOpen);
     }
 
-    const changeAppointmentRequest = async (event) => {
+    const changeAppointmentRequest = (event) => {
         const value = event.target.value;
         if (appointmentRequested == null) {
             setAppointmentRequested(value);
@@ -76,7 +76,7 @@ export default function Quote() {
                 history.push('./appointment')
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
-                await axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
+                axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
                 history.push('./appointment')
             } else {
                 return
