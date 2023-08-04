@@ -372,7 +372,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                     }});
         }
         getAppointments();
-    }, [])
+    }, [appointment])
 
     useEffect(() => {
 
