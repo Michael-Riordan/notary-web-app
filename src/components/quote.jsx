@@ -179,6 +179,8 @@ export default function Quote() {
     };
 
     const sendEmail = (event) => {
+        console.log(appointmentId);
+        
         event.preventDefault();
 
         if (event.key === 'Enter') {
