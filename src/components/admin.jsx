@@ -339,7 +339,7 @@ export default function Admin() {
         let pendingIds = [];
         if (pendingAppointments.length > 0) {
             pendingAppointments.forEach(appointment => {
-                console.log(appointment.appointmentId, appointment.appointmentid);
+                console.log(pendingAppointments);
                 pendingIds.push(appointment.appointmentId);
             })
         };
