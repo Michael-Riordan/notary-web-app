@@ -280,7 +280,7 @@ export default function Appointment() {
                     }});
         }
         getAppointments();
-    }, [selectedTime])
+    }, [])
 
     useEffect(() => {
         const weekdays = []
