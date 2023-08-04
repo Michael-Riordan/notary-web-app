@@ -365,8 +365,9 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
             await axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
+                    console.log(response, 'response log 1')
                     if (response.length !== 0) {
-                        console.log(response);
+                        console.log(response, 'response log 2');
                         setAppointmentId(response[response.length - 1].appointmentid)
                     }});
         }
