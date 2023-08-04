@@ -366,6 +366,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                 .then((response) => response.data)
                 .then(response => {
                     if (response.length !== 0) {
+                        console.log(response);
                         setAppointmentId(response[response.length - 1].appointmentid)
                     }});
         }
