@@ -21,7 +21,7 @@ export default function Appointment() {
     console.log(appointments);
 
     const history = useHistory();
-
+    
     const calculateMaxDate = () => {
         //any tile date past the max date will be disabled; 
         const date = (new Date());
@@ -33,8 +33,7 @@ export default function Appointment() {
         } else {
             return new Date(year, month + 1, numberDay);
         }
-    }
-
+    };
 
     const handleClick = (value) => {
         const date = value.toString();
@@ -47,13 +46,13 @@ export default function Appointment() {
         suffix = 'th';
         trimmedDate[2] = numberDate + suffix;
         setClickedDate(trimmedDate.join(" "));
-    }
+    };
 
     const handleInputClick = (event) => {
         if (selectedTime == null) {
             setSelectedTime(event.target.value);
         }
-    }
+    };
 
     const handleApptConfirmation = () => {
         const appointmentData = {appointmentTime: selectedTime,
@@ -65,25 +64,27 @@ export default function Appointment() {
         });
         //pushing appointment data to quote page to be displayed.
         history.push(`/quote?${queryParams}`);
-    }
+    };
 
     const handleApptRejection = () => {
         setSelectedTime(null);
         setClickedDate(null);
-    }
+    };
     //returns day of week from date obj
     const pullDay = (dateObj, sliceStart, sliceEnd) => {
         return dateObj.toString().split(' ').slice(sliceStart, sliceEnd).join(' ');
-    }
-
+    };
+    
     const createDateAndTime = (date, time) => {
         return date + ' ' + time;
-    }
+    };
     
     // weekend needs blocked times 2hr:30min before and after scheduled appointment.
     const checkDisabled = (time) => {
+        console.log('check 1.5')
         let disabled = false;
 
+        
         const now = new Date();
         const dateNoSuffix = clickedDate.replace((/th|st|nd|rd/), '');
         const openDate = new Date(dateNoSuffix);
@@ -100,7 +101,7 @@ export default function Appointment() {
                 disabled = true;
             };
         }
-
+        
         const openDateForTimeCheck = pullDay(openDateFormatted, 1, 4);
         blockedTimesForDate.forEach(block => {
             const blockedDayAndTime = createDateAndTime(block.date, block.time);
@@ -140,10 +141,10 @@ export default function Appointment() {
             }
         });
         return disabled;
-    }
+    };
 
-    
     const checkAppointmentsForDay = (date) => {
+        console.log('check 2')
         let disabled = false;
 
         //checking if date is in blockedDates - disabling calendar tile if so.
@@ -217,7 +218,7 @@ export default function Appointment() {
                     }
                 }
             }
-        }
+        };
 
         //checking if all appointment times are blocked off for day tile
         appointments.forEach(appointment => {
@@ -260,8 +261,8 @@ export default function Appointment() {
             }
         })
         return disabled;
-    }
-
+    };
+    
     useEffect(() => {
         if (clickedDate == null) {
             const monthButton = document.querySelector('.react-calendar__navigation__label');
@@ -274,6 +275,7 @@ export default function Appointment() {
             await axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
+                    console.log(response, '1')
                     setAppointments(response);
                     if (response.length !== 0) {
                         console.log('setting appointmentid');
@@ -281,7 +283,7 @@ export default function Appointment() {
                     }});
         }
         getAppointments();
-    }, [])
+    }, []);
 
     useEffect(() => {
         const weekdays = []
@@ -330,7 +332,7 @@ export default function Appointment() {
         }
 
         fetchBlockedDateAndTime();
-    }, [])
+    }, []);
 
     return (
         <section id='calendar-body'>

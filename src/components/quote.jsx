@@ -26,6 +26,8 @@ export default function Quote() {
     const [emailValid, setEmailValid] = useState(false);
     const [numberInput, setNumberInput] = useState('');
     const [appointment, setAppointment] = useState('');
+    const [appointmentDate, setAppointmentDate] = useState('');
+    const [appointmentTime, setAppointmentTime] = useState('');
     const [appointmentId, setAppointmentId] = useState(null);
     const [finalPrice, setFinalPrice] = useState(0);
     const [emailContent, setEmailContent] = useState('');
@@ -44,7 +46,7 @@ export default function Quote() {
         emailValidationData: emailValid,
         phoneData: numberInput,
         finalPrice: finalPrice,
-    }
+    };
 
     const history = useHistory();
     const location = useLocation();
@@ -61,11 +63,11 @@ export default function Quote() {
    
     const handleClick = () => {
         setIsClicked(!isClicked);
-    }
+    };
 
     const handleAppointmentClick = () => {
         setAppointmentSelectorOpen(!appointmentSelectorOpen);
-    }
+    };
 
     const changeAppointmentRequest = (event) => {
         const value = event.target.value;
@@ -77,7 +79,7 @@ export default function Quote() {
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
                 axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
-                history.push('./appointment')
+                history.push('./appointment');
             } else {
                 return
             };
@@ -138,13 +140,13 @@ export default function Quote() {
         setNumOfLoanPackages(numOfLoanPackages);
         const price = (numOfLoanPackages * 75);
         setAdditionLoanPackagePrice(price);
-    }
+    };
 
     // Handles Data passed up DOM tree from PlacesAutocomplete Child Component
     const handleAddressData = (address) => {
         setPlaceId(address.place_id);
         setAddressInput(address.description);
-    }
+    };
 
     const handleInputChange = (event) => {
         const inputClass = event.target.className;
@@ -358,7 +360,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
         } else {
             setAppointment(`${data.appointmentDate} @ ${data.appointmentTime}`)
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
         const getAppointments = async () => {
@@ -372,7 +374,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                     }});
         }
         getAppointments();
-    }, [appointment])
+    }, [appointment]);
 
     useEffect(() => {
 
