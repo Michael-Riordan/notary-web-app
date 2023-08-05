@@ -19,7 +19,6 @@ export default function Appointment() {
     const [blockedDates, setBlockedDates] = useState(null);
     const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
     const [appointmentsFetched, setAppointmentsFetched] = useState(false);
-    console.log(appointments);
 
     const history = useHistory();
     
@@ -82,7 +81,6 @@ export default function Appointment() {
     
     // weekend needs blocked times 2hr:30min before and after scheduled appointment.
     const checkDisabled = (time) => {
-        console.log('check 1.5')
         let disabled = false;
         
         const now = new Date();
@@ -338,7 +336,7 @@ export default function Appointment() {
     return (
         <section id='calendar-body'>
             <h1 id='appointment-header'>Select an Appointment Date/Time</h1>
-            {selectedTime != null && appointmentsFetched === true?
+            {selectedTime != null?
              <div id='appointment-confirmation'>
                 <h2 id='selected-time'>Chosen Appointment: <br/> {clickedDate} @ {selectedTime}</h2>
                 <div id='confirmation-button-wrapper'>
@@ -346,7 +344,8 @@ export default function Appointment() {
                   <button id='cancel-button' onClick={handleApptRejection}>Cancel</button>
                 </div>
              </div> :
-              clickedDate == null? <div id='calendar-wrapper'>
+              clickedDate == null && appointmentsFetched === true? 
+            <div id='calendar-wrapper'>
                 <Calendar id='calendar'
                           minDate={new Date()}
                           maxDate={calculateMaxDate()}
