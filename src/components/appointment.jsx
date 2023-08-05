@@ -18,7 +18,6 @@ export default function Appointment() {
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
     const [blockedDates, setBlockedDates] = useState(null);
     const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
-    const [appointmentsFetched, setAppointmentsFetched] = useState(false);
 
     const history = useHistory();
     
@@ -279,7 +278,6 @@ export default function Appointment() {
                         console.log('setting appointmentid');
                         setAppointmentId(response[response.length - 1].appointmentid)
                     }});
-                    setAppointmentsFetched(true);
         }
         getAppointments();
     }, []);
@@ -344,7 +342,7 @@ export default function Appointment() {
                   <button id='cancel-button' onClick={handleApptRejection}>Cancel</button>
                 </div>
              </div> :
-              clickedDate == null && appointmentsFetched === true? 
+              clickedDate == null?
             <div id='calendar-wrapper'>
                 <Calendar id='calendar'
                           minDate={new Date()}
