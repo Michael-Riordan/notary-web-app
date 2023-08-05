@@ -18,6 +18,7 @@ export default function Appointment() {
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
     const [blockedDates, setBlockedDates] = useState(null);
     const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
+    const [appointmentsFetched, setAppointmentsFetched] = useState(false);
     console.log(appointments);
 
     const history = useHistory();
@@ -83,7 +84,6 @@ export default function Appointment() {
     const checkDisabled = (time) => {
         console.log('check 1.5')
         let disabled = false;
-
         
         const now = new Date();
         const dateNoSuffix = clickedDate.replace((/th|st|nd|rd/), '');
@@ -281,6 +281,7 @@ export default function Appointment() {
                         console.log('setting appointmentid');
                         setAppointmentId(response[response.length - 1].appointmentid)
                     }});
+                    setAppointmentsFetched(true);
         }
         getAppointments();
     }, []);
@@ -337,7 +338,7 @@ export default function Appointment() {
     return (
         <section id='calendar-body'>
             <h1 id='appointment-header'>Select an Appointment Date/Time</h1>
-            {selectedTime != null?
+            {selectedTime != null && appointmentsFetched === true?
              <div id='appointment-confirmation'>
                 <h2 id='selected-time'>Chosen Appointment: <br/> {clickedDate} @ {selectedTime}</h2>
                 <div id='confirmation-button-wrapper'>
