@@ -18,7 +18,7 @@ export default function Appointment() {
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
     const [blockedDates, setBlockedDates] = useState(null);
     const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
-    console.log(appointmentId);
+    console.log(appointments);
 
     const history = useHistory();
     
