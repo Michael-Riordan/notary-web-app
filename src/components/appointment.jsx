@@ -5,6 +5,7 @@ import Calendar from 'react-calendar';
 import moment from 'moment';
 import 'react-calendar/dist/Calendar.css'
 import '../css/calendar-custom.css'
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu','Fri'];
 
@@ -269,18 +270,30 @@ export default function Appointment() {
     }, [clickedDate]);
 
     useEffect(() => {
+        const location = useLocation();
+        const searchParams = new URLSearchParams(location.search);
+        let prevAppointmentId;
+
+        if (searchParams.size !== 0) {
+            prevAppointmentId = searchParams.get('appointmentId');
+            console.log(prevAppointmentId);
+        };
+        
         const getAppointments = async () => {
             await axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
                     console.log(response, '1')
-                    setAppointments(response);
-                    if (response.length !== 0) {
-                        console.log('setting appointmentid');
-                        setAppointmentId(response[response.length - 1].appointmentid)
-                    }});
+                    return response; 
+                })
         }
-        getAppointments();
+        const appointments = getAppointments();
+        if (prevAppointmentId != null) {
+            const updatedAppointments = appointments.filter((appointment) => appointment.appointmentid != prevAppointmentId);
+            setAppointments(updatedAppointments);
+        } else {
+            setAppointments(appointments);
+        }
     }, []);
 
     useEffect(() => {
