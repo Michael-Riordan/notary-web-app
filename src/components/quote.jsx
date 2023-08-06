@@ -78,8 +78,10 @@ export default function Quote() {
                 history.push('./appointment')
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
-                axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
-                history.push('./appointment')
+                const queryParams = {
+                    appointmentId: appointmentId,
+                }
+                history.push(`./appointment?${queryParams}`)
             } else {
                 return
             };
