@@ -69,7 +69,7 @@ export default function Quote() {
         setAppointmentSelectorOpen(!appointmentSelectorOpen);
     };
 
-    const changeAppointmentRequest = (event) => {
+    const changeAppointmentRequest = async (event) => {
         const value = event.target.value;
         if (appointmentRequested == null) {
             setAppointmentRequested(value);
@@ -78,8 +78,12 @@ export default function Quote() {
                 history.push('./appointment')
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
-                axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
-                history.push(`./appointment`)
+                try {
+                    await axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`);
+                    history.push(`./appointment`);
+                } catch (error) {
+                    console.error('Error deleting appointment:', error);
+                }
             } else {
                 return
             };
