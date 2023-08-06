@@ -69,21 +69,17 @@ export default function Quote() {
         setAppointmentSelectorOpen(!appointmentSelectorOpen);
     };
 
-    const changeAppointmentRequest = async (event) => {
+    const changeAppointmentRequest = (event) => {
         const value = event.target.value;
         if (appointmentRequested == null) {
             setAppointmentRequested(value);
             if (value === 'yes' && appointment === '') {
                 saveToSessionStorage();
-                history.push('./appointment')
+                history.push('./appointment');
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
-                try {
-                    await axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`);
-                    history.push(`./appointment`);
-                } catch (error) {
-                    console.error('Error deleting appointment:', error);
-                }
+                axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`);
+                history.push('./appointment');
             } else {
                 return
             };
