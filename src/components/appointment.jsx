@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Calendar from 'react-calendar';
 import moment from 'moment';
@@ -21,7 +21,6 @@ export default function Appointment() {
     console.log(appointments);
 
     const history = useHistory();
-    const location = useLocation();
     
     const calculateMaxDate = () => {
         //any tile date past the max date will be disabled; 
@@ -270,21 +269,6 @@ export default function Appointment() {
     }, [clickedDate]);
 
     useEffect(() => {
-        const deletePastAppointment = async () => {
-            const searchParams = new URLSearchParams(location.search);
-            const data = Object.fromEntries(searchParams.entries());
-            if (data.appointmentId != null) {
-                try {
-                    const response = await axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${data.appointmentId}`);
-                    console.log(response.data);
-                } catch (error) {
-                    console.error('Error deleting appointment:', error);
-                }
-            }
-        }
-
-        deletePastAppointment();
-
         const getAppointments = async () => {
             await axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
