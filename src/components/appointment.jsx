@@ -273,7 +273,7 @@ export default function Appointment() {
             await axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/appointments`)
                 .then((response) => response.data)
                 .then(response => {
-                    console.log(response, '1')
+                    console.log(response, 'fetching');
                     setAppointments(response);
                     if (response.length !== 0) {
                         console.log('setting appointmentid');
