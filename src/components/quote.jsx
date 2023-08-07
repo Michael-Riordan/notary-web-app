@@ -78,8 +78,14 @@ export default function Quote() {
                 history.push('./appointment');
             } else if (value === 'yes' && appointment !== '') {
                 saveToSessionStorage();
-                await axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`);
-                history.push(`./appointment`);
+                await axios.delete(`${import.meta.env.VITE_SERVER_DOMAIN}/deleteAppointment/${appointmentId}`)
+                    .then((response) => {
+                        console.log(response);
+                        history.push('./appointment');
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
             } else {
                 return
             };
