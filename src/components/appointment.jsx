@@ -12,13 +12,10 @@ export default function Appointment() {
     const [clickedDate, setClickedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [appointments, setAppointments] = useState([]);
-    const [appointmentId, setAppointmentId] = useState(null);
     const [daysAndHours, setDaysAndHours] = useState([]);
-    const [days, setDays] = useState([]);
     const [hoursForCurrentDay, setHoursForCurrentDay] = useState([]);
     const [blockedDates, setBlockedDates] = useState(null);
     const [blockedTimesForDate, setBlockedTimesForDate] = useState([]);
-    console.log(appointments);
 
     const history = useHistory();
     
@@ -142,7 +139,6 @@ export default function Appointment() {
     };
 
     const checkAppointmentsForDay = (date) => {
-        console.log('check 2')
         let disabled = false;
 
         //checking if date is in blockedDates - disabling calendar tile if so.
@@ -275,29 +271,18 @@ export default function Appointment() {
                 .then(response => {
                     console.log(response, 'fetching');
                     setAppointments(response);
-                    if (response.length !== 0) {
-                        console.log('setting appointmentid');
-                        setAppointmentId(response[response.length - 1].appointmentid)
-                    }});
+                });
         }
         getAppointments();
     }, []);
 
     useEffect(() => {
-        const weekdays = []
         const fetchTimes = async () => {
             const results = await fetch(`${import.meta.env.VITE_SERVER_DOMAIN}/api/business-hours`);
             const daysAndTimes = await results.json();
             console.log(daysAndTimes);
-            daysAndTimes.forEach(dayObj => {
-                const day = Object.keys(dayObj)[0];
-                weekdays.push(day);
-
-            })
-            setDays(weekdays)
             setDaysAndHours(daysAndTimes);
-        }
-
+        };
         fetchTimes();
     }, []);
 
