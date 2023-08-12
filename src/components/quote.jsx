@@ -262,7 +262,7 @@ export default function Quote() {
         setEmailContent(`Hello LRmobilenotary, \n    My name is ${nameInput} and I'm inquiring about your notary services. \n 
 Here is my info: \n
 My Preferred Signing Location: ${addressInput} \n
-Cost of Gas to Signing Location ($.62 round trip): $${costOfGas} \n
+Cost of Gas to Signing Location ($.62/mi gasoline cost): $${costOfGas} \n
 My Free Estimate (includes gasoline): $${finalPrice} \n
 ${appointment !== '' && typeof appointment !== 'object'? `My Requested Appointment: ${appointment}` : ''} \n
 ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
@@ -403,7 +403,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                 <div id='quote-header-wrapper'>
                     <h1 id='your-free-quote'>Your Free Quote.</h1>
                     <p className='final-quote'>Services: ${totalPrice + notarizationPrice + additionalLoanPackagePrice}</p>
-                    <p className='final-quote'>Cost of Gas ($.62 Round Trip) : ${costOfGas}</p>
+                    <p className='final-quote'>Cost of Gas ($.62/mi Gasoline Cost) : ${costOfGas}</p>
                     <p className='final-quote'>My Free Estimate: ${finalPrice}</p>
                 </div>
 

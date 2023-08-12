@@ -26,7 +26,7 @@ export default function About() {
                             This is particularly beneficial for individuals or businesses with busy schedules 
                             or mobility constraints.
                         </p>
-                        <p className='service-price'>$10 Per Notarial Act <br/>$.62 round trip gasoline cost</p>
+                        <p className='service-price'>$10 Per Notarial Act <br/>$.62/mi gasoline cost</p>
                     </div>
                     <div className='about-service'>
                         <h1>Loan Signing</h1>
@@ -36,7 +36,7 @@ export default function About() {
                             Our agents play a crucial role in ensuring the accurate execution of loan documents, contributing to 
                             a successful real estate transaction.
                         </p>
-                        <p className='service-price'>Loan Package: $175 <br/> Second Loan Package: $75 <br/> $.62 round trip gasoline cost</p>
+                        <p className='service-price'>Loan Package: $175 <br/> Second Loan Package: $75 <br/> $.62/mi gasoline cost</p>
                     </div>
                     <div className='about-service'>
                         <h1>Corporate 3rd Party Representative</h1>
@@ -45,7 +45,7 @@ export default function About() {
                             with the role of representing your company's interests. We perform official notarial acts, authenticate documents, 
                             ensure compliance with legal and regulatory requirements, handle client interactions, and mitigate risks.
                         </p>
-                        <p className='service-price'>I-9 Form Verification: $50.00/hr <br/>$.62 round trip gasoline cost</p>
+                        <p className='service-price'>I-9 Form Verification: $50.00/hr <br/>$.62/mi gasoline cost</p>
                     </div>
                 </article>
             </section>
