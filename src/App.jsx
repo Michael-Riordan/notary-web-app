@@ -31,7 +31,9 @@ function App() {
         <div className='logo'>
         <Link to='/' id='header-webname'>LR-MobileNotary</Link>
         </div>
-        <CustomNav />
+        <div id='menu-wrapper'>
+          <CustomNav />
+        </div>
       </header>
         <Switch>
           <Route exact path='/' component={Home} />
@@ -43,19 +45,20 @@ function App() {
       <footer id='app-footer'>
         <div id='footer-info-wrapper'>
           <img id='NNA-emblem' src={NNAemblem} alt='National Notary Association'/>
+          <div id='footer-tabs-wrapper'>
+            <Link to='/' id='footer-company-name'>LR-MobileNotary</Link>
+            <div className='footer-tabs'>
+              <a id='call-now-footer' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`}>Call Now</a>
+              <span> | </span>
+              <Link id='footer-about-tab' to='/about'>About/Pricing</Link>
+            </div>
+            <div className='footer-tabs'>
+              <Link id='footer-quote-tab' to='/quote'>Get a Quote</Link>
+              <span> | </span>
+              <Link id='footer-admin-tab' to='/admin'>Admin</Link>
+            </div>
+          </div>
           <img id='AZ-state-flag' src={stateFlag} alt='Arizona State Flag' />
-          <Link to='/' id='footer-company-name'>LR-MobileNotary</Link>
-          <div id='footer-tabs'>
-            <a id='call-now-footer' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`}>Call Now</a>
-            <p>|</p>
-            <Link id='footer-about-tab' to='/about'>About/Pricing</Link>
-            <br/>
-          </div>
-          <div id='footer-tabs-2'>
-            <Link id='footer-quote-tab' to='/quote'>Get a Quote</Link>
-            <p>|</p>
-            <Link id='footer-admin-tab' to='/admin'>Admin</Link>
-          </div>
         </div>
       </footer>
       </Router>

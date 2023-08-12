@@ -7,69 +7,107 @@
     background-color: #f5efbf;
     border-top: 1px solid rgb(49, 43, 38);
     font-weight: bold;
+    z-index: 1;
 }
-#footer-tabs {
-    display: flex;
+
+.footer-tabs {
+    text-align: center;
     justify-self: center;
 }
 
-#footer-tabs-2 {
-    display: flex;
-    margin-top: -15px;
+#footer-tabs-wrapper {
+    align-self: center;
     justify-self: center;
-    margin-bottom: 5px;
 }
 
 #footer-info-wrapper {
     display: grid;
-    flex-direction: row;
+    grid-auto-flow: column;
+    justify-content: center;
 }
 
 #footer-company-name {
-    margin-top: 30px;
     color: rgb(49, 43, 38);
-    font-size: 1.5em;
-    justify-self: center;
-    text-decoration: underline;
-}
-
-#call-now-footer {
-    color: rgb(49, 43, 38);
-    justify-self: center;
-}
-
-#call-now-footer ~ p {
-    margin-top: 0;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-
-#footer-about-tab {
-    color: rgb(49, 43, 38);
-}
-
-#footer-quote-tab ~ p {
-    margin-top: 0;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-
-#footer-admin-tab {
-    margin-left: 0;
+    font-size: 1.5rem;
+    margin-left: 5px;
 }
 
 #NNA-emblem {
     margin-bottom: -120px;
-    margin-left: 33%;
     width: 150px;
 }
 
 #AZ-state-flag {
     width: 150px;
-    margin-bottom: -110px;
-    margin-left: 43rem;
 }
 
+@media (max-width: 500px) {
+    #footer-company-name {
+        font-size: 1rem;
+    }
+
+    .footer-tabs {
+        font-size: .7rem;
+    }
+}
+
+@media (max-width: 400px) {
+    #footer-company-name {
+        font-size: 1rem;
+    }
+
+    .footer-tabs {
+        font-size: .6rem;
+    }
+
+    #NNA-emblem {
+        width: 100px;
+    }
+
+    #AZ-state-flag {
+        width: 100px;
+    }
+}
+
+@media (max-width: 320px) {
+    #NNA-emblem {
+        width: 75px;
+    }
+
+    #AZ-state-flag {
+        width: 75px;
+    }
+}
+
+@media (orientation: landscape) {
+    #footer-company-name {
+        font-size: 1rem;
+    }
+
+    .footer-tabs {
+        font-size: .7rem;
+    }
+    #NNA-emblem {
+        width: 7rem;
+    }
+
+    #AZ-state-flag {
+        width: 7rem;
+    }
+}
+
+@media (orientation: landscape) and (min-width: 1000px) {
+
+    #footer-company-name {
+        font-size: 1.5rem;
+    }
+
+    .footer-tabs {
+        font-size: 1rem;
+    }
+}
+
+/*
 @media screen and (max-width:480px) {
     #NNA-emblem {
         margin-left: 0;
@@ -184,3 +222,4 @@
         margin-left: 70%;
     }
 }
+*/

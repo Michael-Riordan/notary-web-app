@@ -1,7 +1,7 @@
 
 #header-section {
     margin-top: 2%;
-    background-position: center;
+    background-position: unset;
     background-size: cover;
     height: 50%;
     width: 70%;
@@ -22,34 +22,104 @@
 
 #company-logo {
     display: grid;
-    justify-self: center;
-    height: 100%;
-    background-color: none;
+    height: 50%;
+    align-content: flex-end;
+    gap: 10%;
 }
 
 #company-name {
     display: flex;
-    font-size: 300%;
+    font-size: 3rem;
     align-items: center;
     width: max-content;
     height: 50px;
     justify-self: center;
-    margin-bottom: 0;
+    margin-bottom: 3%;
     text-decoration: underline;
     color: rgb(49, 43, 38);
     text-align: center;
-    margin-top: 100px;
+    margin-top: 40rem;
 }
 
 #head-quote {
     justify-self: center;
-    margin-top: 0;
     margin-bottom: 0;
     color: rgb(49, 43, 38);
     text-align: center;
-    margin-top: 40px;
+
 }
 
+@media (max-width: 783px) {
+    #company-name {
+        margin-top: 60rem;
+        font-size: 2rem;
+    }
+
+    #head-quote {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    #company-name {
+        margin-top: 30rem;
+    }
+}
+
+@media (max-width: 350px) {
+    #company-name {
+        font-size: 1.5rem;
+        margin-top: 200%;
+    }
+}
+
+@media (orientation: landscape) {
+
+    #company-name {
+        margin-top: 100%;
+    }
+
+    #head-quote {
+        font-size: 1.5rem;
+    }
+
+    #app-head {
+        background-position:unset;
+    }
+}
+
+@media (orientation: landscape) and (max-width: 780px) {
+    #company-name {
+        margin-top: 120%;
+    }
+
+    #head-quote {
+        font-size: 1rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 380px) {
+    #company-name {
+        margin-top: 120%;
+        font-size: 2rem;
+    }
+
+    #head-quote {
+        margin-top: 0;
+        font-size: 1rem;
+    }
+}
+
+@keyframes fade-in-animation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/*
 @media screen and (min-width: 1025px) {
     #company-logo {
         margin-top: 10px;
@@ -113,10 +183,11 @@
 
 @media screen and (min-width: 375px) {
     #company-logo {
-        margin-top: -30px;
+        margin-top: -30;
         margin-left: -20px;
     }
 }
+
 
 @media screen and (max-width: 360px) {
     #company-logo {
@@ -149,12 +220,4 @@
         margin-bottom: 50px;
     }
 }
-
-@keyframes fade-in-animation {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+*/
