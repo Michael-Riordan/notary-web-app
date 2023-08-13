@@ -1,6 +1,7 @@
 #address-list {
     position: inherit;
     margin-left: -31px;
+    justify-self: center;
     display: grid;
     flex-wrap: wrap;
     width: 12.4rem;
