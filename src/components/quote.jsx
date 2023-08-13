@@ -408,7 +408,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                 </div>
 
                 <section id='quote-calculator'>
-                    <div className='input-wrapper'>
+                    <form className='input-wrapper' onSubmit={sendEmail}>
                         <label htmlFor='services-input' className='input-label'>Select Services</label>
                         <button className={`button-input ${isClicked ? 'clicked' : ''}`} 
                                 name='services-input' type='button' 
@@ -435,9 +435,9 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                                 <label className='service-label'>
                                                     Additional Loan Packages: $75
                                                     <input value={numOfLoanPackages}
-                                                           type='number'
-                                                           id='number-input'
-                                                           onChange={(event) => {
+                                                        type='number'
+                                                        id='number-input'
+                                                        onChange={(event) => {
                                                             event.target.value < 0 || event.target.value == null ? setNumOfLoanPackages(0) :
                                                             handleNumOfLoanPackageChange(Number(event.target.value))}}
                                                     />
@@ -449,9 +449,9 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                         <label className='service-label'>
                                             Number of Notarizations
                                             <input value={numOfNotarizations} 
-                                                   type='number' 
-                                                   id='number-input'
-                                                   onChange={(event) => {
+                                                type='number' 
+                                                id='number-input'
+                                                onChange={(event) => {
                                                     event.target.value < 0 || event.target.value == null ? setNumOfNotarizations(0) :
                                                     handleInputNumberChange(Number(event.target.value))}}
                                             />
@@ -460,8 +460,6 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                 }
                             </ul>
                         </div>
-                    </div>
-                    <form className='input-wrapper' onSubmit={sendEmail}>
                         <FormLabelAndInput
                             label='Signing Location'
                             name='address'
@@ -531,7 +529,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                             handleInputChange={handleInputChange}
                         />
                         <FormLabelAndInput
-                            label={isDisabled || !emailValid? 'Message Us' : `Feel free to add any additional information.`}
+                            label={isDisabled || !emailValid? 'Message Us' : `Add additional information below.`}
                             name='email-content'
                             type='text'
                             value={isDisabled? 'If you would like to send us an email and request your chosen appointment, please first select all desired services and fill out all required fields. The send button will appear once all necessary fields are complete.' : emailSent? 

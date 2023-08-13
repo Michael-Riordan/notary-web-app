@@ -134,4 +134,8 @@
         flex-wrap: wrap;
         margin-top: 15%;
     }
+
+    #about-header {
+        padding-bottom: 50px;
+    }
 }
