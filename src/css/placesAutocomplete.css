@@ -1,12 +1,13 @@
 #address-list {
+    position: inherit;
+    margin-left: -31px;
     display: grid;
     flex-wrap: wrap;
     width: 12.4rem;
 }
 
 #address-list ul{
-    position: inherit;
-    justify-self: center;
+    position: absolute;
     background-color: #f5efbfd8;
     width: 14.46rem;
     list-style-type: none;
