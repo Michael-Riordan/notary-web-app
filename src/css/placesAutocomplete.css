@@ -1,5 +1,5 @@
 #address-list {
-    display: flex;
+    display: grid;
     flex-wrap: wrap;
     width: 12.4rem;
 }
