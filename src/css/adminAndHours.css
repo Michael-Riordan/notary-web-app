@@ -88,7 +88,7 @@
     height: 90%;
     display: grid;
     grid-template-areas: 'hours blocked-dates blocked-times'
-                         'hours pending-appointments pending-appointments';
+                         'hours pending-appointments accepted-appointments';
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;

@@ -2,10 +2,10 @@
     border: 2px solid black;
     width: 300px;
     margin-top: 20px;
-    margin-bottom: 20px;
     height: 350px;
     box-shadow: 4px 4px 10px 0px black;
     background-color: rgba(250, 235, 215, 0.401);
+    grid-area: blocked-times;
 }
 
 #blocked-times-setter-header {

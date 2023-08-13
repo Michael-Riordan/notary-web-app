@@ -9,6 +9,7 @@
     background-color: rgba(250, 235, 215, 0.401);
     box-shadow: 4px 4px 10px 0px black;
     min-height: 350px;
+    grid-area: pending-appointments;
 }
 
 #appointment-confirmation-header {

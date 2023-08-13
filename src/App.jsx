@@ -18,6 +18,7 @@ import './css/adminAndHours.css'
 import './css/adminBlockedDates.css'
 import './css/adminBlockedTimes.css'
 import './css/adminAppointmentConfirmation.css'
+import './css/adminAcceptedAppointments.css'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import Appointment from './components/appointment';
 import Admin from './components/admin';

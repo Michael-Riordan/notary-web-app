@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from "moment";
 
 export default function Admin() {
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(true);
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [daysAndHours, setDaysAndHours] = useState([]);
@@ -360,7 +360,6 @@ export default function Admin() {
     return (
         <div id='admin-body'>
             {loggedIn? 
-                
                     <section id='navigation-section'>
                         <div id='hours-setter-wrapper'>
                             <h2 id='hours-header'>Hours</h2>
@@ -565,6 +564,25 @@ export default function Admin() {
                                     label='Reject Appointment'
                                 />
                             </div>
+                        </div>
+                        <div id='appointments-viewer'>
+                            <h2 id='accepted-appointments-header'>Appointments</h2>
+                            <h3 id='appointment-list-header'>Accepted Appointments</h3>
+                            <ul className='pending-appointments-list'>
+                                {
+                                    appointments.map((appointment) => {
+                                        if (appointment.status === 'Accepted') {
+                                            return (
+                                                <>
+                                                    <li className='pending-appointment'>
+                                                        {appointment.name}: {appointment.appointment}
+                                                    </li>
+                                                </>
+                                            )
+                                        }
+                                    })
+                                }
+                            </ul>
                         </div>
                     </section>
                 :   

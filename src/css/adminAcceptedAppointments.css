@@ -1,0 +1,39 @@
+#appointments-viewer {
+    display: grid;
+    border: 2px solid black;
+    width: 300px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    height: 350px;
+    box-shadow: 4px 4px 10px 0px black;
+    background-color: rgba(250, 235, 215, 0.401);
+    grid-area: accepted-appointments;
+}
+
+#accepted-appointments-header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid black;
+    height: max-content;
+}
+
+#appointment-list-header {
+    text-align: center;
+    margin-top: -4rem;
+}
+
+.pending-appointments-list {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    font-weight: bold;
+    border: 1px solid black;
+    padding-left: 0;
+    text-align: center;
+    justify-self: center;
+    width: 80%;
+    margin-top: 0;
+    height: max-content;
+    margin-top: -7rem;
+    background-color: antiquewhite;
+}
