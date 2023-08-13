@@ -5,7 +5,8 @@
 }
 
 #address-list ul{
-    position: absolute;
+    position: inherit;
+    justify-self: center;
     background-color: #f5efbfd8;
     width: 14.46rem;
     list-style-type: none;
