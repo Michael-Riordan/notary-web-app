@@ -575,7 +575,7 @@ export default function Admin() {
                                             return (
                                                 <>
                                                     <li className='pending-appointment'>
-                                                        {appointment.name}: {appointment.appointment}
+                                                        {appointment.appointmentDate}: {appointment.appointmentTime}
                                                     </li>
                                                 </>
                                             )
