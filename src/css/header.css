@@ -1,14 +1,27 @@
 
-
 header {
+    position: absolute;
     display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: rgba(0, 0, 0, 0);
     flex-wrap: wrap;
     align-items: center;
     width: 100vw;
-    background-color: #f5efbf;
-    padding: 0;
-    border-bottom: 1px solid black;
-    z-index: 2;
+    z-index: 100;
+    margin-top: 20px;
+}
+
+#nav-list {
+    display: flex;
+    align-items: flex-end;
+    width: 100vw;
+    justify-content: space-evenly;
+}
+
+.route-link {
+    text-decoration: none;
+    font-size: 1.5vw;
 }
 
 header #header-webname {
@@ -16,14 +29,10 @@ header #header-webname {
     overflow: hidden;
     white-space: nowrap;
     margin-left: 10px;
-    color: rgb(49, 43, 38);
-    font-size: 1.8rem;
+    color: white;
+    font-size: 2.5vw;
     text-decoration: underline;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
+    grid-area: webname;
 }
 
 .logo {
@@ -36,14 +45,12 @@ header {
     margin: 5px;
 }
 
-@media screen and (max-width: 480px) {
+@media (orientation: portrait) {
     header #header-webname {
-        font-size: 1.5rem;
+        font-size: 2vh;
     }
-}
 
-@media screen and (max-width: 320px) {
-    header #header-webname {
-        font-size: 1rem;
+    .route-link {
+        font-size: 1.5vh;
     }
 }

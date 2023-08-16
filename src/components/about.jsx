@@ -7,14 +7,7 @@ export default function About() {
                 <div id='about-header-wrapper'>
                     <div id='licensed-bonded-insured'>
                         <h1>Licensed. <br/> Bonded. <br/> Insured.</h1>
-                        <img src={handshake} alt='handshake' id='handshake'/>
                     </div>
-                    <h2 id='about-header'>LRmobilenotary is a professional mobile notary service based in the Phoenix area 
-                        committed to providing reliable and efficient notarial services.
-                         With a focus on convenience and customer satisfaction, LRmobilenotary 
-                         offers flexible mobile notary services that cater to the diverse 
-                         needs of individuals, businesses, and organizations.
-                    </h2>
                 </div>
                 <article id='services-wrapper'>
                     <div className='about-service'>

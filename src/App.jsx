@@ -28,14 +28,15 @@ function App() {
   return (
     <>
       <Router>
-      <header>
-        <div className='logo'>
-        <Link to='/' id='header-webname'>LR-MobileNotary</Link>
-        </div>
-        <div id='menu-wrapper'>
-          <CustomNav />
-        </div>
-      </header>
+        <header>
+          <nav id='nav-list'>
+            <Link to='/quote' className='route-link'>Get a Quote</Link>
+            <Link to='/about' className='route-link'>About</Link>
+            <Link to='/' id='header-webname'>LR-MobileNotary</Link>
+            <a href='mailto:lrmobilenotaryaz@gmail.com' className='route-link'>Email Us</a>
+            <a href='tel:+13473061553' className='route-link'>Call Us</a>
+          </nav>
+        </header>
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/about' component={About} />

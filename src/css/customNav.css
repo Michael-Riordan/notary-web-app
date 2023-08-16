@@ -131,12 +131,6 @@
     text-decoration: none;
 }
 
-#call-now {
-    color: rgb(106, 91, 60);
-    font-weight: bold;
-    text-decoration: none;
-}
-
 @media (min-width: 1000px) {
 
     #menu-button-container {
