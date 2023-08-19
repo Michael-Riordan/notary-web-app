@@ -1,13 +1,14 @@
 
+
 .react-calendar__tile--now {
-    background-color: #f0610b  !important;
+    background-color: #f00ba7  !important;
     border-radius: 50%;
 }
 
 .react-calendar__tile--active {
     border-radius: 50%;
     z-index: 1;
-    background-color: #4FACF7 !important;
+    background-color: #540f65 !important;
 }
 
 abbr {
@@ -15,7 +16,7 @@ abbr {
 }
 
 .react-calendar {
-    background-color: #f5efbf58 !important;
+    background-color: #b9b8b058 !important;
     border-radius: 20px;
     box-shadow: 0px 2px 8px 1px black;
 }
@@ -28,7 +29,7 @@ abbr {
 }
 
 .react-calendar__navigation__label:disabled {
-    background-color: #f5efbf58 !important;
+    background-color: #38383600 !important;
 }
 
 .react-calendar__navigation__arrow {
@@ -69,11 +70,11 @@ abbr {
 }
 
 .react-calendar__navigation__arrow:hover {
-    background-color: #8ebfe8  !important;
+    background-color: #dbbff4  !important;
 }
 
 .react-calendar__navigation__label:hover {
-    background-color: #8ebfe8  !important;
+    background-color: #dbbff4  !important;
 }
 
 .react-calendar__month-view {
@@ -87,16 +88,16 @@ abbr {
 }
 
 .react-calendar__month-view__days button:hover {
-    background-color: #8ebfe8   !important;
+    background-color: #dbbff4   !important;
     border-radius: 20px;
 }
 
 .react-calendar__tile:disabled {
-    background-color: rgba(204, 137, 61, 0.458) !important;
+    background-color: rgba(0, 0, 0, 0.458) !important;
 }
 
 .react-calendar__tile:disabled:hover {
-    background-color: rgba(204, 137, 61, 0.458) !important;
+    background-color: rgba(0, 0, 0, 0.458) !important;
     border-radius: 0;
 }
 

@@ -1,451 +1,235 @@
 #quote-body {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-top: 0;
+    flex-direction: column;
+    justify-items: center;
     width: 100vw;
-    height: 70rem;
-    background-image: url('../assets/layered-peaks-haikei-6.svg');
-    background-position: left;
-    background-size: cover;
-    background-repeat: no-repeat;
 }
 
 #quote-header-wrapper {
-    margin-top: 0;
-    opacity: 0;
-    animation: fade-in-animation 3s ease-out forwards;
-}
-
-@keyframes drag-in-animation {
-    from {
-        opacity: 0;
-        transform: translateY(500px);
-    }
-    
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#quote-header-wrapper p {
-    font-size: 1.5rem;
-    margin-left: 30rem;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 60vw;
+    background-image: url('../assets/Arizona-Sunset-Piture.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    justify-items: center;
+    align-items: center;
 }
 
 #your-free-quote {
-    margin-left: 30rem;
-    font-size: 4rem;
+    margin-top: 20vw;
+    font-size: 6vmax;
     margin-bottom: 0;
-    margin-top: 10rem;
-    text-shadow: 8px 7px 4px rgb(0, 0, 0, .3);
+}
+
+#quote-header-wrapper h2 {
+    font-size: 2vw;
+    text-align: center;
+}
+
+
+.final-quote {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.final-quote:last-of-type {
+    margin-bottom: 50px;
 }
 
 #quote-calculator {
-    margin-top:5%;
-    width: 20em;
-    margin-left: 2rem;
-    height: 500px;
-    margin-right: 10rem;
-    animation: fade-in-animation 3s forwards;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: max-content;
+    background-color: bisque;
+}
+
+#quote-data {
+    text-align: center;
+    margin-top: 10vh;
+    margin-right: 6vh;
+    align-self: center;
+    font-size: 1.5rem;
+}
+
+#quote-data p {
+    color: black;
 }
 
 .input-wrapper {
     display: flex;
     flex-direction: column;
-    margin-left: 50px;
-    width: max-content;
+    border: 2px solid black;
+    width: 40%;
+    align-self: center;
+    margin-bottom: 10vh;
+    margin-top: 10vh;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 2px 2px 10px 2px black;
+}
+
+.input-label {
+    color: black;
+    text-align: center;
+}
+
+#services-dropdown {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-self: center;
+}
+
+.button-input {
+    width: 80%;
+    height: 30px;
+    align-self: center;
+    color: black;
+    font-family: 'Bree Serif';
+    background-color: rgb(232, 171, 98);
+    font-weight: bold;
+}
+
+#services-menu {
+    display: flex;
+    align-self: center;
+    flex-wrap: wrap;
+    width: 80%;
+    z-index: 1;
+}
+
+#services-list {
+    list-style-type: none;
+    align-items: flex-start;
+    padding-left: 0;
+    margin-top: 0;
+    width: 100%;
+}
+
+.service-label {
+    color: black;
+}
+
+.button-input ~ #services-menu .service-li {
+    border: none;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease-in-out
+}
+
+.button-input.clicked ~ #services-menu .service-li {
+    border: 1px solid black;
+    height: 60px;
+    transform: scaleY(1);
+    width: 99.5%;
+}
+
+.service-li {
+    background-color: bisque;
+    z-index: 2;
+}
+
+.button-input.clicked ~ #services-menu .service-li:not(:last-of-type) {
+    border-bottom: none;
 }
 
 .input-label {
     display: flex;
-    font-size: 1.5rem;
-    font-weight: bold;
     flex-direction: column;
 }
 
-.input {
-    width: 13rem;
-    border: 1px solid black;
-    height: 2.5rem;
-    box-shadow: 1px 4px 8px -2px black;
-    font-family: 'PTSansNarrow';
-    font-weight: bold;
-}
-
-.input:hover {
-    transform: translateY(-2px);
-}
-
-.button-input:hover {
-    transform: translateY(-2px);
-}
-
-.button-input {
-    display: flex;
-    box-shadow: 1px 4px 8px -2px black;
-    align-items: center;
-    flex-direction: row;
-    width: 12.5rem;
-    height: 30px;
-    padding: 0;
-    margin: 0;
-    text-align: start;
-    text-indent: 3px;
-    cursor: pointer;
-    background-color: white;
-    border: 1px solid rgb(49, 43, 38);
-    font-family: 'PTSansNarrow';
-    font-size: .8rem;
-    font-weight: bold;
-}
-
-.button-input:hover {
-    background-color: #f3e896;
-}
-
-.button-input::after {
-    content: '';
-    border-right: 4px solid transparent;
-    border-left: 4px solid transparent;
-    border-bottom: 8px solid rgb(49, 43, 38);
-    margin-left: 60%;
-    transform: rotate(-360deg);
-    transition: transform 0.3s ease;
-}
-
-.button-input.clicked::after {
-    content: '';
-    transform: rotate(180deg);
-}
-
-.input-label.appointment-prompt ~ .button-input::after {
-    display: none;
-}
-
-#services-menu {
-    position: absolute;
-    margin-top: 56px;
-    width: 12.5rem;
-}
-
-#services-list {
-    margin-top: 0;
-    padding: 0;
-}
-
-.service-li {
-    display: grid;
-    list-style-type: none;
-    height: 0px;
-    background-color: #faf4c7;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden;
-    font-weight: bold;
-    text-align: center;
-}
-
-.service-label {
-    cursor: pointer;
-    align-self: center;
-}
-
-.service-li-number .service-label {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.service-input {
-    cursor: pointer;
+.label-and-img {
+    color: black;
 }
 
 #number-input {
-    width: 30px;
-    align-self: center;
+    width: 20px;
+    height: 20px;
+    color: black;
 }
 
-.button-input.clicked ~ #services-menu #services-list > .service-li {
-    border: 1px solid rgb(49, 43, 38);
-    background-color: #f5efbf;
-    height: 47px;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: visible;
+.button-input.clicked ~ #services-menu .service-li.number {
     text-align: center;
-    justify-items: center;
-}
-
-.service-li-number {
-    display: grid;
+    display: flex;
     flex-direction: column;
-    list-style-type: none;
-    height: 0px;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.input {
+    width: 80%;
+    height: 30px;
+    align-self: center;
+    color: black;
+}
+
+#yes-no {
+    align-self: center;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.yes-no-label {
+    color: black;
+}
+
+.textarea {
+    color: black;
+    width: 80%;
+    align-self: center;
+    height: 15vmax;
     font-weight: bold;
 }
 
-.button-input.clicked ~ #services-menu #services-list > .service-li-number {
-    height: 50px;
-    list-style-type: none;
-    border: 1px solid rgb(49, 43, 38);
-    align-content: center;
-    text-align: center;
-    background-color: #f5efbf;
-}
-
-.service-li:hover {
-    cursor: pointer;
-    background-color: rgb(209, 180, 94) !important;
-}
-
-#address-list {
-    z-index: 2;
-    font-weight: bold;
-}
-
-.button-input ~ #yes-no #yes-no-selector {
-    height: 0;
-    margin-bottom: 0;
-    margin-top: -1px;
-    width: 12.4rem;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-    background-color: #f5efbfa3;
-    z-index: 0;
-    overflow: hidden;
-    font-weight: bold;
-    justify-items: center;
-    text-align: center;
-}
-
-.button-input.clicked ~ #yes-no #yes-no-selector {
-    height: 1.5rem;
-    margin-bottom: 0;
-    width: 12.4rem;
-    list-style-type: none;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
-    border: 1px solid rgb(49, 43, 38);
-    background-color: #f5efbfa3;
-}
-
-.button-input.clicked ~ #yes-no #yes-no-selector:hover {
-    transform: translateY(-1px);
-}
-
-#yes-no-selector {
-    text-align: center;
-}
-
-.yes-no-label.no {
-    margin-left: 4rem;
-}
-
-.yes-no-label.yes {
-    margin-left: 0;
-}
-
-.button-input ~ #yes-no #yes-no-selector {
-    text-align: center;
-}
-
-.input.address {
-    width: 14rem;
-}
-
-.final-quote {
-    margin: 0;
-    margin-right: 70px;
-    font-style: italic;
-    text-shadow: 10px 7px 4px rgb(0, 0, 0, .3);
-}
-
-.final-quote:first-of-type {
-    margin-top: 10px;
-}
-
-.textarea.email-content {
-    height: 170px;
-    width: 350px;
-    font-family: 'PTSansNarrow';
-    font-size: 1rem;
-}
-
-#send-button {
-    width: 40%;
-    margin-left: 100px;
-    margin-top: 5px;
-    background-color: #f5efbfd8;
-    border-radius: 20px;
-    border: 1px solid rgb(49, 43, 38);
-}
-
-#send-button:hover {
-    background-color: #f3e896a3;
-    cursor: pointer;
-}
-
-.email {
-    margin-top: 2px;
-    display: grid;
-}
-
-.email.sent #confirmation-symbol{
-    background-color: green;
-    border: 2px solid black;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    justify-self: center;
-    margin-left: -15px;
-    margin-top: -30%;
-}
-
-.email.failed #confirmation-symbol{
-    background-color: red;
-    border: 2px solid black;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    justify-self: center;
-    margin-left: -15px;
-    margin-top: -30%;
-}
-
-.email.sent #confirmation-symbol::after {
-    content: '';
-    display: block;
-    height: 5px;
-    width: 15px;
-    margin-top: 6%;
-    margin-left: 10%;
-    border-radius: 4px;
-    transform: rotate(40deg);
-    justify-self: center;
-    background-color: white;
-}
-
-.email.sent #confirmation-symbol::before {
-    content: '';
-    display: block;
-    height: 5px;
-    width: 31.4px;
-    margin-left: 22.9%;
-    border-radius: 4px;
-    margin-top: 45%;
-    transform: rotate(130deg);
-    justify-self: center;
-    background-color: white;
-}
-
-.email.failed #confirmation-symbol::after {
-    content: '';
-    display: block;
-    height: 5px;
-    width: 35px;
-    margin-left: 3px;
-    border-radius: 4px;
-    margin-top: 17px;
-    transform: rotate(130deg);
-    justify-self: center;
-    background-color: white;
-}
-
-.email.failed #confirmation-symbol::before {
-    content: '';
-    z-index: 1;
-    position: absolute;
-    display: block;
-    height: 5px;
-    width: 35px;
-    margin-top: 17px;
-    margin-left: 4px;
-    border-radius: 4px;
-    transform: rotate(-130deg);
-    justify-self: center;
-    background-color: white;
-}
-
-.textarea.email-content {
-    box-shadow: 1px 4px 8px -2px black;
-    font-weight: bold;
-}
-
-.textarea.email-content:hover {
-    transform: translateY(-2px);
-}
-
-@media (max-width: 1390px) {
-    #quote-body {
-        height: 100rem;
-        justify-content: center;
-    }
-
-    #your-free-quote {
-        margin-left: 0;
-        margin-right: 0;
-        text-align: center;
-        text-shadow: none;
-    }
-
-    #quote-header-wrapper {
-        height: max-content;
-    }
-
-    #quote-header-wrapper p {
-        margin-left: 0;
-        text-align: center;
-        margin-right: 0;
-        text-shadow: none;
-    }
-    
+@media (orientation: portrait), (max-width: 500px) {
     #quote-calculator {
-        margin-left: 3rem;
-        margin-bottom: 50rem;
-    }
-    
-    .textarea.email-content {
-        width: 280px;
+        display: flex;
+        flex-direction: column;
     }
 
     .input-wrapper {
-        display: grid;
+        width: auto;
+        margin-top: 0;
     }
 
-    .button-input::after {
-        display: none;
+    #quote-header-wrapper {
+        height: 50vh;
     }
 
-    .input-label {
-        justify-self: center;
+    #quote-header-wrapper h2 {
         text-align: center;
+        padding: 20px;
+        font-size: 2vh;
     }
 
-    .button-input {
-        justify-self: center;
-    }
-
-    #yes-no {
-        display: grid;
-    }
-
-    #yes-no-selector {
-        justify-self: center;
-    }
-
-    .button-input ~ #services-menu {
-        position: inherit;
-        justify-self: center;
-        z-index: 1;
-        margin-top: -1px;
+    #quote-data {
+        margin-right: 0;
+        font-size: 5vw;
     }
 }
 
-@media (max-width: 360px) {
-    #your-free-quote {
-        margin-top: 20%;
+@media (orientation: landscape) and (max-width: 500px) {
+    .textarea {
+        max-width: 80%;
+        height: 20vmax;
+    }
+
+    #quote-data {
+        font-size: x-large;
+    }
+
+    #quote-header-wrapper {
+        display: flex;
+        height: max-content;
+    }
+
+    #quote-header-wrapper h2 {
+        font-size: 4vh;
     }
 }
-
 
 

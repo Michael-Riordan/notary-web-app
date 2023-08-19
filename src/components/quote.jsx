@@ -21,16 +21,14 @@ export default function Quote() {
     const [costOfGas, setCostOfGas] = useState(0);
     const [nameInput, setNameInput] = useState('');
     const [emailInput, setEmailInput] = useState('');
-    const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
     const [emailSent, setEmailSent] = useState(null);
     const [emailValid, setEmailValid] = useState(false);
     const [numberInput, setNumberInput] = useState('');
     const [appointment, setAppointment] = useState('');
-    const [appointmentDate, setAppointmentDate] = useState('');
-    const [appointmentTime, setAppointmentTime] = useState('');
     const [appointmentId, setAppointmentId] = useState(null);
     const [finalPrice, setFinalPrice] = useState(0);
     const [emailContent, setEmailContent] = useState('');
+    const isDisabled = nameInput === '' || emailInput === '' || addressInput === '' || selectedServices.length === 0;
 
     const SESSIONDATA = {
         addressData: addressInput,
@@ -52,12 +50,10 @@ export default function Quote() {
     const location = useLocation();
 
     const services = [
-        {id: 0, name: 'Acknowledgement', price: 10},
-        {id: 1, name: 'Jurat', price: 10},
-        {id: 2, name: 'Loan Package', price: 175},
-        {id: 3, name: 'Notarization', price: '', notarizations: numOfNotarizations},
-        {id: 4, name: 'I-9 Verification (hourly)', price: 50},
-        {id: 5, name: 'Job Application Resume Service', price: 30},
+        {id: 1, name: 'Loan Package', price: 175},
+        {id: 2, name: 'Notarization', price: '', notarizations: numOfNotarizations},
+        {id: 3, name: 'I-9 Verification (hourly)', price: 50},
+        {id: 4, name: 'Job Application Resume Service', price: 75},
 
     ];
    
@@ -110,21 +106,21 @@ export default function Quote() {
         setSelectedServices((prevSelectedServices) => {
             const isSelected = prevSelectedServices.includes(serviceId);
             
-            if (serviceId === 3 && isSelected) {
+            if (serviceId === 2 && isSelected) {
                 setNumOfNotarizations(0);
                 setNotarizationPrice(0);
                 return prevSelectedServices.filter((id) => id !== serviceId);
-            } else if (serviceId === 3 && !isSelected) {
+            } else if (serviceId === 2 && !isSelected) {
                 return [...prevSelectedServices, serviceId]
-            } else if (serviceId === 2 && isSelected) {
+            } else if (serviceId === 1 && isSelected) {
                 if (numOfLoanPackages !== 0) {
                     setTotalPrice(totalPrice - 175);
                     setNumOfLoanPackages(0);
                     setAdditionLoanPackagePrice(0);
-                    return prevSelectedServices.filter((id) => id !== 2)
+                    return prevSelectedServices.filter((id) => id !== 1)
                 } else {
                     setTotalPrice(totalPrice - 175);
-                    return prevSelectedServices.filter((id) => id !== 2)
+                    return prevSelectedServices.filter((id) => id !== 1)
                 }
             } else if (isSelected) {
                 setTotalPrice(totalPrice - servicePrice);
@@ -402,63 +398,68 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
             <section id='quote-body'>
                 <div id='quote-header-wrapper'>
                     <h1 id='your-free-quote'>Your Free Quote.</h1>
-                    <p className='final-quote'>Services: ${totalPrice + notarizationPrice + additionalLoanPackagePrice}</p>
-                    <p className='final-quote'>Cost of Gas ($.62/mi Gasoline Cost) : ${costOfGas}</p>
-                    <p className='final-quote'>My Free Estimate: ${finalPrice}</p>
+                    <h2>Choose your desired services and select a signing location to receive an estimate of the notarization cost.</h2>
                 </div>
 
-                <section id='quote-calculator'>
+                <div id='quote-calculator'>
+                    <div id='quote-data'>
+                        <p className='final-quote'>Services: ${totalPrice + notarizationPrice + additionalLoanPackagePrice}</p>
+                        <p className='final-quote'>Cost of Gas ($.62/mi Gasoline Cost) : ${costOfGas}</p>
+                        <p className='final-quote'>My Free Estimate: ${finalPrice}</p>        
+                    </div>
                     <form className='input-wrapper' onSubmit={sendEmail}>
-                        <label htmlFor='services-input' className='input-label'>Select Services</label>
-                        <button className={`button-input ${isClicked ? 'clicked' : ''}`} 
-                                name='services-input' type='button' 
-                                onClick={handleClick}
-                        >
-                                {isClicked ? 'Click to Close' : 'Click to Open'}
-                        </button>
-                        <div id='services-menu'>
-                            <ul id='services-list'>
-                                {
-                                    services.map((service) => (
-                                        <ServiceLabelAndInput 
-                                            key={service.id}
-                                            id={service.id}
-                                            name={service.name}
-                                            price={service.price}
-                                            handleCheckboxChange={handleCheckboxChange}
-                                            checked={selectedServices.includes(service.id)}
-                                        />
-                                    ))
-                                }
-                                {selectedServices.includes(2) &&
-                                            <li key={6} className='service-li-number'>
-                                                <label className='service-label'>
-                                                    Additional Loan Packages: $75
-                                                    <input value={numOfLoanPackages}
-                                                        type='number'
-                                                        id='number-input'
-                                                        onChange={(event) => {
-                                                            event.target.value < 0 || event.target.value == null ? setNumOfLoanPackages(0) :
-                                                            handleNumOfLoanPackageChange(Number(event.target.value))}}
-                                                    />
-                                                </label>
-                                            </li>
-                                }
-                                {selectedServices.includes(3) && 
-                                    <li key={3} className='service-li-number'>
-                                        <label className='service-label'>
-                                            Number of Notarizations
-                                            <input value={numOfNotarizations} 
-                                                type='number' 
-                                                id='number-input'
-                                                onChange={(event) => {
-                                                    event.target.value < 0 || event.target.value == null ? setNumOfNotarizations(0) :
-                                                    handleInputNumberChange(Number(event.target.value))}}
+                        <div id='services-dropdown'>
+                            <label htmlFor='services-input' className='input-label'>Select Services</label>
+                            <button className={`button-input ${isClicked ? 'clicked' : ''}`} 
+                                    name='services-input' type='button' 
+                                    onClick={handleClick}
+                            >   
+                                    {isClicked ? 'Click to Close' : 'Click to Open'}
+                            </button>
+                            <div id='services-menu'>
+                                <ul id='services-list'>
+                                    {
+                                        services.map((service) => (
+                                            <ServiceLabelAndInput 
+                                                key={service.id}
+                                                id={service.id}
+                                                name={service.name}
+                                                price={service.price}
+                                                handleCheckboxChange={handleCheckboxChange}
+                                                checked={selectedServices.includes(service.id)}
                                             />
-                                        </label>
-                                    </li>
-                                }
-                            </ul>
+                                        ))
+                                    }
+                                    {selectedServices.includes(1) &&
+                                                <li key={6} className='service-li number'>
+                                                    <label className='service-label'>
+                                                        Additional Loan Packages: $75
+                                                        <input value={numOfLoanPackages}
+                                                            type='number'
+                                                            id='number-input'
+                                                            onChange={(event) => {
+                                                                event.target.value < 0 || event.target.value == null ? setNumOfLoanPackages(0) :
+                                                                handleNumOfLoanPackageChange(Number(event.target.value))}}
+                                                        />
+                                                    </label>
+                                                </li>
+                                    }
+                                    {selectedServices.includes(2) && 
+                                        <li key={3} className='service-li number'>
+                                            <label className='service-label'>
+                                                Number of Notarizations
+                                                <input value={numOfNotarizations} 
+                                                    type='number' 
+                                                    id='number-input'
+                                                    onChange={(event) => {
+                                                        event.target.value < 0 || event.target.value == null ? setNumOfNotarizations(0) :
+                                                        handleInputNumberChange(Number(event.target.value))}}
+                                                />
+                                            </label>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
                         </div>
                         <FormLabelAndInput
                             label='Signing Location'
@@ -474,12 +475,6 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                         <label htmlFor='appointment-prompt' className='input-label appointment-prompt'>
                                 {appointment !== '' && typeof appointment !== 'object' ? 'Choose a Different Appointment?' : 'Choose an Appointment? (optional)'}
                         </label>
-                        <button className={`button-input ${appointmentSelectorOpen ? 'clicked' : ''}`} 
-                                name='services-input' type='button' 
-                                onClick={handleAppointmentClick}
-                        >
-                                {appointment !== '' && typeof appointment !== 'object' ? appointment : appointmentSelectorOpen ? 'Click to Close' : 'Click to Open'}
-                        </button>
                         <div id='yes-no'>
                             <div id='yes-no-selector'>
                                 <label htmlFor='yes' className='yes-no-label yes'>
@@ -547,7 +542,7 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                             <div id='confirmation-symbol' />
                         </div>
                     </form>
-                </section>
+                </div>
             </section>
         </>
     );
@@ -559,7 +554,7 @@ function ServiceLabelAndInput(props) {
     return (
         <li key={id} className='service-li'>
             <label className='service-label'>
-                {name === 'Notarization'? `Basic ${name}: Select Number Below` : `${name}: $${price}`}
+                {name === 'Notarization'? `Basic ${name}: Select to Specify Number Below` : `${name}: $${price}`}
                 <input type='checkbox' 
                        className='service-input'
                        onChange={(event) => handleCheckboxChange(event, id, price)} 

@@ -1,6 +1,4 @@
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import NNAemblem from './assets/NNA-emblem.png';
-import stateFlag from './assets/AZ-state-flag.png';
+import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import CustomNav from './components/CustomNav';
 import Home from './components/homePage';
 import About from './components/about';
@@ -19,9 +17,9 @@ import './css/adminBlockedDates.css'
 import './css/adminBlockedTimes.css'
 import './css/adminAppointmentConfirmation.css'
 import './css/adminAcceptedAppointments.css'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import Appointment from './components/appointment';
 import Admin from './components/admin';
+import Footer from './components/footer';
 
 function App() {
   
@@ -44,25 +42,7 @@ function App() {
           <Route path='/appointment' component={Appointment} />
           <Route path='/admin' component={Admin} />
         </Switch>
-      <footer id='app-footer'>
-        <div id='footer-info-wrapper'>
-          <img id='NNA-emblem' src={NNAemblem} alt='National Notary Association'/>
-          <div id='footer-tabs-wrapper'>
-            <Link to='/' id='footer-company-name'>LR-MobileNotary</Link>
-            <div className='footer-tabs'>
-              <a id='call-now-footer' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`}>Call Now</a>
-              <span> | </span>
-              <Link id='footer-about-tab' to='/about'>About/Pricing</Link>
-            </div>
-            <div className='footer-tabs'>
-              <Link id='footer-quote-tab' to='/quote'>Get a Quote</Link>
-              <span> | </span>
-              <Link id='footer-admin-tab' to='/admin'>Admin</Link>
-            </div>
-          </div>
-          <img id='AZ-state-flag' src={stateFlag} alt='Arizona State Flag' />
-        </div>
-      </footer>
+        <Footer />
       </Router>
     </>
   );

@@ -1,11 +1,26 @@
-#app-footer {
+.app-footer {
     display: flex;
     justify-content: center;
     width: 100vw;
-    height: 15%;
-    background-color: rgb(123, 76, 190);
+    height: max-content;
     border-top: 1px solid rgb(49, 43, 38);
     font-weight: bold;
+}
+
+.app-footer.home {
+    background-color: rgb(160, 114, 46);
+}
+
+.app-footer.about {
+    background-color: rgb(233, 228, 202);
+}
+
+.footer-content.quote, .footer-content.appointment{
+    color: black;
+}
+
+.footer-content.footer-company-name.quote, .footer-content.footer-company-name.appointment {
+    color: black;
 }
 
 .footer-tabs {
@@ -24,10 +39,21 @@
     justify-content: center;
 }
 
-#footer-company-name {
+.footer-content.footer-company-name {
     color: white;
     font-size: 1.5rem;
     margin-left: 5px;
+}
+
+.footer-content.footer-company-name.about {
+    color: black;
+}
+.footer-content.about {
+    color: black;
+}
+
+.footer-content.about ~ span {
+    color: black;
 }
 
 #NNA-emblem {
@@ -41,7 +67,7 @@
 }
 
 @media (max-width: 500px) {
-    #footer-company-name {
+    .footer-content.footer-company-name {
         font-size: 1rem;
     }
 
@@ -59,7 +85,7 @@
 }
 
 @media (max-width: 400px) {
-    #footer-company-name {
+    .footer-content.footer-company-name {
         font-size: 1rem;
     }
 
@@ -76,172 +102,77 @@
     }
 }
 
-@media (max-width: 320px) {
-    #NNA-emblem {
-        width: 75px;
-    }
-
-    #AZ-state-flag {
-        width: 75px;
-    }
-}
 
 @media (orientation: landscape) {
     #app-footer {
         height: 20vh;
     }
-    #footer-company-name {
+
+    .footer-content.footer-company-name {
         font-size: 1rem;
     }
 
     #footer-tabs-wrapper {
         margin-bottom: 10px;
     }
-
+    
     .footer-tabs {
         font-size: .7rem;
     }
-
+    
     #NNA-emblem {
-        width: 6rem;
+        width: 7rem;
     }
-
+    
     #AZ-state-flag {
-        width: 6rem;
+        width: 7rem;
     }
 }
 
 @media (orientation: landscape) and (min-width: 1000px) {
-
-    #footer-company-name {
+    
+    .footer-content.footer-company-name {
         font-size: 1.5rem;
     }
-
+    
     .footer-tabs {
         font-size: 1rem;
     }
 }
 
-@media (orientation: portrait) {
+@media (orientation: landscape) and (max-width: 900px) {
+    #NNA-emblem {
+        width: 4.5rem;
+        margin-bottom: 20px;
+    }
+    
+    #AZ-state-flag {
+        width: 4.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .footer-tabs:last-of-type {
+        margin-bottom: 10px;
+    }
+}
 
-    #footer-company-name {
+@media (orientation: portrait) {
+    
+    .footer-content.footer-company-name {
         font-size: .9rem;
     }
 }
 
-/*
-@media screen and (max-width:480px) {
-    #NNA-emblem {
-        margin-left: 0;
-    }
-
-    #AZ-state-flag {
-        margin-left: 16.5rem;
-    }
-}
-
-@media screen and (min-width: 568px) {
-    #NNA-emblem {
-        margin-left: 20%;
-    }
-
-    #AZ-state-flag {
-        margin-left: 60%;
-    }
-}
-
-@media screen and (min-width: 1025px) {
-    #NNA-emblem {
-        margin-left: 30%;
-    }
-
-    #AZ-state-flag {
-        margin-left: 60%;
-    }
-}
-
-@media screen and (max-width: 320px) {
-    #footer-info-wrapper #NNA-emblem {
-        height: 50px;
-        width: 80px;
-        margin-left: 9%;
-    }
-
-    #AZ-state-flag {
-        height: 50px;
-        width: 80px;
-        margin-left: 65%;
-    }
-
-    #footer-company-name {
+@media (max-width: 320px) {
+    .footer-content.footer-company-name {
         font-size: 1rem;
-        margin-top: 0;
     }
 
-    #footer-tabs {
-        font-size: .7rem;
-    }
-
-    #footer-tabs-2 {
-        font-size: .7rem;
-        margin-left: 10px;
-    }
-}
-
-@media screen and (max-width: 390px) {
     #NNA-emblem {
-        width: 130px;
-        height: 110px;
+        width: 75px;
     }
 
     #AZ-state-flag {
-        margin-left: 60%;
-    }
-
-    #footer-company-name {
-        margin-left: -10px;
-        font-weight: bold;
-    }
-
-    #footer-tabs {
-        font-size: .8rem;
-        font-weight: bold;
-        margin-left: -10px;
-    }
-
-    #footer-tabs-2 {
-        font-weight: bold;
-        margin-left: -10px;
+        width: 75px;
     }
 }
-
-@media screen and (max-width: 320px) {
-    #company-name {
-        font-size: 1.5rem;
-    }
-}
-
-@media screen and (max-width: 280px) {
-    #AZ-state-flag {
-        margin-left: 70%;
-    }
-
-    #footer-company-name {
-        margin-left: 20px;
-    }
-
-    #footer-tabs {
-        margin-left: 20px;
-    }
-
-    #footer-tabs-2 {
-        margin-left: 20px;
-    }
-}
-
-@media screen and (max-height:320px) {
-    #AZ-state-flag {
-        margin-left: 70%;
-    }
-}
-*/

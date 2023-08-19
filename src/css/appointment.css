@@ -3,8 +3,7 @@
     flex-direction: column;
     align-items: center;
     width: 100vw;
-    height: 100vh;
-    background-image: url('../assets/layered-peaks-haikei-7.svg');
+    background-image: url('../assets/arizona-background-picture-3.jpg');
     background-size: cover;
 }
 
@@ -12,12 +11,12 @@
     justify-self: center;
     font-size: 3rem;
     text-align: center;
+    margin-top: 30vh;
 }
 
 #calendar-wrapper {
     margin-top: 10px;
     justify-self: center;
-    margin-bottom: 100px;
 }
 
 #appointment-selector {

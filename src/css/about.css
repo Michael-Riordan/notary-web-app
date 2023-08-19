@@ -1,7 +1,7 @@
 
 #about-body {
     z-index: 0;
-    background-color: rgb(15, 24, 66);
+    background-color: rgb(233, 228, 202);
     width: 100vw;
     height: max-content;
 }
@@ -10,12 +10,13 @@
     display: grid;
     transform: translateY(500px);
     animation: drag-in-animation 1s ease-out forwards;
-    background-image: url(../assets/phoenix-image-3.webp);
+    background-image: url(../assets/phoenix-arizona-3.webp);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center top -70px;
+    background-position: center top -10px;
     height: 80vh;
     opacity: 0;
+    z-index: 1;
 }
 
 .service-price {
@@ -25,12 +26,11 @@
 #licensed-bonded-insured {
     margin-top: 15vh;
     justify-self: center;
-    font-size: 3rem;
+    font-size: 7vh;
     text-align: center;
 }
 
 #about-header {
-    margin-top: 0;
     justify-self: center;
     width: 80%;
     font-size: 1.2rem;
@@ -38,6 +38,8 @@
 
 #services-wrapper {
     display: flex;
+    justify-content: center;
+    margin-top: -40px;
     height: max-content;
     transform: translateY(500px);
     animation: drag-in-animation 1s ease-out forwards;
@@ -45,19 +47,24 @@
 }
 
 .about-service {
-    margin-left: 15px;
-    margin-right: 2px;
-    border-right: 1px solid white;
-    padding: 5px;
+    margin: 30px;
+    margin-top: 0;
+    border: 1px solid black;
+    background-color: antiquewhite;
+    width: 30vw;
+    justify-self: center;
+    text-align: center;
+    box-shadow: 2px 2px 10px 2px black;
+    z-index: 2;
 }
 
 .about-service p {
-    color: white;
+    color: black;
     font-size: 1vw;
 }
 
 .about-service h1 {
-    color: white
+    color: black
 }
 
 .about-service:nth-of-type(3) {
@@ -76,13 +83,46 @@
     }
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 690px) {
     #services-wrapper {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .about-service {
+        width: max-content;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
     .about-service p {
+        font-size: 3vw;
+    }
+}
+
+@media (orientation: portrait) and (max-width: 320px) {
+    #licensed-bonded-insured {
+        font-size: 10vw;
+    }
+}
+
+@media (orientation:landscape) and (max-width: 700px) {
+
+    #licensed-bonded-insured {
+        font-size: 4vw;
+    }
+    .about-service {
+        width: 60%;
         font-size: 2vw;
+    }
+
+    .about-service p {
+        font-size: 1.5vw;
+    }
+}
+
+@media (orientation:landscape) and (max-height: 300px) {
+    #about-header-wrapper {
+        height: 100vh;
     }
 }

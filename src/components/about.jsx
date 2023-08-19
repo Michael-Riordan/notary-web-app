@@ -1,4 +1,3 @@
-import handshake from '../assets/undraw_business_deal_re_up4u.svg';
 
 export default function About() {
     return (
@@ -13,8 +12,7 @@ export default function About() {
                     <div className='about-service'>
                         <h1>Mobile Notary Service</h1>
                         <p>
-                            LRmobilenotary offers the convenience of bringing notarial services directly 
-                            to your preferred location. Rather than requiring you to visit a traditional notary office, 
+                            Rather than requiring you to visit a traditional notary office, 
                             LRmobilenotary will travel to your home, office, or any other mutually agreed-upon location. 
                             This is particularly beneficial for individuals or businesses with busy schedules 
                             or mobility constraints.
@@ -24,8 +22,7 @@ export default function About() {
                     <div className='about-service'>
                         <h1>Loan Signing</h1>
                         <p>
-                            By utilizing the services of an LRmobilenotary loan signing agent, borrowers and lenders can experience 
-                            a streamlined loan signing process that offers flexibility, convenience, and professional expertise. 
+                            LRmobilenotary offers flexibility, convenience, and professional expertise. 
                             Our agents play a crucial role in ensuring the accurate execution of loan documents, contributing to 
                             a successful real estate transaction.
                         </p>
@@ -34,7 +31,7 @@ export default function About() {
                     <div className='about-service'>
                         <h1>Corporate 3rd Party Representative</h1>
                         <p>
-                            While utilizing LRmobilenotary as a corporate third-party representative, we combine our expertise in notarial services 
+                            LRmobilenotary combines expertise in notarial services 
                             with the role of representing your company's interests. We perform official notarial acts, authenticate documents, 
                             ensure compliance with legal and regulatory requirements, handle client interactions, and mitigate risks.
                         </p>
