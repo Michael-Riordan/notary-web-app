@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import rightArrow from '../assets/right_arrow_svgrepo.svg';
 
 export default function Home() {
 
