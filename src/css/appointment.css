@@ -27,7 +27,7 @@
     border: 1px solid black;
     align-self: center;
     margin-bottom: 20%;
-    background: linear-gradient(45deg, #c544e8, transparent);
+    background: linear-gradient(45deg, #ba76cc, transparent);
     box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.582), 5px 10px 4px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     padding: 10px;
@@ -52,13 +52,10 @@
     list-style-type: none;
 }
 
-.time-input {
-    color: black;
-}
-
 .time-label {
     border: 1px solid black;
-    background-color: #f5efbf;
+    color: black;
+    background-color: #c496cb;
     cursor: pointer;
     width: 100px;
 }
