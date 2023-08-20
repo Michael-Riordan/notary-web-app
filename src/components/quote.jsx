@@ -461,17 +461,19 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                                 </ul>
                             </div>
                         </div>
-                        <FormLabelAndInput
-                            label='Signing Location'
-                            name='address'
-                            type='text'
-                            value={addressInput}
-                            handleInputChange={handleInputChange}
-                            placeholder='123 Main St, Anytown, AZ'
-                            img={<img src={googleLogo} alt='google logo' id='google-logo'/>}
+                        <div id='address-input-and-list'>
+                            <FormLabelAndInput
+                                label='Signing Location'
+                                name='address'
+                                type='text'
+                                value={addressInput}
+                                handleInputChange={handleInputChange}
+                                placeholder='123 Main St, Anytown, AZ'
+                                img={<img src={googleLogo} alt='google logo' id='google-logo'/>}
 
-                        />
-                        <PlacesAutocomplete inputValue={addressInput} onData={handleAddressData}/>
+                            />  
+                            <PlacesAutocomplete inputValue={addressInput} onData={handleAddressData}/>
+                        </div>
                         <label htmlFor='appointment-prompt' className='input-label appointment-prompt'>
                                 {appointment !== '' && typeof appointment !== 'object' ? 'Choose a Different Appointment?' : 'Choose an Appointment? (optional)'}
                         </label>
