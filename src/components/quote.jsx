@@ -477,6 +477,9 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                         <label htmlFor='appointment-prompt' className='input-label appointment-prompt'>
                                 {appointment !== '' && typeof appointment !== 'object' ? 'Choose a Different Appointment?' : 'Choose an Appointment? (optional)'}
                         </label>
+                        <p>
+                            {appointment !== '' && typeof appointment !== 'object' ? {appointment} : ''}
+                        </p>
                         <div id='yes-no'>
                             <div id='yes-no-selector'>
                                 <label htmlFor='yes' className='yes-no-label yes'>
