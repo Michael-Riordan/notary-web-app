@@ -540,8 +540,9 @@ ${numberInput === ''? '' : `Call/Text me at ${numberInput}`}`)
                         >
                                 Send
                         </button>
-                        <div className={emailSent == null? '' : emailSent? 'email sent' : 'email failed'}>
-                            <div id='confirmation-symbol' />
+                        <div>
+                            {emailSent == null? '' : emailSent? <p style={{color: 'green'}}>Email sent successfully, please check your inbox for a confirmation email.</p> :
+                            <p style={{color: 'red'}}>Email Failed to Send, Please Try Again Later</p>}
                         </div>
                     </form>
                 </div>

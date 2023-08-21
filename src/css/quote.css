@@ -190,6 +190,18 @@
     font-weight: bold;
 }
 
+#send-button {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    width: 50%;
+    height: 20px;
+    align-self: center;
+    color: black;
+    background-color: green;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
 @media (orientation: portrait), (max-width: 500px) {
     #quote-calculator {
         display: flex;
