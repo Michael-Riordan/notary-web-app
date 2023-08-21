@@ -182,6 +182,13 @@
     color: black;
 }
 
+#chosen-appointment {
+    text-align: center;
+    color: black;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .textarea {
     color: black;
     width: 80%;
