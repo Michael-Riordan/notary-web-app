@@ -15,11 +15,13 @@
     padding-bottom: 20px;
     border-bottom: 2px solid black;
     height: max-content;
+    color: black;
 }
 
 #appointment-list-header {
     text-align: center;
     margin-top: -4rem;
+    color: black;
 }
 
 .pending-appointments-list {
@@ -36,4 +38,5 @@
     height: max-content;
     margin-top: -7rem;
     background-color: antiquewhite;
+    color: black;
 }

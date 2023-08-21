@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from "moment";
 
 export default function Admin() {
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [daysAndHours, setDaysAndHours] = useState([]);

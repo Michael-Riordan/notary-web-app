@@ -112,6 +112,11 @@
 
 .service-label {
     color: black;
+    cursor: pointer;
+}
+
+.service-input {
+    cursor: pointer;
 }
 
 .button-input ~ #services-menu .service-li {

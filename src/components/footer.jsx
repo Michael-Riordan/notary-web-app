@@ -9,6 +9,7 @@ export default function Footer() {
     : location.pathname === '/about'? 'about' 
     : location.pathname === '/quote'? 'quote' 
     : location.pathname === '/appointment'? 'appointment'
+    : location.pathname === '/admin'? 'admin' 
     : '';
 
     return (

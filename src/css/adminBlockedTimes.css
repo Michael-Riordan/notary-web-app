@@ -12,11 +12,13 @@
     border-bottom: 2px solid black;
     padding-bottom: 10px;
     text-align: center;
+    color: black;
 }
 
 #blocked-times-list-header {
     text-align: center;
     margin-bottom: 0;
+    color: black;
 }
 
 #blocked-times-setter {

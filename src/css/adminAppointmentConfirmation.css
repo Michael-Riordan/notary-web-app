@@ -17,12 +17,14 @@
     padding-bottom: 0;
     text-align: center;
     font-size: 1.5rem;
+    color: black;
 }
 
 #pending-appointments-header {
     text-align: center;
     margin-bottom: 0;
     margin-top: 0;
+    color: black;
 }
 
 #pending-appointments-list {
@@ -38,11 +40,13 @@
     margin-top: 0;
     height: max-content;
     background-color: antiquewhite;
+    color: black;
 }
 
 .pending-appointment {
     height: 40px;
     padding-top: 0;
+    color: black;
 }
 
 .pending-appointment:not(:last-of-type) {

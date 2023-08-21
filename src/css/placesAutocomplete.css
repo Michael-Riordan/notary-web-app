@@ -1,26 +1,36 @@
+#address-input-and-list {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 100%;
+}
+
 #address-list {
-    position: inherit;
-    margin-left: -31px;
-    justify-self: center;
-    display: grid;
+    display: flex;
     flex-wrap: wrap;
-    width: 12.4rem;
+    padding: 0;
+    padding-top: 0;
+    align-self: center;
+    width: max-content;
+    width: 81%;
 }
 
 #address-list ul{
-    position: absolute;
-    background-color: #f5efbfd8;
-    width: 14.46rem;
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
     list-style-type: none;
     padding: 0;
     margin-top: 0;
-    transition: height 400ms cubic-bezier(0.23, 1, 0.320, 1);
+    width: 100%;
 }
 
 .address-list-item {
     border: 1px solid rgb(49, 43, 38);
-    transition: height 400ms cubic-bezier(0.23, 1, 0.320, 1);
     cursor: pointer;
+    align-self: center;
+    width: 100%;
+    color: black;
 }
 
 .address-list-item:hover {
@@ -33,27 +43,3 @@
     margin-left: 10px;
     margin-bottom: -5px;
 }
-
-@media screen and (max-width: 480px) {
-    #address-list ul {
-        width: 14.8rem;
-    }
-}
-
-@media screen and (max-width: 320px) {
-    #address-list ul {
-        font-size: .8rem;
-    }
-
-    #yes-no {
-        margin-top: -2px;
-    }
-}
-
-@media screen and (max-width:390px) {
-    #address-list ul {
-        width: 14.3rem;
-        margin-top: -2px;
-    }
-}
-

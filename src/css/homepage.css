@@ -122,6 +122,18 @@
     #company-logo {
         margin-top: 25vh;
     }
+
+    #company-name {
+        font-size: 6vh;
+    }
+
+    #company-name-continued {
+        font-size: 3vh;
+    }
+
+    #head-quote {
+        font-size: 2vh;
+    }
 }
 
 @media (orientation: landscape) {

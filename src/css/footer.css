@@ -15,11 +15,11 @@
     background-color: rgb(233, 228, 202);
 }
 
-.footer-content.quote, .footer-content.appointment{
+.footer-content.quote, .footer-content.appointment, .footer-content.admin, .footer-content.admin ~ span{
     color: black;
 }
 
-.footer-content.footer-company-name.quote, .footer-content.footer-company-name.appointment {
+.footer-content.footer-company-name.quote, .footer-content.footer-company-name.appointment, .footer-content.footer-content.footer-company-name.admin {
     color: black;
 }
 
@@ -31,6 +31,7 @@
 #footer-tabs-wrapper {
     align-self: center;
     justify-self: center;
+    text-align: center;
 }
 
 #footer-info-wrapper {
