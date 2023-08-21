@@ -141,7 +141,7 @@
 }
 
 #cancel-button {
-    background-color: #ff3801;
+    background-color: red;
     border-radius: 10px;
     width: 70px;
     font-weight: bold;
