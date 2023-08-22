@@ -28,7 +28,7 @@ export default function Home() {
                     mobile notary services that cater to the diverse needs of individuals, businesses, and organizations.
                 </p>
                 <div id='contact-us-button'>
-                    <a id='call-now' href={`tel:${import.meta.env.VITE_BUSINESS_PHONE_NUMBER}`} role='menuitem'>Contact Us</a>
+                    <a id='call-now' to='/quote'>Contact Us</a>
                 </div>
             </section>
         </>
