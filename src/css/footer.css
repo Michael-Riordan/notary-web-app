@@ -19,6 +19,10 @@
     color: black;
 }
 
+.footer-content.quote ~ span {
+    color: black;
+}
+
 .footer-content.footer-company-name.quote, .footer-content.footer-company-name.appointment, .footer-content.footer-content.footer-company-name.admin {
     color: black;
 }
