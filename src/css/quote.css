@@ -92,6 +92,7 @@
     font-family: 'Bree Serif';
     background-color: rgb(232, 171, 98);
     font-weight: bold;
+    cursor: pointer;
 }
 
 #services-menu {
